@@ -1,33 +1,33 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    background-color: #f0f099;
-    background: url('rainy.gif') no-repeat;
+    background-color: #f009;
+    background: url('NC11passers.jpeg') no-repeat;
     background-size: cover;
-    margin: 0;
+    margin: 100;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 200vh;
 }
 
 #game-container {
-    background: url('Neon4.gif') no-repeat;
-    background-size: cover;
+    background: url('rainy.gif'); height: 200vh cover;
+    background-size: 200;
     opacity:90px;
     border: 5px solid #990;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 150px;
+    border-radius: 40px;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
 }
 
 button {
-    font-size: 19px;
-    padding: 10px 20px;
-    margin-top: 10px;
+    font-size: 20px;
+    padding: 5px 10px;
+    margin-top: 0px;
     cursor: pointer;
     border: none;
-    border-radius: 5px;
+    border-radius: 15px;
     background-color: #007bff;
     
     color: white;

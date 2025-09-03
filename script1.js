@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const timeLeftSpan = document.getElementById('time-left');
     const scoreSpan = document.getElementById('score');
     
-    let timeLeft = 10;
+    let timeLeft = 60;
     let score = 0;
     let gameInterval;
     
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clickButton.addEventListener('click', incrementScore);
     
     function startGame() {
-        timeLeft = 10;
+        timeLeft = 60;
         score = 0;
         timeLeftSpan.textContent = timeLeft;
         scoreSpan.textContent = score;
@@ -38,6 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function endGame() {
         clickButton.style.display = 'none';
         startButton.disabled = false;
-        alert(`Game over! Your score is ${score}`);
+        alert(`Timed Out! Your score is ${score}`);
     }
 });

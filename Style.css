@@ -16,12 +16,12 @@ ul{
 }
 ul li{
      float:left;
-     width:182px;
+     width:150px;
      background-color:green;
      opacity:.8;
-     line-height:60px;
+     line-height:45px;
      text-align:center;
-     Font-size:23px;
+     Font-size:15px;
      margin-right:5px;
      Font-Family:algerian;
      justify;
