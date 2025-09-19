@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Top-Up Icon</title>
+  <desc id="desc">White top-up icon (wallet/phone with upward arrow) for sidebar</desc>
+  <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <!-- phone/wallet body -->
+    <rect x="12" y="12" width="40" height="40" rx="6" ry="6" />
+    <!-- coin slot / top edge line -->
+    <path d="M20 18h24" />
+    <!-- upward arrow (top-up) -->
+    <path d="M32 28v12" />
+    <path d="M28 32l4-4 4 4" />
+    <!-- plus sign at bottom-right to indicate credit -->
+    <path d="M40 38v6" stroke-opacity="0.95" />
+    <path d="M37 41h6" stroke-opacity="0.95" />
+  </g>
+</svg>
