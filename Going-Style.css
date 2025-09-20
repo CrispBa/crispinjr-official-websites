@@ -121,7 +121,7 @@ body {
 .sidebar {
   position: fixed;
   top: 0;
-  left: 0;
+  left: 1;
   border-radius: 25px;
   padding-right: 15px;
   z-index: 50;
@@ -154,7 +154,7 @@ body {
 .sidebar-header .header-logo { display:flex; align-items:flex-start; gap:6px; flex-direction:column; justify-content:center }
 .sidebar-header .header-logo .logo-text{ color:#EEF2FF; font-weight:700; font-size:0.95rem; white-space:nowrap; margin:0; margin-top:6px; text-align:left }
 .logo-wrap{position:relative;display:inline-block;border-radius:14px;overflow:hidden}
-.logo-wrap .edit-logo-btn{position:absolute;left:10px;bottom:8px;border:none;background:transparent;padding:4px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#eef2ff;cursor:pointer;transform:translateY(50%)}
+.logo-wrap .edit-logo-btn{position:absolute;left: 45px;bottom: 8px;border:none;background:transparent;padding:4px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#eef2ff;cursor:pointer;transform:translateY(50%)}
 .logo-wrap .edit-logo-btn::before{content:"";position:absolute;inset:-6px;border-radius:10px;background:transparent}
 .logo-wrap .edit-logo-btn .material-symbols-rounded{font-size:18px;color:#000;filter:none}
 .logo-wrap .edit-logo-btn:hover .material-symbols-rounded{transform:scale(1.06);filter:drop-shadow(0 6px 18px rgba(0,0,0,0.25));color:#000}
@@ -169,9 +169,10 @@ body {
   border: none;
   cursor: pointer;
   display: flex;
-  background: #EEF2FF;
+  background: #f5f3f3;
   align-items: center;
   justify-content: center;
+  top: 120px;
   border-radius: 8px;
   transition: 0.4s ease;
 }
@@ -180,11 +181,12 @@ body {
 }
 .sidebar-header .sidebar-toggler span,
 .sidebar-menu-button span {
-  font-size: 1.75rem;
+  font-size: 2.75rem;
   transition: 0.4s ease;
 }
 .sidebar.collapsed .sidebar-header .sidebar-toggler span {
   transform: rotate(180deg);
+  margin-top: 10px;
 }
 .sidebar-header .sidebar-toggler:hover {
   background: #d9e1fd;
@@ -204,9 +206,6 @@ body {
   padding-bottom: 20px;
   height: calc(100vh - 227px);
   scrollbar-color: transparent transparent;
-}
-.sidebar .sidebar-nav .primary-nav:hover {
-  scrollbar-color: #EEF2FF transparent;
 }
 .sidebar.collapsed .sidebar-nav .primary-nav {
   overflow: unset;
@@ -269,8 +268,9 @@ body {
 .sidebar-nav .dropdown-menu {
   height: 0;
   overflow-y: hidden;
+  overflow-x: hidden;
   list-style: none;
-  padding-left: 15px;
+  padding-left: 25px;
   transition: height 0.4s ease;
 }
 .sidebar.collapsed .dropdown-menu {
@@ -301,7 +301,7 @@ body {
 }
 .dropdown-menu .nav-item .nav-link {
   color: #F1F4FF;
-  padding: 9px 15px;
+  padding: 5px 8px;
 }
 .sidebar.collapsed .dropdown-menu .nav-link {
   padding: 7px 15px;
@@ -334,8 +334,8 @@ body {
     background: #151A2D;
   }
   .sidebar.collapsed {
-    width: 270px;
-    left: -270px;
+    width: 80px;
+    left: -2px;
   }
   .sidebar.collapsed .sidebar-header .sidebar-toggler {
     transform: none;
@@ -347,20 +347,20 @@ body {
 
 /* Logo editor modal styles */
 #logoEditorModal { position: fixed; inset: 0; display: grid; place-items: center; z-index: 60; pointer-events: none }
-#logoEditorModal .editor-panel { pointer-events: auto; width: 360px; max-width: calc(100% - 40px); background: #fff; color:#111; border-radius:12px; padding:14px; box-shadow: 0 10px 36px rgba(2,6,23,0.45); transform: translateY(-10px); opacity:0; transition: all 0.18s ease }
-#logoEditorModal.open .editor-panel { transform: translateY(0); opacity:1 }
+#logoEditorModal .editor-panel {pointer-events: auto;width: 360px;max-width: calc(100% - 40px);background: #c5d5be;color:#000;border-radius:12px;padding:14px;box-shadow: 0 10px 36px rgba(2,6,23,0.45);transform: translateY(-10px);opacity:0;transition: all 0.18s ease;}
+#logoEditorModal.open .editor-panel {transform: translateY(0);opacity:1;}
 #logoEditorModal .editor-panel h3 { margin:0 0 8px 0; font-size:1rem }
-#logoEditorModal .editor-panel label { display:block; margin:8px 0; font-size:0.9rem }
-#logoEditorModal .editor-panel input { width:100%; padding:8px 10px; border-radius:8px; border:1px solid #e6e6e6 }
+#logoEditorModal .editor-panel label {display:block;margin:8px 0;font-size:0.9rem;}
+#logoEditorModal .editor-panel input { width:100%; padding:8px 10px; border-radius:8px; border:1px solid rgb(2 6 23 / 0%) }
 #logoEditorModal .editor-actions { display:flex; gap:8px; justify-content:flex-end }
 #logoEditorModal .editor-actions button { padding:6px 8px; border-radius:8px; border:none; cursor:pointer; font-size:0.85rem }
-#logoEditorModal .editor-actions #editorSave { background:#2b6cb0; color:#fff }
+#logoEditorModal .editor-actions #editorSave { background:#2b6cb0; color:#ffffff }
 #logoEditorModal .editor-actions #editorReset { background:#e53e3e; color:#fff }
-#logoEditorModal .editor-actions #editorClose { background:#f3f4f6 }
+#logoEditorModal .editor-actions #editorClose { background:#fefefe }
 
 /* Top-right action bar inside the editor panel */
 #logoEditorModal .editor-actions.top-right { position:absolute; right:12px; top:12px }
-#logoEditorModal .editor-panel { position:relative }
+#logoEditorModal .editor-panel {/* position:relative; */}
 
 #cropArea { max-width:640px; width:100%; }
 #cropperImage { max-width:100%; height:auto; display:block }
@@ -379,8 +379,4 @@ header nav a {
 header nav a:hover {
   color: #0033cc;
   text-decoration: underline;
-}
-  *{
-margin: 0;
-padding: 0;
 }

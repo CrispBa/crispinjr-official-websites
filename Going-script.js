@@ -44,7 +44,7 @@
           </div>
           <div style="width:120px;text-align:center">
             <div style="width:96px;height:96px;border-radius:50%;overflow:hidden;border:1px solid #ddd;display:inline-block">
-              <img id="editorPreviewSmall" src="" alt="preview" style="width:100%;height:100%;object-fit:cover">
+              <img id="editorPreviewSmall" img src="cobelog2.jpg" alt="preview" style="width:100%;height:100%;object-fit:cover">
             </div>
           </div>
         </div>
@@ -58,8 +58,8 @@
             <img id="cropperImage" src="" alt="To crop" style="max-width:100%;display:block;">
           </div>
           <div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end">
-            <button id="cropApply">Apply Crop</button>
-            <button id="cropCancel">Cancel Crop</button>
+            <button id="cropApply" style="border-radius: 15px;color: #0be8a9ff;background: #0400ffff;">Apply Crop</button>
+            <button id="cropCancel" style="border-radius: 15px;color: #000000ff;background: #42c798ff;">Cancel Crop</button>
           </div>
         </div>
 
