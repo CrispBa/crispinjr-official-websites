@@ -15,27 +15,37 @@
   html,body{height:100%;margin:0}
   body{
     background: linear-gradient(120deg,var(--bg1),var(--bg2));
-    background-size: 200% 200%;
     animation: gradientShift 12s ease infinite;
     color: #111;
     font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
   }
 
   @keyframes gradientShift{
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
     100%{background-position:0% 100%}
   }
 
     /* Subtle translucent page container to make content readable */
-    .page-surface{
-      backdrop-filter: blur(6px) saturate(120%);
+    {
+      background: 
       background: rgba(255,255,255,0.06);
-      margin: 40px auto;
-      padding: 18px;
+      margin-left: auto;
+      left:auto;
+      right:auto;
+      top:auto;
+      bottom:auto;
+      padding: 15px;
       border-radius: 14px;
       max-width: 1000px;
       box-shadow: 0 6px 24px rgba(2,6,23,0.45);
+      margin-right: -25px;
+      width: 400%;
+      display: flex;
+      align-items: center;
+      align-content: flex-end;
+      /* justify-content: space-around; */
+      flex-direction: row-reverse;
     }
     </style>
     <div class="page-surface">
@@ -114,7 +124,7 @@
             <!-- Dropdown Menu -->
             <ul class="dropdown-menu">
               <li class="nav-item"><a class="nav-link dropdown-title">Task Folder</a></li>
-              <li class="nav-item"><a href="https://github.com/CrispBa/crispinjr-official-websites/tree/Ict/crispba" class="nav-link dropdown-link">CrispBa Folder</a></li>
+              <li class="nav-item"><a href="CrispBa Folder/" class="nav-link dropdown-link">CrispBa Folder</a></li>
               <li class="nav-item"><a href="https://drive.google.com/drive/folders/14M9Vl3MMzXkuNkIYfEZ4YzuUh6YU3wxH?usp=sharing" class="nav-link dropdown-link">Google Drive</a></li>
             </ul>
           </li>
@@ -131,7 +141,7 @@
             <!-- Dropdown -->
             <!-- Dropdown Menu -->
             <ul class="dropdown-menu">
-              <li class="nav-item"><a class="nav-link dropdown-title">Services Offer</a></li>
+              <li class="nav-item"><a class="nav-link dropdown-title">NMSCST</a></li>
               <li class="nav-item"><a href="#" class="nav-link dropdown-link">Laptop/PC Trobleshoot</a></li>
               <li class="nav-item"><a href="#" class="nav-link dropdown-link">Laptop/PC Format/Installation </a></li>
               <li class="nav-item"><a href="#" class="nav-link dropdown-link">Laptop/PC Bypass Password/Forggoten </a></li>
@@ -146,7 +156,7 @@
             </a>
             <!-- Dropdown Menu -->
             <ul class="dropdown-menu">
-              <li class="nav-item"><a class="nav-link dropdown-title">Cobelo App</a></li>
+              <li class="nav-item"><a class="nav-link dropdown-title">NMSCST</a></li>
               <li class="nav-item"><a href="com.amfiles.s16s.apk" download class="nav-link dropdown-link">Cobelo A-Management Files</a></li>
               <li class="nav-item"><a href="com.cobelomultiapplication.io.apk" download class="nav-link dropdown-link">Cobelo - Multi Purpose App</a></li>
               <li class="nav-item"><a href="com.crispinjr.reloader.apk" download class="nav-link dropdown-link">Cobelo Reloader</a></li>
@@ -160,7 +170,7 @@
             </a>
             <!-- Dropdown Menu -->
             <ul class="dropdown-menu">
-              <li class="nav-item"><a class="nav-link dropdown-title">Cobelo Games</a></li>
+              <li class="nav-item"><a class="nav-link dropdown-title">NMSCST</a></li>
               <li class="nav-item"><a href="Lineofcode.html" class="nav-link dropdown-link">Click Master</a></li>
             </ul>
           </li>
@@ -172,7 +182,7 @@
             </a>
             <!-- Dropdown Menu -->
             <ul class="dropdown-menu">
-              <li class="nav-item"><a class="nav-link dropdown-title">Terms & Policy</a></li>
+              <li class="nav-item"><a class="nav-link dropdown-title">NMSCST</a></li>
               <li class="nav-item"><a href="About-us.html" class="nav-link dropdown-link">About</a></li>
               <li class="nav-item"><a href="Contact.html" class="nav-link dropdown-link">Contact Info</a></li>
               <li class="nav-item"><a href="Terms of Service.html" class="nav-link dropdown-link">Terms of Service</a></li>
@@ -199,6 +209,3 @@
  <!-- .page-surface -->
  </body> 
   </html>
-
-
-
