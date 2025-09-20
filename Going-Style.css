@@ -124,9 +124,9 @@ body {
   left: 0;
   border-radius: 25px;
   padding-right: 15px;
-  z-index: 20;
+  z-index: 50;
   width: 300px;
-  height: 65%;
+  height: 100%;
   background: #151A2D;
   transition: all 1.2s ease;
 }
