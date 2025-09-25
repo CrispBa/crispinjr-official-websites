@@ -1,20 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" charset="utf-8"></script>
-  <style media="screen">
-  *{
-margin: 0;
-padding: 0;
-}
-
-body{
-background: #e4eaf0;
-}
 
 .wrapper{
 position: absolute;
@@ -23,85 +8,6 @@ left: 50%;
 transform: translate(-50%,-50%);
 }
 
-.searchbox{
-position: relative;
-}
-
-.searchbox .input{
-width: 0px;
-border: 0px;
-height: 75px;
-padding: 0px 35px;
-border-radius: 50px;
-box-shadow: 0 0 15px 1px #b6bbc0;
-outline: none;
-color: #42be11;
-
-font-size: 20px;
-transition: all 0.5s linear;
-}
-
-.searchbtn{
-position: absolute;
-top: 0;
-right: -1px;
-background: #fff;
-width: 75px;
-height: 75px;
-border-radius: 50%;
-cursor: pointer;
-transition: all 0.5s 0.6s linear;
-}
-
-.searchbtn .fas{
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%,-50%);
-color: #1155be;
-font-size: 22px;
-transition: all 0.5s 0.6s linear;
-}
-
-/* jquery class */
-.searchbtn.bg-green{
-background: #1155be;
-transition: all 0.2s linear;
-}
-
-.searchbtn .fas.color-white{
-color: #fff;
-transition: all 0.2s linear;
-}
-
-.searchbox .input.active-width{
-width: 355px;
-}
-
-  </style>
-</head>
-<body>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-
-  <div class="wrapper">
-    <div class="searchbox">
-      <input type="text" class="input" placeholder="Search Here ....">
-
-      <div class="searchbtn">
-        <i class="fas fa-search"></i>
-      </div>
-
-    </div>
-  </div>
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
-/* Remove default underlines on most links; keep clear focus styles for accessibility */
-a,
 .page-surface a,
 header nav a {
   text-decoration: none;
