@@ -1,22 +1,195 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Cobelo Websites</title>       <link rel="stylesheet" href="Index1.css" />
+  <link rel="stylesheet" href="web-btn.css" />
+  <link rel="stylesheet" href="search-bar.css" />
+  <link rel="stylesheet" href="Going-Style.css" />
+  
+  
+<style>
+  body {
+    background-image: url('design1.gif');
+    background-size: cover;
+    margin: 0;
+    font-family: "Georgia", serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color: white;
+  }
+  /* Text above slider */
+  .top-text {
+    max-width: 800px;
+    margin: 30px auto 10px auto;
+    font-size: 24px;
+    text-align: center;
+  }
+  /* Slider container and styles */
+  .slider-container {
+    width: 800px;
+    height: 367px;
+    perspective: 1200px;
+    margin: 0 auto;
+  }
+  .slider {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotate 25s infinite linear;
+  }
+  .slide {
+    position: absolute;
+    width: 400px;
+    height: 300px;
+    left: 200px;
+    top: 33.5px;
+    background: #eee;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    backface-visibility: hidden;
+    overflow: hidden;
+    transition: transform 0.5s;
+  }
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    background: cover;
+  }
+  .slide:nth-child(1) {
+    transform: rotateY(0deg) translateZ(500px);
+  }
+  .slide:nth-child(2) {
+    transform: rotateY(72deg) translateZ(500px);
+  }
+  .slide:nth-child(3) {
+    transform: rotateY(144deg) translateZ(500px);
+  }
+  .slide:nth-child(4) {
+    transform: rotateY(216deg) translateZ(500px);
+  }
+  .slide:nth-child(5) {
+    transform: rotateY(288deg) translateZ(500px);
+  }
+  @keyframes rotate {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+  }
 
-    <title>Cobelo Official Websites</title>
-       <link rel="stylesheet" href="Going-Style.css" />
- 
-
-  <style>
-
- body{
-      font-family: "Georgia", serif;
-      margin-right: -25px;
-      width: 400%;
-      display: flex;
-      align-items: center;
-      align-content: flex-end;
-      /* justify-content: space-around; */
-      flex-direction: row-reverse;
+  /* Footer styles */
+  footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background: transparent;
+    padding: 10px 0;
+    box-sizing: border-box;
+  }
+  footer fieldset {
+    max-width: 500px;
+    width: 90%;
+    background-image: url('footer.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    border: 1px solid #338628;
+    padding: 15px 10px;
+    color:rgb(0, 0, 0);
+    font-weight: 900;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Georgia", serif;
+  }
+  footer legend, footer p {
+    font-family: "Georgia", serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  @media (max-width: 600px) {
+    .slider-container {
+      width: 95vw;
+      height: calc(95vw * 0.45875); /* Maintain aspect ratio approx (367/800) */
     }
-    </style>
+    footer fieldset {
+      width: 95%;
+      padding: 10px 8px;
+      font-size: 14px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-text">
+  <h2>Cobelo - 3D Display</h2>
+</div>
+
+<div class="slider-container">
+  <div class="slider">
+    <div class="slide"><img src="cobelog2.jpg" alt="Image 1"></div>
+    <div class="slide"><img src="fb.jpg" alt="Image 2"></div>
+    <div class="slide"><img src="NC11passers.jpeg" alt="Image 3"></div>
+    <div class="slide"><style a href="Index1.css"></style><img src="ICT&SMAW_Class-Pictorial.png" alt="Image 3"></div>
+    <div class="slide"><img src="top.jpg" alt="Image 4"></div>
+    <div class="slide"><img src="Screenshot_2023-11-13-17-15-21-34_22e4250240c136c826b8a3b1264b092d.jpg" alt="Image 5"></div>
+  </div>
+</div>
+
+<div class="top-text">
+  <h2>Follow me on Social Media Platform</h2>
+</div>
+
+<div class="card-slider-container">
+  <button class="slider-arrow left">&#60;</button>
+  <div class="card-slider">
+    <div class="profile-card">
+      <img src="cobelog2.jpg" alt="James Wilson">
+      <h3>James Wilson</h3>
+      <p class="role">Software Developer</p href="web-btn.css">
+      <button class="msg-btn">Message</button>
+    </div>
+    <div class="profile-card">
+      <img src="cobelog2.jpg" alt="Zoe Olivia">
+      <h3>Zoe Olivia</h3>
+      <p class="role">Fashion Designer</p>
+      <button class="msg-btn">Message</button>
+    </div>
+    <div class="profile-card">
+      <img src="cobelog2.jpg" alt="Index1.html">
+      <h3>David Brown</h3>
+      <p class="role">Graphic Designer</p>
+      <button class="msg-btn">Message</button>
+    </div>
+  </div>
+  <button class="slider-arrow right"></button>
+</div>
+<div class="slider-dots">
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+</div>
+<div class="subtitle">
+  Welcome! KA DeVcom!
+</div>
+
+<html>
+  <title>Search Sites</title>
+    <link rel="stylesheet" href="search-bar.css" />
+<article>
+<form action="https://www.google.com/search" method="GET" target="_blank" class="google-search-form">
+  <input type="search" name="q" placeholder="Search Google..." aria-label="Google Search" required/>
+  <button type="submit">Search</button>
+</form>
+  <!-- Other article content can go here -->
+</article>
+
     <div class="page-surface">
       <!-- Linking Google Fonts for Icons -->
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
@@ -168,10 +341,22 @@
 
  <!-- .page-surface -->
  </body> 
-  </html>
 
 
 
 
 
 
+
+
+</html>
+
+<footer>
+  <fieldset>
+    <legend>Published By: CrisBa</legend>
+    <p>&copy; Copyright by CrispBa Github.io | 2023 All Rights Reserved</p>
+  </fieldset>
+</footer>
+
+</body>
+</html>
