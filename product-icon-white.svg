@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-labelledby="title desc" role="img">
+  <title id="title">CrispBa Products Logo (White)</title>
+  <desc id="desc">Monochrome white product icon for dark backgrounds</desc>
+  <defs>
+    <clipPath id="round">
+      <rect x="0" y="0" width="64" height="64" rx="12" ry="12"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#round)">
+    <rect width="64" height="64" fill="transparent"/>
+    <!-- White box outline -->
+    <g transform="translate(8,10)" fill="#ffffff">
+      <path d="M4 6 L28 0 L52 6 L28 18 Z"/>
+      <path d="M4 6 L4 34 L28 46 L52 34 L52 6" fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+    </g>
+    <!-- White bolt -->
+    <g transform="translate(20,18)">
+      <path d="M10 0 L4 16 L14 16 L8 32 L30 10 L18 10 L24 0 Z" fill="#ffffff" transform="scale(0.55)"/>
+    </g>
+  </g>
+</svg>

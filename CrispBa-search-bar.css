@@ -1,29 +1,49 @@
+/* In CrispBa-search-bar.css */
+
 .google-search-form {
   display: flex;
   justify-content: center;
-  max-width: 900px;
-  height: 100px;
-  margin: 40px auto 30px auto;
+  margin: 30px auto;
+  max-width: 700px;
+  gap: 11px;
+  height: 100;
+  box-shadow: 0 2px 18px rgb(250 37 155);
   border-radius: 40px;
   overflow: hidden;
+  /* Use CSS variables for the random color and smooth transition */
+  --random-color: rgba(250, 37, 155, 0.11); /* Default fallback color */
+  background-image: url("rainb.gif");
+  transition: background-color 0.5s ease, box-shadow 0.5s ease;
+  width: 100%;
 }
+
+
+.google-search-form:hover {
+  /* Use the JavaScript-updated custom property on hover */
+  box-shadow: 0 9px 38px var(--random-color);
+  width: auto;
+}
+
 
 .google-search-form input[type="search"] {
   flex-grow: 1;
-  padding: 14px 24px;
+  overflow-wrap: wrap;
+  align-items: center;
   font-family: "Georgia", serif;
-  font-size: 1.1em;
+  font-size: 1.6em;
+  text-align:center;
   border: none;
+  display: flex;
   outline: none;
   color: #222;
-  box-shadow: 0 4px 18px rgba(250, 37, 155, 0.4);
-  transition: box-shadow 0.3s ease;
-  border-radius: 40px 0 0 40px;
+  box-shadow: 1 22px 55px rgb(189 255 4 / 90%);
+  transition: box-shadow 0.3s cubic-bezier(0.45, -1.11, 1, 1);
 }
 
 .google-search-form input[type="search"]::placeholder {
-  color: #d190d9;
-  font-weight: 600;
+  color: #fff67;
+  font-weight: 800px;
+  font-weight: bold;
 }
 
 .google-search-form input[type="search"]:focus {
@@ -31,24 +51,29 @@
 }
 
 .google-search-form button {
-  padding: 0 28px;
+  padding: 0px;
   font-family: "Georgia", serif;
-  font-size: 1.2em;
+  font-size: 1.3em;
   font-weight: 700;
-  color: white;
-  background: #fa259b;
+  color: black;
   border: none;
+  background-image: url("13.gif");
+  background-size: cover;
   cursor: pointer;
   box-shadow: 0 19px 20px rgba(250, 37, 155, 0.6);
   border-radius: 0 40px 40px 0;
   transition: background-color 0.3s ease;
 }
-
 .google-search-form button:hover {
-  background: #d31284;
+  background: #c00e75a8;
+}
+.search-btn {
+  width: 10vh;
 }
 .search-bar-container {
   position: fixed;
+  flex-wrap: wrap;
+  display: flex;
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
@@ -64,5 +89,27 @@
   overflow: hidden;
   transition: box-shadow 0.35s ease, background 0.35s ease;
 }
-
-
+.search-bar-container:hover {
+  box-shadow:
+    inset 2px 2px 6px rgba(255, 255, 255, 0.25),
+    inset -3px -3px 8px rgba(0, 0, 0, 0.8),
+    0 20px 30px rgba(250, 37, 155, 0.7);
+  background: #111428;
+  align-content: space-between;
+}
+.coder-life {
+  text-wrap: flex;
+  color: yellow;
+  font-size: 2em;
+  filter: drop-shadow(-10px 0px 20px #fff000);
+  font-family:'Times New Roman', Times, serif;
+  text-shadow: 0 0 5px #6f7787, 0 0 10px #fdebfb, 0 0 20px #ef06d0, 0 0 40px #03f107;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-inline-start: 0cqw;
+}
+.coder-life:hover {
+  transform: scale(1.09);}
+/* End of CrispBa-search-bar.css */

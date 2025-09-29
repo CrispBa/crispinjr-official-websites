@@ -40,7 +40,7 @@
           <div style="flex:1">
             <label>Choose image file: <input id="editorFile" type="file" accept="image/*"></label>
             <div style="font-size:0.8rem;color:#666;margin-top:6px">Or paste an image URL below</div>
-            <input id="editorImg" type="text" placeholder="cobelog2.jpg or https://..." style="width:100%;margin-top:6px">
+            <input id="editorImg" type="text" placeholder="choose image or https://..." style="width:100%;margin-top:6px">
           </div>
           <div style="width:120px;text-align:center">
             <div style="width:96px;height:96px;border-radius:50%;overflow:hidden;border:1px solid #ddd;display:inline-block">
@@ -133,7 +133,12 @@
     });
 
     // wire buttons
-    document.getElementById('editorClose').addEventListener('click', ()=> modal.classList.remove('open'));
+    document.getElementById('editorClose').addEventListener('click', ()=>{
+      modal.classList.remove('open');
+      // ensure the Save button is visible again when closing the editor
+      const sb = document.getElementById('editorSave');
+      if(sb) sb.style.display = 'inline-block';
+    });
     const fileInput = document.getElementById('editorFile');
     const imgInput = document.getElementById('editorImg');
     const previewSmall = document.getElementById('editorPreviewSmall');
@@ -187,6 +192,8 @@
       try{ cropper.destroy() }catch(e){}
       cropper = null;
       cropArea.style.display = 'none';
+      // ensure Save button is visible after applying crop
+      try{ const sb = document.getElementById('editorSave'); if(sb) sb.style.display = 'inline-block'; }catch(e){}
     });
     document.getElementById('editorSave').addEventListener('click', ()=>{
       const state = loadState();
@@ -196,13 +203,53 @@
       applyState(state);
       modal.classList.remove('open');
     });
-    document.getElementById('editorReset').addEventListener('click', ()=>{
-      localStorage.removeItem(LS_KEY);
-      applyState(defaultState);
-      // update inputs
-      document.getElementById('editorImg').value = defaultState.img;
-      document.getElementById('editorText').value = defaultState.text;
-    });
+
+const resetBtn = document.getElementById('editorReset');
+const saveBtn = document.getElementById('editorSave');
+
+if (resetBtn) {
+  resetBtn.addEventListener('click', function() {
+    const defaultImage = 'cobelog2.jpg';
+    const defaultText = 'CRISPIN JR, S. COBELO';
+
+    // Reset header logo image
+    const headerImg = document.getElementById('headerLogoImg');
+    if (headerImg) headerImg.src = defaultImage;
+
+    // Reset small preview inside editor
+    const preview = document.getElementById('editorPreviewSmall');
+    if (preview) preview.src = defaultImage;
+
+    // Reset editor inputs
+    const imgInputEl = document.getElementById('editorImg');
+    if (imgInputEl) imgInputEl.value = defaultImage;
+    const textInputEl = document.getElementById('editorText');
+    if (textInputEl) textInputEl.value = defaultText;
+
+    // Reset header text
+    const headerText = document.getElementById('headerLogoText');
+    if (headerText) headerText.textContent = defaultText;
+
+    // Clear saved state so defaults persist
+    try { localStorage.removeItem(LS_KEY); } catch(e) {}
+
+    // Destroy cropper if active and hide crop area
+    try { if (typeof cropper !== 'undefined' && cropper) { try { cropper.destroy(); } catch(e){} cropper = null; } } catch(e) {}
+    try { if (typeof cropArea !== 'undefined' && cropArea) cropArea.style.display = 'none'; } catch(e) {}
+
+    // Hide the save button
+    if (saveBtn) saveBtn.style.display = 'none';
+  });
+}
+
+if (saveBtn) {
+  saveBtn.addEventListener('click', function() {
+    // After saving we can hide the save button (optional behaviour)
+    saveBtn.style.display = 'none';
+    if (resetBtn) resetBtn.style.display = 'inline-block';
+  });
+}
+
 
     btn.addEventListener('click', ()=>{
       const state = loadState();
@@ -250,3 +297,28 @@ document.querySelectorAll(".sidebar-toggler, .sidebar-menu-button").forEach((but
 });
 // Collapse sidebar by default on small screens
 if (window.innerWidth <= 1024) document.querySelector(".sidebar").classList.add("collapsed");
+
+// Inside the DOMContentLoaded event listener...
+document.addEventListener("DOMContentLoaded", function() {
+  // ... (existing code for editor, slideshow, etc.) ...
+
+  // Function to generate a random RGB color
+  function getRandomRgbColor() {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  // Random color hover effect for search bar
+  const searchForm = document.querySelector('.google-search-form');
+  
+  searchForm.addEventListener('mouseenter', () => {
+    // Generate a new random color on each hover
+    const randomColor = getRandomRgbColor();
+    
+    // Set the CSS custom property for the background and box-shadow
+    searchForm.style.setProperty('--random-color', randomColor);
+  });
+});
+
