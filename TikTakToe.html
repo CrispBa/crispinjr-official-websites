@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>CrispBa Stylish Tic Tac Toe</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+  
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-image: url('https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUyZXZ3amdhbGEzMWdlcG84Yml0bHN5aXU0Njd2eHJmbmZ5N3gzeXo3aiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UNHplVba2fweBfkLHv/giphy.gif');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center; /* Optional: centers the image */
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 15px;
+    color: white;
+  }
+  
+  h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 10px #0007;
+  }
+
+  #players {
+    margin-bottom: 20px;
+  }
+  input {
+    padding: 8px 14px;
+    font-size: 1.2em;
+    border-radius: 15px;
+    border: none;
+    margin: 0 15px 20px 0;
+    outline: none;
+    transition: box-shadow 0.3s ease;
+  }
+  input:focus {
+    box-shadow: 0 0 10px 3px #4a00e0;
+  }
+
+  #board {
+    display: grid;
+    grid-template-columns: repeat(3, 130px);
+    grid-template-rows: repeat(3, 130px);
+    gap: 15px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.12);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    padding: 20px;
+    user-select: none;
+  }
+
+  .cell {
+    background: linear-gradient(145deg, #6a00f4, #4a00b0);
+    border-radius: 20px;
+    box-shadow: inset 4px 4px 8px #35006b, inset -4px -4px 8px #7f33ff;
+    font-size: 7rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: #dcd6f7;
+  }
+  .cell:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px 3px #8e2de2;
+  }
+  .cell.animated {
+    animation: popScale 0.4s ease forwards;
+  }
+  
+  @keyframes popScale {
+    0% {transform: scale(0.7);}
+    50% {transform: scale(1.2);}
+    100% {transform: scale(1);}
+  }
+
+  #result {
+    margin-top: 25px;
+    font-size: 1.5em;
+    font-weight: 700;
+    text-shadow: 1px 1px 5px #000a;
+  }
+
+  #scores {
+    margin-top: 15px;
+    font-size: 1.1em;
+  }
+
+  button {
+    margin-top: 25px;
+    background: linear-gradient(120deg, #8e2de2, #4a00e0);
+    border: none;
+    padding: 14px 35px;
+    border-radius: 30px;
+    color: white;
+    font-weight: 700;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    box-shadow: 0 8px 15px rgba(74,0,224,0.5);
+  }
+  button:hover {
+    background: #5c00bb;
+    box-shadow: 0 10px 20px rgba(74,0,224,0.7);
+  }
+</style>
+</head>
+<body>
+
+<h1>CrispBa Tic Tac Toe</h1>
+
+<div id="players">
+  Player X: <input type="text" id="playerXName" placeholder="Player X name" value="Player X" />
+  Player O: <input type="text" id="playerOName" placeholder="Player O name" value="Player O" />
+</div>
+
+<div id="board">
+  <div class="cell" data-index="0"></div>
+  <div class="cell" data-index="1"></div>
+  <div class="cell" data-index="2"></div>
+  <div class="cell" data-index="3"></div>
+  <div class="cell" data-index="4"></div>
+  <div class="cell" data-index="5"></div>
+  <div class="cell" data-index="6"></div>
+  <div class="cell" data-index="7"></div>
+  <div class="cell" data-index="8"></div>
+</div>
+
+<div id="result"></div>
+<div id="scores">
+  <span id="scoreX">Player X: 0</span> | <span id="scoreO">Player O: 0</span>
+</div>
+
+<button id="resetBtn">Reset Game</button>
+
+<script>
+  const board = Array(9).fill(null);
+  const cells = document.querySelectorAll('.cell');
+  const result = document.getElementById('result');
+  const resetBtn = document.getElementById('resetBtn');
+  const playerXNameInput = document.getElementById('playerXName');
+  const playerONameInput = document.getElementById('playerOName');
+  const scoreXDisplay = document.getElementById('scoreX');
+  const scoreODisplay = document.getElementById('scoreO');
+
+  let currentPlayer = 'X';
+  let gameActive = true;
+  let scores = { X: 0, O: 0 };
+
+  function checkWin() {
+    const winPatterns = [
+      [0,1,2], [3,4,5], [6,7,8],
+      [0,3,6], [1,4,7], [2,5,8],
+      [0,4,8], [2,4,6]
+    ];
+    for (const pattern of winPatterns) {
+      const [a,b,c] = pattern;
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+        return board[a];
+      }
+    }
+    if (board.every(cell => cell)) {
+      return 'Tie';
+    }
+    return null;
+  }
+
+  function updateScore(player) {
+    scores[player]++;
+    scoreXDisplay.textContent = `${playerXNameInput.value || 'Player X'}: ${scores.X}`;
+    scoreODisplay.textContent = `${playerONameInput.value || 'Player O'}: ${scores.O}`;
+  }
+
+  function animateCell(cell) {
+    cell.classList.add('animated');
+    setTimeout(() => cell.classList.remove('animated'), 400);
+  }
+
+  cells.forEach(cell => {
+    cell.addEventListener('click', () => {
+      const idx = cell.getAttribute('data-index');
+      if (!gameActive || board[idx]) return;
+
+      board[idx] = currentPlayer;
+      cell.textContent = currentPlayer;
+      animateCell(cell);
+
+      const winner = checkWin();
+      if (winner) {
+        gameActive = false;
+        if (winner === 'Tie') {
+          result.textContent = `It's a tie!`;
+        } else {
+          updateScore(winner);
+          const winnerName = winner === 'X' ? (playerXNameInput.value || 'Player X') : (playerONameInput.value || 'Player O');
+          const loserName = winner === 'X' ? (playerONameInput.value || 'Player O') : (playerXNameInput.value || 'Player X');
+          result.textContent = `🎉 Congratulations ${winnerName}! You win! Game Over for ${loserName}.`;
+        }
+      } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        result.textContent = `Current Player: ${currentPlayer === 'X' ? (playerXNameInput.value || 'Player X') : (playerONameInput.value || 'Player O')}`;
+      }
+    });
+  });
+
+  resetBtn.addEventListener('click', () => {
+    board.fill(null);
+    cells.forEach(cell => cell.textContent = '');
+    gameActive = true;
+    currentPlayer = 'X';
+    result.textContent = `Current Player: ${playerXNameInput.value || 'Player X'}`;
+  });
+
+  // Initialize
+  result.textContent = `Current Player: ${playerXNameInput.value || 'Player X'}`;
+  scoreXDisplay.textContent = `${playerXNameInput.value || 'Player X'}: 0`;
+  scoreODisplay.textContent = `${playerONameInput.value || 'Player O'}: 0`;
+</script>
+
+</body>
+</html>
