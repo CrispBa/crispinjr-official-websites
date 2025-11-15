@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CrispBa Platform</title>
   <!-- Load Roboto from Google Fonts -->
+   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -342,12 +343,35 @@ menu-item:hover {
       white-space: nowrap;
     }
 
-
 .ai-btn img {
-  /* Control the size of your icon */
+  /* Existing styles */
   width: 50px;
   height: 35px;
+  
+  /* --- NEW ANIMATION PROPERTIES --- */
+  animation-name: icon-wobble; /* Links to the keyframes below */
+  animation-duration: 2s;      /* Takes 2 seconds to complete one cycle */
+  animation-iteration-count: infinite; /* Makes it auto-moving (nonstop) */
+  animation-timing-function: ease-in-out; /* Smooth start/end */
+  animation-direction: alternate; /* Makes it go forward and then backward */
 }
+
+/* --- The Animation Definition --- */
+@keyframes icon-wobble {
+  0% {
+    /* Starting state: slightly up and normal size */
+    transform: translateY(-2px) scale(1); 
+  }
+  50% {
+    /* Midway state: slightly down and slightly larger (pulsate) */
+    transform: translateY(2px) scale(1.05); 
+  }
+  100% {
+    /* Final state: back to the starting position/size for the 'alternate' direction */
+    transform: translateY(-2px) scale(1);
+  }
+}
+
 
     .ai-btn:hover {
       background: rgba(255, 255, 255, 0.2);
@@ -534,7 +558,29 @@ menu-item:hover {
       font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
-    }
+   
+      /* Auto-Animation for Nonstop Moving/Transforming (The Subtle Shake) */
+  animation: 
+    button-shake 1.5s ease-in-out infinite alternate; 
+}
+
+/* --- 2. KEYFRAME DEFINITION --- */
+
+/* Keyframes for the button shake effect (Auto-Transforming) */
+@keyframes button-shake {
+  0% {
+    /* Starting position */
+    transform: translateY(-50%) translateX(0); 
+  }
+  50% {
+    /* Subtle movement to the right */
+    transform: translateY(-50%) translateX(3px); 
+  }
+  100% {
+    /* Subtle movement to the left (Note: 'alternate' ensures a smooth loop) */
+    transform: translateY(-50%) translateX(-3px); 
+  }
+}
 
     .search-submit-btn:hover {
       background: linear-gradient(45deg, #00f2ea, #ff0050);
@@ -720,25 +766,49 @@ menu-item:hover {
     }
 
     .close-ai-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-      padding: 0;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      transition: var(--transition);
+    background: none;
+    border: none;
+    color: white;
+    font-size: 33px;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: var(--transition);
     }
 
     .close-ai-btn:hover {
       background: rgba(255, 255, 255, 0.2);
       transform: scale(1.4) rotate(18deg);
       color: blue;
+    }
+
+    .close-ai-btnn {
+      
+    background: none;
+    border: none;
+    font-weight:400px;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: var(--transition);
+    }
+   .close-ai-btnn:hover {
+    color: skyblue;
+    transform: scale(1.4) rotate(18deg);
+    background: none;
+    font-weight: 400px;
     }
 
     .ai-chat-messages {
@@ -796,6 +866,30 @@ menu-item:hover {
       resize: none;
       font-family: inherit;
       background: white;
+    }
+    
+    .ai-send-btnn {
+    padding: 10px 15px;
+    background: linear-gradient(1000deg, #00f2ea, #ff0050);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: var(--transition);
+    transform: translate(%, 50%);
+    }
+
+    .ai-send-btnn:hover {
+      background: linear-gradient(200deg, #ff0050, #00f2ea);
+      color:skyblue;
+      transform: scale(1.03);
+      padding: 11px 16px;
+    }
+     
+    .ai-send-btnn:disabled {
+      background: rgba(59, 130, 246, 0.5);
+      cursor: not-allowed;
     }
 
     .ai-send-btn {
@@ -1047,6 +1141,7 @@ menu-item:hover {
       position: relative;
       overflow: hidden;
     }
+    
 
     .social-account-card::before {
       content: '';
@@ -1058,9 +1153,11 @@ menu-item:hover {
       transition: var(--transition);
     }
 
-    .social-account-card.facebook::before {
-      background: #1877f2;
-    }
+   .social-account-card.facebook::before {
+  /* Existing style */
+  background: #1877f2;
+   }
+  
 
     .social-account-card.tiktok::before {
       background: linear-gradient(45deg, #00f2ea, #ff0050);
@@ -1537,6 +1634,34 @@ menu-item:hover {
   /* Prevents the default browser outline from appearing on click */
   outline: none;
 }
+
+/* Contact form styles (merged from indexba.html) */
+.location-notice { margin-bottom: 15px; padding: 12px; background: linear-gradient(135deg,#f8f9ff 0%, #e8f4fd 100%); border-left: 4px solid #667eea; border-radius: 8px; }
+.location-notice small { color: #666; font-style: italic; font-size: 12px; display: block; }
+.form-group { display:flex; flex-direction:column; gap:8px; margin-bottom: 18px; }
+.form-group label { font-weight: 700; color: #444; font-size: 14px; }
+.form-group input, .form-group textarea { padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; transition: all 0.3s ease; font-family: inherit; }
+.form-group input[type="text"], .form-group input[type="email"] { height: 45px; }
+.form-group textarea { min-height: 120px; resize: vertical; line-height: 1.5; }
+.form-group input:focus, .form-group textarea:focus { outline: none; border-color: #667eea; box-shadow: 0 0 10px rgba(102,126,234,0.2); }
+.btnform { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 14px; border: none; width: 100%; border-radius: 8px; font-size: 16px; font-weight: 700; margin-top: 10px; cursor: pointer; transition: all 0.3s ease; }
+.btnform:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.35); }
+.btnform:disabled { background: #a0a0a0; cursor: not-allowed; opacity: 0.8; }
+.form-status-message { margin-top: 15px; padding: 12px 15px; border-radius: 8px; font-size: 14px; text-align: center; font-weight: 500; transition: all 0.3s ease; line-height: 1.4; display: none; }
+.form-status-message.success { background: linear-gradient(135deg,#d4edda 0%, #c3e6cb 100%); color: #155724; border: 1px solid #c3e6cb; animation: slideIn 0.3s ease; }
+.form-status-message.error { background: linear-gradient(135deg,#f8d7da 0%, #f5c6cb 100%); color: #721c24; border: 1px solid #f5c6cb; animation: shake 0.3s ease; }
+.form-status-message.info { background: linear-gradient(135deg,#d1ecf1 0%, #bee5eb 100%); color: #0c5460; border: 1px solid #bee5eb; }
+
+@keyframes slideIn { from { opacity: 0; transform: translateY(-10px);} to { opacity: 1; transform: translateY(0);} }
+@keyframes shake { 0%,100%{ transform: translateX(0);} 25%{ transform: translateX(-5px);} 75%{ transform: translateX(5px);} }
+
+/* Responsive tweaks for small screens inside modal */
+@media (max-width: 480px) {
+  .form-group input, .form-group textarea { font-size: 15px; }
+  .btnform { padding: 12px; font-size: 15px; }
+  .form-status-message { font-size: 13px; }
+}
+
   </style>
 
   <!-- Additional UI polish styles: improved hovers, focus, cards, and buttons -->
@@ -1796,7 +1921,7 @@ menu-item:hover {
               <button class="dropbtn menu-item" onclick="toggleDropdown(this); return false;"><img class="menu-icon" src="Settingslogo.png" alt=""> Settings</button>
               <div class="dropdown-content">
                 <a href="About-us.html" class="menu-item"><img class="menu-icon" src="info.png" alt="">About</a>
-                <a href="https://formsubmit.co/el/rimita" class="menu-item"><img class="menu-icon" src="chat.png" alt="">Message US</a>
+                <a href="#" class="menu-item" onclick="toggleMessageOverlay(); return false;"><img class="menu-icon" src="chat.png" alt="">Message US</a>
                 <a href="Terms of Service.html" class="menu-item"><img class="menu-icon" src="terms-of-service.png" alt="">Terms of Service</a>
 		 <a href="privacy-policy.html" class="menu-item"><img class="menu-icon" src="policylogo.png" alt="">Privacy Policy</a>
                 <a href="Translator.html" class="menu-item"><img class="menu-icon" src="translator.png" alt="">Translate</a>
@@ -1857,6 +1982,7 @@ menu-item:hover {
       <!-- Social Feed Section -->
       <section class="social-feed">
         <div class="feed-header">
+          <br>
           <h2>Latest Updates</h2>
           <p>Stay connected with the community</p>
         </div>
@@ -1945,6 +2071,68 @@ menu-item:hover {
     </footer>
   </div>
 
+  <!-- MESSAGE US OVERLAY (Developed By: CrispBa) -->
+<div id="messageOverlay" class="ai-modal">
+    <div class="ai-chat-container" style="max-width:600px; height:auto; min-height:60vh;">
+
+        <!-- Header -->
+        <div class="ai-chat-header">
+            <h3>Message Us</h3>
+            <button class="close-ai-btnn" onclick="toggleMessageOverlay()">✖</button>
+        </div>
+
+        <!-- Contact Form Content -->
+        <div style="padding:20px; overflow-y:auto; max-height:65vh;">
+
+            <form id="contact-form">
+
+                <div class="location-notice" style="
+                    margin-bottom:15px;
+                    padding:12px;
+                    background:linear-gradient(135deg,#f8f9ff 0%, #e8f4fd 100%);
+                    border-left:4px solid #667eea;
+                    border-radius:8px;">
+                    <small style="color:#666; font-style:italic;">
+                        📍 We'll request your approximate location for contact records (optional)
+                    </small>
+                    <div style="margin-top:8px;">
+                      <button type="button" id="showLocHint" style="background:transparent;border:none;color:#2563eb;font-weight:600;cursor:pointer;padding:0;margin-top:6px;">How to enable location</button>
+                      <div id="locationHint" style="display:none;margin-top:8px;background:#f9fafb;border:1px solid #e6eefc;padding:10px;border-radius:8px;color:#333;font-size:13px;">
+                        <strong>Enable location:</strong> Allow site location in your browser settings (click the padlock icon in the address bar → Site settings → Location → Allow). If you're opening the file locally (file://), geolocation may be blocked — run a local HTTP server and try again.
+                      </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Full Name:</label>
+                    <input type="text" id="user_name" name="user_name" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address:</label>
+                    <input type="email" id="user_email" name="user_email" required placeholder="your.email@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Subject:</label>
+                    <input type="text" id="subject" name="subject" required placeholder="What is this message about?">
+                </div>
+
+                <div class="form-group">
+                    <label>Message:</label>
+                    <textarea id="message" name="message" required placeholder="Tell us more..." rows="5"></textarea>
+                </div>
+
+                <button type="submit" class="btnform">Send Message</button>
+
+                <div id="status-message" class="form-status-message" style="display:none;"></div>
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
   <!-- AI Chat Modal -->
   <div id="aiModal" class="ai-modal">
     <div class="ai-chat-container">
@@ -1955,12 +2143,12 @@ menu-item:hover {
       <div id="aiChatMessages" class="ai-chat-messages">
         <div class="message-row ai">
           <div class="message-icon" aria-hidden="true">CB</div>
-          <div class="message-bubble ai">Hello! I'm here to help with your questions. Ask me anything about CrispBa, Because I am a programmed assistant designed to provide support in CrispBa's life.</div>
+          <div class="message-bubble ai">Hello! I'm here to help with your questions. Ask me anything about CrispBa, and I am a programmed assistant designed to provide support.</div>
         </div>
       </div>
       <div class="ai-chat-input">
         <textarea id="aiInputField" class="ai-input-field" placeholder="Ask anything here about CrispBa.... "Cobelo"" rows="1"></textarea>
-        <button id="aiSendBtn" class="ai-send-btn" onclick="sendAIMessage()">Send</button>
+        <button id="aiSendBtn" class="ai-send-btnn" onclick="sendAIMessage()">Send</button>
       </div>
     </div>
   </div>
@@ -2310,6 +2498,7 @@ menu-item:hover {
         { question: "who is crispin?", keyWords: ["crispin"], answer: "Crispin Jr. Sialana Cobelo, also known as CrispBa, is my developer and creator. Thank you for using the CrispBa AI Chatbot." },
         { question: "who is your crush?", keyWords: ["crush"], answer: "My crush in school is Lady Shene Gonzaga. Keep it private between us! Dont tell anyone that shes my crush hehe. Thank you for using the CrispBa AI Chatbot." },
         { question: "are you single?", keyWords: ["single"], answer: "Haha, yes I am currently single. But I have a crush in my school that I love so much! Thank you for using the CrispBa AI Chatbot." }
+        {question: "tell me a joke", keyWords: ["joke", "funny"], answer: "Why don't scientists trust atoms? Because they make up everything! 😂"},
       ];
 
       // try to match keywords in order
@@ -2369,7 +2558,7 @@ menu-item:hover {
             <h3 class="service-title"><i><b>Laptop/PC Bypass Password & Forggoten</b></i></h3>
             <p class="service-desc">Learn methods to bypass a forgotten password on your laptop or PC. Regain access to your locked computer safely.</p>
             <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
-              <button class="ai-send-btn service-request-btn" onclick="window.open('https://formsubmit.co/el/rimita','_blank')">Request</button>
+              <button class="ai-send-btn service-request-btn" onclick="closeServicesModal(); toggleMessageOverlay(); return false;">Request</button>
             </div>
           </div>
 
@@ -2378,7 +2567,7 @@ menu-item:hover {
             <h3 class="service-title"><i><b>Laptop/PC Troubleshooting</b></i></h3>
             <p class="service-desc">A technical support service designed to identify, diagnose, and resolve hardware or software issues to restore your computer to optimal working condition.</p>
             <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
-              <button class="ai-send-btn service-request-btn" onclick="window.open('https://formsubmit.co/el/rimita','_blank')">Request</button>
+              <button class="ai-send-btn service-request-btn" onclick="closeServicesModal(); toggleMessageOverlay(); return false;">Request</button>
             </div>
           </div>
 
@@ -2387,7 +2576,7 @@ menu-item:hover {
             <h3 class="service-title"><i><b>Laptop/PC Format/Installation</b></i></h3>
             <p class="service-desc">This service involves a complete format of your computer's hard drive to securely erase all data, which resolves system errors and removes viruses. We then perform a clean, professional installation of your specified operating system to restore your device to a like-new state.</p>
             <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
-              <button class="ai-send-btn service-request-btn" onclick="window.open('https://formsubmit.co/el/rimita','_blank')">Request</button>
+              <button class="ai-send-btn service-request-btn" onclick="closeServicesModal(); toggleMessageOverlay(); return false;">Request</button>
             </div>
           </div>
 
@@ -2396,7 +2585,7 @@ menu-item:hover {
             <h3 class="service-title"><i><b>PC/Laptop - Windows Server r2 Installation</b></i></h3>
             <p class="service-desc">This service provides the professional installation of a Windows Server R2 operating system onto your PC or laptop. This process will configure your device to function as a server, a setup ideal for business applications, software development and testing.</p>
             <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
-              <button class="ai-send-btn service-request-btn" onclick="window.open('https://formsubmit.co/el/rimita','_blank')">Request</button>
+              <button class="ai-send-btn service-request-btn" onclick="closeServicesModal(); toggleMessageOverlay(); return false;">Request</button>
             </div>
           </div>
         </div>
@@ -2591,6 +2780,200 @@ menu-item:hover {
     });
     
   });
+
+    function toggleMessageOverlay() {
+      document.getElementById("messageOverlay").classList.toggle("show");
+    }
+
+    // Auto height for textarea ONLY (no width expanding)
+document.addEventListener("input", function(e){
+    if (e.target.tagName.toLowerCase() === "textarea") {
+        const ta = e.target;
+        ta.style.height = "auto";   // reset
+        ta.style.height = ta.scrollHeight + "px"; // expand height only
+    }
+});
+
+// Merge contact form logic from indexba.html (EmailJS + robust validation + tracking)
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize EmailJS when available
+  function initEmailJS() {
+    if (typeof emailjs !== 'undefined') {
+      try { emailjs.init({ publicKey: 'wno10-3WHKFrrecfm' }); } catch(e){}
+      console.log('✅ EmailJS initialized');
+      return true;
+    }
+    console.warn('EmailJS not loaded yet');
+    return false;
+  }
+
+  if (window.emailjs) initEmailJS(); else setTimeout(initEmailJS, 100);
+
+  const form = document.getElementById('contact-form');
+  if (!form) { console.error('Contact form not found'); return; }
+
+  // Ensure status message exists
+  var statusMessage = document.getElementById('status-message');
+  if (!statusMessage) {
+    statusMessage = document.createElement('div');
+    statusMessage.id = 'status-message';
+    statusMessage.className = 'form-status-message';
+    form.appendChild(statusMessage);
+  }
+  statusMessage.style.display = 'none';
+
+  // Tracking data
+  var trackingData = window.trackingData || { time_sent:'', location:'Not available', ip_address:'Not retrieved', user_agent: navigator.userAgent.slice(0,100), timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown'};
+  var ipFetched = false, locationFetched = false;
+
+  async function getIPAddress() {
+    if (ipFetched) return trackingData.ip_address;
+    try {
+      var res = await fetch('https://api.ipify.org?format=json');
+      var data = await res.json();
+      trackingData.ip_address = data.ip || 'Unknown';
+    } catch(e) { trackingData.ip_address = 'Unable to retrieve'; }
+    ipFetched = true;
+    return trackingData.ip_address;
+  }
+
+  function getUserLocation() {
+    // Return a Promise that resolves when location is obtained (or a fallback is set)
+    return new Promise(function(resolve) {
+      if (locationFetched) { resolve(trackingData.location); return; }
+      if (!navigator.geolocation) {
+        trackingData.location = 'Not provided';
+        locationFetched = true;
+        resolve(trackingData.location);
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(function(pos){
+        trackingData.location = pos.coords.latitude.toFixed(4)+', '+pos.coords.longitude.toFixed(4);
+        locationFetched = true;
+        resolve(trackingData.location);
+      }, function(err){
+        // If user denies or an error occurs, set a neutral value
+        trackingData.location = 'Not provided';
+        locationFetched = true;
+        resolve(trackingData.location);
+      }, { enableHighAccuracy:false, timeout:10000, maximumAge:600000 });
+    });
+  }
+
+  function updateTimestamp(){ trackingData.time_sent = new Date().toLocaleString(); }
+
+  // Validation (immediate, similar to indexba)
+  function validateForm(){
+    form.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+    var fields = {
+      user_name: form.querySelector('input[name="user_name"]'),
+      user_email: form.querySelector('input[name="user_email"]'),
+      subject: form.querySelector('input[name="subject"]'),
+      message: form.querySelector('textarea[name="message"]')
+    };
+    if (!fields.user_name || !fields.user_email || !fields.subject || !fields.message) { showStatus('Form fields missing', 'error'); return false; }
+
+    var hasError = false;
+    if (!fields.user_name.value.trim() || fields.user_name.value.trim().length < 2) { fields.user_name.classList.add('error'); showStatus('Please enter your name', 'error'); fields.user_name.focus(); hasError = true; }
+    var emailVal = fields.user_email.value.trim(); if (!emailVal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) { fields.user_email.classList.add('error'); showStatus('Please enter a valid email', 'error'); fields.user_email.focus(); hasError = true; }
+    if (!fields.subject.value.trim() || fields.subject.value.trim().length < 2) { fields.subject.classList.add('error'); showStatus('Please enter a subject', 'error'); fields.subject.focus(); hasError = true; }
+    if (!fields.message.value.trim() || fields.message.value.trim().length < 10) { fields.message.classList.add('error'); showStatus('Please enter a longer message', 'error'); fields.message.focus(); hasError = true; }
+    return !hasError;
+  }
+
+  function showStatus(message, type){ statusMessage.textContent = message; statusMessage.className = 'form-status-message '+type; statusMessage.style.display = 'block'; if (type === 'success') setTimeout(()=>{ statusMessage.style.display='none'; },4000); }
+
+  function resetForm(){ form.reset(); form.querySelectorAll('.error').forEach(el=>el.classList.remove('error')); if (statusMessage){ statusMessage.style.display='none'; statusMessage.textContent=''; } var notice = form.querySelector('.location-notice'); if (notice) notice.style.display='none'; }
+
+  function addTrackingData(){
+    updateTimestamp();
+    trackingData.location = trackingData.location || 'Not available';
+    trackingData.ip_address = trackingData.ip_address || 'Not retrieved';
+    var ua = trackingData.user_agent.length > 80 ? trackingData.user_agent.slice(0,80)+'...' : trackingData.user_agent;
+    // Build fields but omit location when it's a neutral/placeholder value
+    var fields = {
+      time_sent: trackingData.time_sent,
+      location: trackingData.location,
+      ip_address: trackingData.ip_address,
+      user_agent: ua,
+      timezone: trackingData.timezone
+    };
+
+    // Neutral location values we don't want to send in email
+    var neutralLocations = ['Not provided','Not available','Unable to retrieve','Permission denied','Location unavailable','Geolocation not supported'];
+    if (neutralLocations.indexOf(String(fields.location)) !== -1) {
+      delete fields.location;
+    }
+
+    // Remove any previous tracking hidden fields
+    Object.keys(fields).forEach(k=>{ var existing = form.querySelector('input[name="'+k+'"]'); if (existing) form.removeChild(existing); });
+
+    // Append remaining fields
+    Object.entries(fields).forEach(([k,v])=>{
+      var inp = document.createElement('input'); inp.type='hidden'; inp.name=k; inp.value=String(v); form.appendChild(inp);
+    });
+  }
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    if (!validateForm()) return;
+    await getIPAddress(); await getUserLocation(); addTrackingData();
+    var submitBtn = form.querySelector('.btnform'); if (!submitBtn) { showStatus('Submit button not found', 'error'); return; }
+    var orig = submitBtn.textContent; var wasDisabled = submitBtn.disabled;
+    submitBtn.textContent='Sending...'; submitBtn.disabled = true; showStatus('Sending your message...', 'info');
+    try {
+      if (typeof emailjs === 'undefined') throw new Error('EmailJS not loaded');
+      var res = await emailjs.sendForm('service_ceac6th','template_69e9tlb', form);
+      console.log('Email sent', res);
+      showStatus('Message sent successfully! Thank you for contacting us.', 'success');
+      setTimeout(()=>{ resetForm(); if (window.scrollTo) window.scrollTo({top:0,behavior:'smooth'}); }, 2000);
+    } catch(err){ console.error('Send failed', err); var msg='Failed to send message. Please try again.'; if (err && err.status===0) msg='No internet connection detected.'; if (err && err.status===429) msg='Too many requests. Try again later.'; showStatus(msg,'error'); }
+    finally{ submitBtn.textContent = orig; submitBtn.disabled = wasDisabled; ['time_sent','location','ip_address','user_agent','timezone'].forEach(k=>{ var f = form.querySelector('input[name="'+k+'"]'); if (f && f.type==='hidden') try{ form.removeChild(f);}catch(e){} }); }
+  });
+
+  // Real-time validation clear
+  form.addEventListener('input', function(e){ var f=e.target; if (f.classList.contains('error')){ var v=f.value.trim(); if (f.name==='user_email'){ if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) f.classList.remove('error'); } else if ((f.name==='user_name' && v.length>=2) || (f.name==='subject' && v.length>=2) || (f.name==='message' && v.length>=10)){ f.classList.remove('error'); } } });
+
+  // Initialize tracking fetches
+  setTimeout(()=>{ getIPAddress(); getUserLocation(); updateTimestamp(); }, 500);
+
+});
+
+function requestLocationEarly() {
+  if (window.locationFetched) return;            // already done
+  if (!navigator.geolocation) {
+    console.warn('Geolocation not supported');
+    window.trackingData.location = 'Geolocation not supported';
+    window.locationFetched = true;
+    return;
+  }
+
+  console.log('📍 Requesting location early...');
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const { latitude, longitude } = pos.coords;
+      window.trackingData.location = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+      window.locationFetched = true;
+      console.log('📍 Early location:', window.trackingData.location);
+    },
+    (err) => {
+      console.warn('⚠️ Early location error:', err.message);
+      window.trackingData.location = (err.code === 1) ? 'Permission denied' : 'Location unavailable';
+      window.locationFetched = true;
+    },
+    { enableHighAccuracy: false, timeout: 8000, maximumAge: 600000 }
+  );
+}
+// Toggle location hint visibility (small helper for users)
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('showLocHint');
+  var hint = document.getElementById('locationHint');
+  if (!btn || !hint) return;
+  btn.addEventListener('click', function(){
+    if (hint.style.display === 'none' || !hint.style.display) hint.style.display = 'block'; else hint.style.display = 'none';
+  });
+});
 </script>
 </body>
 </html>
