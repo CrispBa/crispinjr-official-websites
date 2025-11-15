@@ -1,0 +1,48 @@
+<div style="max-width: 480px; margin: 32px auto; background: #fff; border-radius: 18px; box-shadow: 0 8px 40px rgba(30,80,160,0.20); overflow: hidden; font-family: system-ui,Arial,sans-serif;">
+<div style="font-size: 1.2em; color: #fff; font-weight: bold; letter-spacing: 0px; background: linear-gradient(89deg,#2980b9 0%,#22a7f0 100%); ; padding: 2px; text-align: center; border-radius: 8px 8px 0 0; margin: -15px -15px 20px px;"><span style="color: #ecf0f1; max-width: 480px;"><em>New Message Received!!</em></span></div>
+<div style="padding: 18px 22px;">
+<p style="margin-top: 0; margin-bottom: 14px; font-size: 1.09em; color: #333; font-weight: 500;">Hi <span style="color: #236fa1; font-family: Georgia,serif; font-size: 1.15em;">{{user_name}}</span>.</p>
+<br>
+<p style="margin: 5px 0px 18px; font-size: 1em; color: #333333; text-align: justify;">Thank you for reaching out to us! We have received your request: <span style="color: #3598db; font-weight: 600;">{{subject}}</span>,&nbsp; from your website contact form, and I do our best to process it within 1-3 business days.</p>
+<br>
+<table style="width: 100%; border-collapse: collapse; background: #f8faff; border-radius: 10px; overflow: hidden; box-shadow: rgba(30, 80, 160, 0.08) 0px 2px 12px; margin-bottom: 10px; height: 192px; border-width: 1px; border-color: #ced4d9;" border="1">
+<tbody>
+<tr style="height: 48px;">
+<td style="background: #eaf6fb; color: #236fa1; font-weight: 600; font-family: 'Book Antiqua', Palatino, serif; padding: 12px 8px; border-width: 1px; border-right-style: solid; border-color: #ced4d9; width: 28.3334%;">Name</td>
+<td style="background: #f8faff; color: #2d3436; font-family: 'Courier New', Courier, monospace; padding: 12px 8px; width: 71.7433%; border-width: 1px; border-color: #ced4d9;">{{user_name}}</td>
+</tr>
+<tr style="height: 48px;">
+<td style="background: #eaf6fb; color: #236fa1; font-weight: 600; font-family: 'Book Antiqua', Palatino, serif; padding: 12px 8px; border-width: 1px; border-right-style: solid; border-color: #ced4d9; width: 28.3334%;">Email</td>
+<td style="background: #f8faff; color: #2d3436; font-family: 'Courier New', Courier, monospace; padding: 12px 8px; width: 71.7433%; border-width: 1px; border-color: #ced4d9;">{{user_email}}</td>
+</tr>
+<tr style="height: 48px;">
+<td style="background: #eaf6fb; color: #236fa1; font-weight: 600; font-family: 'Book Antiqua', Palatino, serif; padding: 12px 8px; border-width: 1px; border-right-style: solid; border-color: #ced4d9; width: 28.3334%;">Subject</td>
+<td style="background: #f8faff; color: #2d3436; font-family: 'Courier New', Courier, monospace; padding: 12px 8px; width: 71.7433%; border-width: 1px; border-color: #ced4d9;">{{subject}}</td>
+</tr>
+<tr style="height: 48px;">
+<td style="background: #eaf6fb; color: #236fa1; font-weight: 600; font-family: 'Book Antiqua', Palatino, serif; padding: 12px 8px; border-width: 1px; border-right-style: solid; border-color: #ced4d9; width: 28.3334%;">Message</td>
+<td style="background: #f8faff; color: #2d3436; font-family: 'Courier New', Courier, monospace; padding: 12px 8px; width: 71.7433%; border-width: 1px; border-color: #ced4d9;">{{message}}</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<hr>
+<p><a style="color: #3498db;"><span style="color: #34495e;">Best regards,</span><br></a><img style="height: 27px; width: 27px;translate:0px 8px;border: 2px solid skyblue; border-radius: 16px;" src="https://crispba.github.io/crispinjr-official-websites/cobelog2.jpg" alt="logo"> <a href="https://www.facebook.com/crispinjr.cobelo"><span style="font-size: 12pt;padding: 0px; margin:0px;">Crispin Jr, Cobelo</span></a></p>
+<br>
+<div style="background: #e8f4fd; padding: 20px; border-radius: 8px; border-left: 4px solid #3498db; margin: 20px 0;">
+<h4 style="color: #2c3e50; margin-top: 0;">📊 Technical Details</h4>
+<p><strong>📅 Sent:</strong> {{time_sent}}</p>
+<p><strong>🌐 IP Address:</strong> {{ip_address}}</p>
+<p><strong>📍 Location:</strong> {{location}}</p>
+<p><strong>💻 Device:</strong> {{user_agent}}</p>
+<p><strong>🕐 Timezone:</strong> {{timezone}}</p>
+<hr><em style="color: #666; text-align: center; font-size: 14px; margin: 0;"> This is an automated message from </em><em style="color: #666; text-align: center; font-size: 14px; margin: 0;"><a href="https://bit.ly/crispba">CrispBa Platform </a>website contact form.<br><em style="color: #666; text-align: center; font-size: 14px; margin: 0;">No action required unless you choose to respond to the sender.</em></em>
+<p>&nbsp;</p>
+</div>
+</div>
+</div>
+<style>
+    div {
+      background-color: whitesmoke;
+          }
+  </style>
