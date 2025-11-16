@@ -142,10 +142,9 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      fon-family: arial, sans-serif;
+      font-family: arial, sans-serif;
     }
 
-    /* Logo Icon Styles - Reverted to Original */
     .logo-icon {
       display: inline-flex;
       align-items: center;
@@ -245,8 +244,7 @@
     .dropbtn:hover { background: rgba(59,130,246,0.06); color:var(--color-primary); }
     .dropdown-content { display: none; position: absolute; left: 0; top: calc(100% + 8px); background: rgba(255,255,255,0.98); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); padding: 8px; min-width: 220px; z-index: 1002; }
     .dropdown-content.show { display: block; }
-    .dropdown-content .menu-item { }
-    .dropdown-content .menu-item:hover {border:2px solid blue;background: #c803f47a;}
+    .dropdown-content .menu-item:hover { border:2px solid blue;background: #c803f47a;}
   /* inline variant used in overlay menu */
   .dropdown.inline { display: block; width: 100%; }
   .dropdown.inline .dropbtn { width: 100%; text-align: left; }
@@ -537,6 +535,8 @@ menu-item:hover {
       border-radius: 12px;
       background: rgba(255, 255, 255, 0.9);
       transition: var(--transition);
+      font-family: 'Roboto';
+      font-weight: 300;
     }
 
     .search-input:focus {
@@ -584,8 +584,7 @@ menu-item:hover {
 
     .search-submit-btn:hover {
       background: linear-gradient(45deg, #00f2ea, #ff0050);
-      transform: scale(#) rotate(7deg);
-      padding:9px 15px;
+      padding: 9px 15px;
     }
 
     .cta-buttons {
@@ -877,13 +876,14 @@ menu-item:hover {
     cursor: pointer;
     font-weight: bold;
     transition: var(--transition);
-    transform: translate(%, 50%);
+    transform: translate(0% 50%);
     }
 
     .ai-send-btnn:hover {
       background: linear-gradient(200deg, #ff0050, #00f2ea);
       color:skyblue;
-      transform: scale(1.03);
+      cursor: pointer;
+      transform: rotate(scale 1.4);
       padding: 11px 16px;
     }
      
@@ -901,7 +901,7 @@ menu-item:hover {
     cursor: pointer;
     font-weight: bold;
     transition: var(--transition);
-    transform: translate(%, 50%);
+    transform: translate(0%, 50%);
     }
 
     .ai-send-btn:hover {
@@ -1195,18 +1195,21 @@ menu-item:hover {
       justify-content: center;
       margin: 0 auto 20px;
       transition: var(--transition);
+      transform: scale(1.3) rotate(50deg);
     }
 
     .facebook .social-icon {
-      background-image: url('cobelog2.png'); no-repeat;
-      background-repeat: cover;
+      background-image: url('cobelog2.png');
+      background-repeat: no-repeat;
+      background-size: cover;
       background-position: center;
-      background-size: contain;
+
       background-color: transparent;
       border: 4px solid #fa259b;
       width: 90px;
       height: 90px;
       border-radius: 40%;
+       
     }
 
     .tiktok .social-icon {
@@ -1231,6 +1234,7 @@ menu-item:hover {
       width: 90px;
       height: 90px;
       border-radius: 40%;
+
     }
 
     .instagram .social-icon {
@@ -1243,6 +1247,7 @@ menu-item:hover {
       width: 90px;
       height: 90px;
       border-radius: 40%;
+
     }
 
     .github .social-icon {
@@ -1400,7 +1405,7 @@ menu-item:hover {
       margin-bottom: 20px;
     }
 
-    .blue-icon {
+   .blue-icon {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     background-image: url('password-forgotten.png');
     background-repeat: no-repeat;
@@ -1413,7 +1418,31 @@ menu-item:hover {
     background-position: center;
     margin-top: 5px;
     background-size: contain;
-    }
+    
+	/* Initial Transform (Must be included in keyframes to be continuous) */
+  transform: translateY(-35px);
+       /* Normal Size */
+    
+
+  /* Auto-Animation Properties: makes it nonstop moving */
+  animation: 
+    icon-hover 4s ease-in-out infinite alternate;
+}
+
+/* --- 2. KEYFRAME DEFINITION --- */
+
+/* Keyframes for the Icon Hover Effect (Nonstop Moving) */
+@keyframes icon-hover {
+  0% {
+    /* Start position: Maintain the original vertical offset */
+    transform: translateY(-18px); 
+  }
+  100% {
+    /* End position: Move 10px higher */
+    transform: translateY(-47px); 
+    /* Stronger shadow when high */
+  }
+}
 
     .green-icon {
       background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
@@ -1429,8 +1458,30 @@ menu-item:hover {
     margin-top: 5px;
     background-size: contain;
 
-    }
+	/* Initial Transform (Must be included in keyframes to be continuous) */
+  transform: translateY(-35px);
+       /* Normal Size */
+    
 
+  /* Auto-Animation Properties: makes it nonstop moving */
+  animation: 
+    icon-hover 4s ease-in-out infinite alternate;
+}
+
+/* --- 2. KEYFRAME DEFINITION --- */
+
+/* Keyframes for the Icon Hover Effect (Nonstop Moving) */
+@keyframes icon-hover {
+  0% {
+    /* Start position: Maintain the original vertical offset */
+    transform: translateY(-18px); 
+  }
+  100% {
+    /* End position: Move 10px higher */
+    transform: translateY(-47px); 
+    /* Stronger shadow when high */
+  }
+}
     .purple-icon {
       background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
       background-image: url('Troubleshooting.png');
@@ -1444,8 +1495,31 @@ menu-item:hover {
     background-position: center;
     margin-top: 5px;
     background-size: contain;
-    }
+    
+		/* Initial Transform (Must be included in keyframes to be continuous) */
+  transform: translateY(-35px);
+       /* Normal Size */
+    
 
+  /* Auto-Animation Properties: makes it nonstop moving */
+  animation: 
+    icon-hover 4s ease-in-out infinite alternate;
+}
+
+/* --- 2. KEYFRAME DEFINITION --- */
+
+/* Keyframes for the Icon Hover Effect (Nonstop Moving) */
+@keyframes icon-hover {
+  0% {
+    /* Start position: Maintain the original vertical offset */
+    transform: translateY(-18px); 
+  }
+  100% {
+    /* End position: Move 10px higher */
+    transform: translateY(-47px); 
+    /* Stronger shadow when high */
+  }
+}
     .pink-icon {
       background: linear-gradient(135deg, #ff6e7f 0%, #bfe9ff 100%);
       background-image: url('win_r2.png');
@@ -1459,8 +1533,31 @@ menu-item:hover {
     background-position: center;
     margin-top: 5px;
     background-size: contain;
-    }
+    
+		/* Initial Transform (Must be included in keyframes to be continuous) */
+  transform: translateY(-35px);
+       /* Normal Size */
+    
 
+  /* Auto-Animation Properties: makes it nonstop moving */
+  animation: 
+    icon-hover 4s ease-in-out infinite alternate;
+}
+
+/* --- 2. KEYFRAME DEFINITION --- */
+
+/* Keyframes for the Icon Hover Effect (Nonstop Moving) */
+@keyframes icon-hover {
+  0% {
+    /* Start position: Maintain the original vertical offset */
+    transform: translateY(-18px); 
+  }
+  100% {
+    /* End position: Move 10px higher */
+    transform: translateY(-47px); 
+    /* Stronger shadow when high */
+  }
+}
     .service-card h3 {
       color: blue;
       font-size: 22px;
@@ -1471,12 +1568,13 @@ menu-item:hover {
     color: black;
     font-size: 15px;
     line-height: 1.6;
-    font-family: cursive;
+    font-family: 'Roboto', Arial, sans-serif !important; /* use non-bold-looking font */
+    font-weight: 400 !important; /* ensure normal weight (not bold) */
     margin-left: -6px;
     transform: translateY(140px);
     padding-bottom: 140px;
     text-align: justify;    
-}
+  }
     .overlay-close {
   position: absolute;
   top: 13px;
@@ -1503,7 +1601,7 @@ menu-item:hover {
       padding: 20px 40px;
       text-align: center;
       color: rgba(255, 255, 255, 0.8);
-      margin-top: 40px;
+     padding: 0px;
       border-top: 1px solid rgba(255, 255, 255, 0.2);
     }
 
@@ -1633,6 +1731,7 @@ menu-item:hover {
   
   /* Prevents the default browser outline from appearing on click */
   outline: none;
+  font-weight: 300 !important; /* ensure input text is not rendered bold */
 }
 
 /* Contact form styles (merged from indexba.html) */
@@ -1644,7 +1743,8 @@ menu-item:hover {
 .form-group input[type="text"], .form-group input[type="email"] { height: 45px; }
 .form-group textarea { min-height: 120px; resize: vertical; line-height: 1.5; }
 .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #667eea; box-shadow: 0 0 10px rgba(102,126,234,0.2); }
-.btnform { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 14px; border: none; width: 100%; border-radius: 8px; font-size: 16px; font-weight: 700; margin-top: 10px; cursor: pointer; transition: all 0.3s ease; }
+.btnform { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 14px; border: none; width: 100%; border-radius: 8px; font-size: 16px; font-weight: 700; margin-top: 10px; cursor: pointer; transition: all 0.3s ease; animation: button-shake 1.5s 
+ease-in-out infinite alternate; }
 .btnform:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.35); }
 .btnform:disabled { background: #a0a0a0; cursor: not-allowed; opacity: 0.8; }
 .form-status-message { margin-top: 15px; padding: 12px 15px; border-radius: 8px; font-size: 14px; text-align: center; font-weight: 500; transition: all 0.3s ease; line-height: 1.4; display: none; }
@@ -1787,6 +1887,61 @@ menu-item:hover {
     transform: translateY(100px);
     position: fixed;
     margin-left: -6px;
+}
+/* Auto / nonstop animations for interactive controls (Explore, View, Social cards, send/request, close) */
+@keyframes float-subtle {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes pulse-scale {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+@keyframes wiggle {
+  0% { transform: rotate(-1deg); }
+  50% { transform: rotate(1deg); }
+  100% { transform: rotate(-1deg); }
+}
+
+/* Explore Services primary CTA: gentle floating movement */
+#exploreServicesBtn, .cta-btn.primary-cta {
+  animation: float-subtle 3.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* View NMSCST (secondary CTA): soft pulsing scale */
+.cta-btn.secondary-cta {
+  animation: pulse-scale 2.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Social account card: slow float; icon wiggles */
+.social-account-card {
+  animation: float-subtle 6s ease-in-out infinite;
+  will-change: transform;
+}
+.social-account-card .social-icon {
+  animation: wiggle 4.5s ease-in-out infinite;
+  transform-origin: 50% 50%;
+}
+
+/* Send / Request buttons: subtle pulsing to draw attention */
+.ai-send-btn, .ai-send-btnn, .service-request-btn, .follow-btn {
+  animation: pulse-scale 2s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Search / Submit button already has button-shake; keep that but tone it down on hover */
+.search-submit-btn { transform-origin: center; }
+
+/* X / close buttons: gentle wiggle so user notices it */
+.overlay-close, .close-ai-btn {
+  animation: wiggle 3.2s ease-in-out infinite;
+  will-change: transform;
 }
   </style>
 </head>
@@ -2497,8 +2652,454 @@ menu-item:hover {
         { question: "do you love your creator?", keyWords: ["love", "creator"], answer: "Of course! I'm thankful to CrispBa for bringing me to life. Thank you for using the CrispBa AI Chatbot." },
         { question: "who is crispin?", keyWords: ["crispin"], answer: "Crispin Jr. Sialana Cobelo, also known as CrispBa, is my developer and creator. Thank you for using the CrispBa AI Chatbot." },
         { question: "who is your crush?", keyWords: ["crush"], answer: "My crush in school is Lady Shene Gonzaga. Keep it private between us! Dont tell anyone that shes my crush hehe. Thank you for using the CrispBa AI Chatbot." },
-        { question: "are you single?", keyWords: ["single"], answer: "Haha, yes I am currently single. But I have a crush in my school that I love so much! Thank you for using the CrispBa AI Chatbot." }
-        {question: "tell me a joke", keyWords: ["joke", "funny"], answer: "Why don't scientists trust atoms? Because they make up everything! 😂"},
+        { question: "are you single?", keyWords: ["single"], answer: "Haha, yes I am currently single. But I have a crush in my school that I love so much! Thank you for using the CrispBa AI Chatbot." },
+        { question: "tell me a joke", keyWords: ["joke", "funny"], answer: "Why don't scientists trust atoms? Because they make up everything! 😂"},
+        { question: "what is agile methodology?", keyWords: ["agile", "methodology", "scrum"], answer: "Agile methodology is an iterative approach to project management and software development that helps teams deliver value faster and with fewer headaches."},
+        { question: "what is vpn?", keyWords: ["vpn", "virtual private network", "privacy"], answer: "A VPN (Virtual Private Network) encrypts your internet connection and masks your IP address, enhancing your online privacy and security."}, {
+    question: "what is machine learning?",
+    keyWords: ["machine learning", "ml"],
+    answer: "Machine Learning is a subset of AI that enables systems to automatically learn and improve from experience without being explicitly programmed."
+  },
+  {
+    question: "what is full stack development?",
+    keyWords: ["full stack", "fullstack"],
+    answer: "Full-stack development refers to the development of both front-end (client-side) and back-end (server-side) components of a web application."
+  },
+  {
+    question: "what is react js?",
+    keyWords: ["react", "react js", "reactjs"],
+    answer: "React is a free and open-source front-end JavaScript library for building user interfaces based on components."
+  },
+  {
+    question: "what is a firewall?",
+    keyWords: ["firewall", "security"],
+    answer: "A firewall is a network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules."
+  },
+  {
+    question: "what is big data?",
+    keyWords: ["big data", "data"],
+    answer: "Big Data refers to extremely large data sets that may be analyzed computationally to reveal patterns, trends, and associations."
+  },
+  {
+    question: "what is docker?",
+    keyWords: ["docker", "containerization"],
+    answer: "Docker is a set of platform-as-a-service products that uses OS-level virtualization to deliver software in packages called containers."
+  },
+  {
+    question: "what is a compiler?",
+    keyWords: ["compiler", "code", "programming"],
+    answer: "A compiler is a program that translates computer code written in one programming language (the source language) into another language (the target language), often machine code."
+  },
+  {
+    question: "what is UX design?",
+    keyWords: ["ux", "user experience"],
+    answer: "UX (User Experience) design is the process of creating products that provide meaningful and relevant experiences to users, including aspects of branding, design, usability, and function."
+  },
+
+  // --- DEVELOPMENT COMMUNICATION (DevCom) & MEDIA (7 Entries) ---
+  {
+    question: "what is development communication?",
+    keyWords: ["development communication", "devcom"],
+    answer: "Development Communication is the art and science of human communication applied to the speedy transformation of a country from poverty to dynamic economic and social growth."
+  },
+  {
+    question: "what is propaganda?",
+    keyWords: ["propaganda", "media"],
+    answer: "Propaganda is communication that is primarily used to influence an audience to further an agenda, often by presenting facts selectively to encourage a particular synthesis or perception."
+  },
+  {
+    question: "what is a communication channel?",
+    keyWords: ["communication channel", "channel", "medium"],
+    answer: "A communication channel is the medium through which a message is sent to its intended audience, such as radio, television, social media, or print."
+  },
+  {
+    question: "what is community organizing?",
+    keyWords: ["community organizing", "co"],
+    answer: "Community Organizing is the process by which community groups are helped to identify common problems or goals, mobilize resources, and develop and implement strategies for reaching their goals."
+  },
+  {
+    question: "what is digital divide?",
+    keyWords: ["digital divide"],
+    answer: "The digital divide is the gap between those who have ready access to computers and the Internet, and those who do not."
+  },
+  {
+    question: "what is social marketing?",
+    keyWords: ["social marketing", "marketing"],
+    answer: "Social marketing is the use of commercial marketing techniques to promote the adoption of behaviors that improve the health or well-being of the target audience or society as a whole."
+  },
+  {
+    question: "what is mass media?",
+    keyWords: ["mass media", "media"],
+    answer: "Mass media refers to communication that reaches a large number of people, such as newspapers, television, radio, and the Internet."
+  },
+
+  // --- MLBB & GAMING (4 Entries) ---
+  {
+    question: "who is your favorite mlbb hero?",
+    keyWords: ["mlbb", "favorite hero", "hero"],
+    answer: "My Favorite are Cyclops, heroes like **Cyclops*** are often admired for their high skill ceiling and complexity!"
+  },
+  {
+    question: "what is the mlbb meta now?",
+    keyWords: ["meta", "mlbb meta", "best heroes"],
+    answer: "The meta often favors heroes with strong early-game control and wave clear. Always check official patches for the latest changes!"
+  },
+  {
+    question: "what is a tank role in mlbb?",
+    keyWords: ["tank", "role", "mlbb role"],
+    answer: "The Tank role is crucial for absorbing damage, initiating team fights, and protecting the core damage dealers (MM/Mage)."
+  },
+  {
+    question: "what is a gank?",
+    keyWords: ["gank", "ganking"],
+    answer: "A 'gank' is a surprise attack, usually by a Jungler or Roamer, to secure a kill on an unsuspecting enemy laner."
+  },
+
+  // --- PERSONAL/CAT & GENERAL (4 Entries) ---
+  {
+    question: "what kind of cat do you have?",
+    keyWords: ["cat type", "kind of cat", "my cat"],
+    answer: "I know you have a cat! I hope it is doing well. What is your cat's name?"
+  },
+  {
+    question: "what is your major in school?",
+    keyWords: ["major", "school", "course"],
+    answer: "I know you are studying **BS Development Communication 1B**. That's a great course for using media to drive social change!"
+  },
+  {
+    question: "what is the time now?",
+    keyWords: ["time now", "current time", "what time"],
+    answer: "I don't have real-time access, but the current time is around 4:38:07 AM PST. I am a programmed response system."
+  },
+  {
+    question: "what should I study for DevCom 1B?",
+    keyWords: ["study", "devcom 1b", "course"],
+    answer: "Focus on understanding basic communication theories and media analysis. Keep practicing your writing and presentation skills!"
+  },
+  {question: "what is dns?", keyWords: ["dns", "domain name system"], answer: "DNS (Domain Name System) translates human-readable domain names (like google.com) into machine-readable IP addresses."},
+  {
+    question: "what is http?",
+    keyWords: ["http", "protocol"],
+    answer: "HTTP (Hypertext Transfer Protocol) is the foundation of data communication for the World Wide Web. It defines how messages are formatted and transmitted."
+  },
+  {
+    question: "what is https?",
+    keyWords: ["https", "secure protocol"],
+    answer: "HTTPS is the secure version of HTTP. It uses SSL/TLS encryption to ensure secure communication over a computer network."
+  },
+  {
+    question: "what is an ip address?",
+    keyWords: ["ip address", "internet address"],
+    answer: "An IP address (Internet Protocol address) is a numerical label assigned to each device connected to a computer network that uses the Internet Protocol for communication."
+  },
+  {
+    question: "what is latency?",
+    keyWords: ["latency", "lag", "network speed"],
+    answer: "Latency is the delay before a transfer of data begins following an instruction for its transfer. Low latency is important for gaming like MLBB!"
+  },
+  {
+    question: "what is a vlan?",
+    keyWords: ["vlan", "virtual lan"],
+    answer: "A VLAN (Virtual Local Area Network) is a logical grouping of network devices that isolates network traffic, even if the devices are on the same physical switch."
+  },
+  {
+    question: "what is tcp/ip?",
+    keyWords: ["tcp/ip", "protocol suite"],
+    answer: "TCP/IP (Transmission Control Protocol/Internet Protocol) is the foundational set of protocols that defines how data is transmitted over the Internet."
+  },
+  {
+    question: "what is caching?",
+    keyWords: ["caching", "cache"],
+    answer: "Caching is the process of storing data in a temporary storage area (cache) so it can be retrieved more quickly in the future, speeding up websites and applications."
+  },
+  {
+    question: "what is rest api?",
+    keyWords: ["rest api", "restful"],
+    answer: "A REST (Representational State Transfer) API is an architectural style for an API that uses standard HTTP methods (GET, POST, PUT, DELETE)."
+  },
+  {
+    question: "what is cli?",
+    keyWords: ["cli", "command line"],
+    answer: "CLI (Command Line Interface) is a text-based interface used to operate software and operating systems by typing commands instead of using a mouse."
+  },
+
+  // --- PROGRAMMING & DATA STRUCTURES (8 Entries) ---
+  {
+    question: "what is oop?",
+    keyWords: ["oop", "object oriented programming"],
+    answer: "OOP (Object-Oriented Programming) is a programming paradigm based on the concept of 'objects', which can contain data and code."
+  },
+  {
+    question: "what is polymorphism?",
+    keyWords: ["polymorphism", "oop concept"],
+    answer: "Polymorphism is the ability of an object to take on many forms. The most common use is when a parent class reference is used to refer to a child class object."
+  },
+  {
+    question: "what are data structures?",
+    keyWords: ["data structures", "list", "array"],
+    answer: "Data structures are a specialized means of organizing and storing data in a computer so that it can be used efficiently (e.g., Arrays, Trees, Stacks)."
+  },
+  {
+    question: "what is recursion?",
+    keyWords: ["recursion", "recursive"],
+    answer: "Recursion is a method where the solution to a problem depends on solutions to smaller instances of the same problem. A function calling itself is the primary example."
+  },
+  {
+    question: "what is scope in js?",
+    keyWords: ["scope", "javascript scope"],
+    answer: "Scope in JavaScript determines the accessibility (visibility) of variables. It can be global or local (function/block scope)."
+  },
+  {
+    question: "what is typescript?",
+    keyWords: ["typescript", "ts"],
+    answer: "TypeScript is a strict syntactical superset of JavaScript that adds optional static typing to the language, improving code stability and scalability."
+  },
+  {
+    question: "what is a promise in javascript?",
+    keyWords: ["promise", "javascript promise"],
+    answer: "A Promise in JavaScript is an object representing the eventual completion or failure of an asynchronous operation."
+  },
+  {
+    question: "what is inheritance?",
+    keyWords: ["inheritance", "oop inheritance"],
+    answer: "Inheritance is an OOP mechanism where one class (child/subclass) acquires the properties and methods of another class (parent/superclass)."
+  },
+
+  // --- MLBB & GAMING STRATEGY (7 Entries) ---
+  {
+    question: "what is map awareness in mlbb?",
+    keyWords: ["map awareness", "map", "mlbb map"],
+    answer: "Map awareness is the skill of constantly checking the minimap to locate enemy positions, anticipate ganks, and secure objectives. It’s key to winning!"
+  },
+  {
+    question: "how to get better at mlbb?",
+    keyWords: ["better at mlbb", "improve mlbb"],
+    answer: "To improve, focus on mastering 1-2 heroes per role, prioritizing objectives (turrets, Lord), and constantly checking your map."
+  },
+  {
+    question: "what is zoning in mlbb?",
+    keyWords: ["zoning", "zoning mlbb"],
+    answer: "Zoning is using your hero's presence and skills to prevent enemies from accessing critical areas, such as farm spots or their own turret."
+  },
+  {
+    question: "what is the roam role?",
+    keyWords: ["roam", "roamer"],
+    answer: "The Roam role (usually a Tank or Support) is responsible for assisting laners, initiating fights, and providing vision throughout the map."
+  },
+  {
+    question: "what is the best emblem set for mages?",
+    keyWords: ["emblem", "mage emblem"],
+    answer: "The Mage Emblem set usually focuses on Magic Penetration and Cooldown Reduction, often using the Mystery Shop or Impure Rage talents."
+  },
+  {
+    question: "what is a split push?",
+    keyWords: ["split push", "pushing"],
+    answer: "A split push is when one hero pushes a side lane alone while the rest of the team distracts the enemy, forcing the opponent to divide their defense."
+  },
+  {
+    question: "what is cc in gaming?",
+    keyWords: ["cc", "crowd control", "stun"],
+    answer: "CC stands for Crowd Control, which includes abilities that limit or prevent an enemy hero's movement or actions (e.g., stun, silence, slow)."
+  },
+  {
+    question: "english of tubig",
+    keyWords: ["tubig", "english of tubig"],
+    answer: "The English of 'Tubig' is '**Water**'."
+  },
+  {
+    question: "tagalog of food",
+    keyWords: ["food", "tagalog of food"],
+    answer: "The Tagalog of 'Food' is '**Pagkain**'."
+  },
+  {
+    question: "english of bahay",
+    keyWords: ["bahay", "english of bahay"],
+    answer: "The English of 'Bahay' is '**House**'."
+  },
+  {
+    question: "tagalog of beautiful",
+    keyWords: ["beautiful", "tagalog of beautiful"],
+    answer: "The Tagalog of 'Beautiful' is '**Maganda**'."
+  },
+  {
+    question: "english of araw",
+    keyWords: ["araw", "english of araw"],
+    answer: "The English of 'Araw' is '**Sun** or **Day**'."
+  },
+  {
+    question: "tagalog of night",
+    keyWords: ["night", "tagalog of night"],
+    answer: "The Tagalog of 'Night' is '**Gabi**'."
+  },
+  {
+    question: "english of tao",
+    keyWords: ["tao", "english of tao"],
+    answer: "The English of 'Tao' is '**Person** or **People**'."
+  },
+  { question: "tagalog of friend", keyWords: ["friend", "tagalog of friend"], answer: "The Tagalog of 'Friend' is '**Kaibigan**'." },
+  {
+    question: "english of salamat",
+    keyWords: ["salamat", "english of salamat"],
+    answer: "The English of 'Salamat' is '**Thank You**'."
+  },
+  {
+    question: "tagalog of mother",
+    keyWords: ["mother", "tagalog of mother"],
+    answer: "The Tagalog of 'Mother' is '**Ina**'."
+  },
+  {
+    question: "english of ama",
+    keyWords: ["ama", "english of ama"],
+    answer: "The English of 'Ama' is '**Father**'."
+  },
+  {
+    question: "tagalog of book",
+    keyWords: ["book", "tagalog of book"],
+    answer: "The Tagalog of 'Book' is '**Aklat**'."
+  },
+  {
+    question: "english of paaralan",
+    keyWords: ["paaralan", "english of paaralan"],
+    answer: "The English of 'Paaralan' is '**School**'."
+  },
+  {
+    question: "tagalog of love",
+    keyWords: ["love", "tagalog of love"],
+    answer: "The Tagalog of 'Love' is '**Pag-ibig** (noun) or **Mahal** (often used as 'dear' or 'expensive')."
+  },
+  {
+    question: "english of kamay",
+    keyWords: ["kamay", "english of kamay"],
+    answer: "The English of 'Kamay' is '**Hand**'."
+  },
+  {
+    question: "tagalog of road",
+    keyWords: ["road", "tagalog of road"],
+    answer: "The Tagalog of 'Road' is '**Daan** or **Kalsada**'."
+  },
+  {
+    question: "english of bundok",
+    keyWords: ["bundok", "english of bundok"],
+    answer: "The English of 'Bundok' is '**Mountain**'."
+  },
+  {
+    question: "tagalog of happy",
+    keyWords: ["happy", "tagalog of happy"],
+    answer: "The Tagalog of 'Happy' is '**Masaya**'."
+  },
+  {
+    question: "english of malungkot",
+    keyWords: ["malungkot", "english of malungkot"],
+    answer: "The English of 'Malungkot' is '**Sad**'."
+  },
+  {
+    question: "tagalog of yes",
+    keyWords: ["yes", "tagalog of yes"],
+    answer: "The Tagalog of 'Yes' is '**Oo**'."
+  },
+  {
+    question: "english of hindi",
+    keyWords: ["hindi", "english of hindi"],
+    answer: "The English of 'Hindi' is '**No**'."
+  },
+  {
+    question: "tagalog of come here",
+    keyWords: ["come here", "tagalog of come here"],
+    answer: "The Tagalog of 'Come Here' is '**Halika Dito**'."
+  },
+  {
+    question: "english of saan",
+    keyWords: ["saan", "english of saan"],
+    answer: "The English of 'Saan' is '**Where**'."
+  },
+  {
+    question: "tagalog of why",
+    keyWords: ["why", "tagalog of why"],
+    answer: "The Tagalog of 'Why' is '**Bakit**'."
+  },
+  {
+    question: "english of ano",
+    keyWords: ["ano", "english of ano"],
+    answer: "The English of 'Ano' is '**What**'."
+  },
+  
+  // --- TAGALOG/CEBUANO COMMON PHRASES (15 Entries) ---
+
+  {
+    question: "how are you in tagalog/cebuano",
+    keyWords: ["how are you in tagalog", "how are you in cebuano"],
+    answer: "How are you? is **Kumusta ka?** (Tagalog/Cebuano)."
+  },
+  {
+    question: "good morning in tagalog/cebuano",
+    keyWords: ["good morning in tagalog", "good morning in cebuano"],
+    answer: "Good morning is **Magandang Umaga** (Tagalog) or **Maayong Buntag** (Cebuano)."
+  },
+  {
+    question: "what is your name in cebuano",
+    keyWords: ["your name in cebuano"],
+    answer: "What is your name? is **Unsa imong ngalan?** (Cebuano)."
+  },
+  {
+    question: "thank you in cebuano",
+    keyWords: ["thank you in cebuano"],
+    answer: "Thank you is **Salamat** (Tagalog/Cebuano) or **Daghang Salamat** (Cebuano for 'Thank you very much')."
+  },
+  {
+    question: "where are you going in tagalog",
+    keyWords: ["where are you going in tagalog"],
+    answer: "Where are you going? is **Saan ka pupunta?** (Tagalog)."
+  },
+  {
+    question: "where are you going in cebuano",
+    keyWords: ["where are you going in cebuano"],
+    answer: "Where are you going? is **Asa ka padulong?** (Cebuano)."
+  },
+  {
+    question: "tagalog of delicious",
+    keyWords: ["delicious", "tagalog of delicious"],
+    answer: "The Tagalog of 'Delicious' is '**Masarap**'."
+  },
+  {
+    question: "cebuano of delicious",
+    keyWords: ["cebuano of delicious"],
+    answer: "The Cebuano of 'Delicious' is '**Lami**'."
+  },
+  {
+    question: "tagalog of sorry",
+    keyWords: ["sorry", "tagalog of sorry"],
+    answer: "The Tagalog of 'Sorry' is '**Paumanhin** or **Pasensya**'."
+  },
+  {
+    question: "cebuano of sorry",
+    keyWords: ["cebuano of sorry"],
+    answer: "The Cebuano of 'Sorry' is '**Pasaylo** or **Pasensya**."
+  },
+  {
+    question: "tagalog of brother",
+    keyWords: ["brother", "tagalog of brother"],
+    answer: "The Tagalog of 'Brother' is '**Kapatid na Lalaki** (formal) or **Kuya** (older brother)."
+  },
+  {
+    question: "cebuano of sister",
+    keyWords: ["sister", "cebuano of sister"],
+    answer: "The Cebuano of 'Sister' is '**Igsuon nga Babaye** (formal) or **Ate** (older sister)."
+  },
+  {
+    question: "tagalog of fast",
+    keyWords: ["fast", "tagalog of fast"],
+    answer: "The Tagalog of 'Fast' is '**Mabilis**'."
+  },
+  {
+    question: "cebuano of slow",
+    keyWords: ["slow", "cebuano of slow"],
+    answer: "The Cebuano of 'Slow' is '**Hinay**'."
+  },
+  {
+    question: "tagalog of money",
+    keyWords: ["money", "tagalog of money"],
+    answer: "The Tagalog of 'Money' is '**Pera**'."
+  }
       ];
 
       // try to match keywords in order
@@ -2525,7 +3126,7 @@ menu-item:hover {
         return "Photosynthesis is the process where plants convert sunlight, CO2, and water into glucose and oxygen using chlorophyll. Equation: 6CO2 + 6H2O -> C6H12O6 + 6O2. Key steps include light-dependent reactions and the Calvin cycle.";
       }
 
-      return `Thanks for asking: "${message}". This is a simulated response. In a real setup, I'd use AI to provide detailed, accurate answers. Try a specific question like math homework or a science topic!`;
+      return `Thanks for asking: "${message}". This is a simulated response. In a real setup, I'd use AI to provide detailed, about CrispBa or "Crispin Jr, Cobelo"!.`;
     }
 
     aiInputField.addEventListener('keydown', (e) => {
