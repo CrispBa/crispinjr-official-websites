@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Locked Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* --- CORE STYLES --- */
+        body {
+            background-color: #e5e7eb; 
+            height: 100vh;
+            overflow: hidden; 
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* --- LOGIN SCREEN STYLES --- */
+        #login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #1f2937; /* Dark background */
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999; /* On top of everything */
+        }
+        .login-box {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        /* --- APP INTERFACE (Hidden by default) --- */
+        #app-interface {
+            display: none; /* Hidden until unlocked */
+            height: 100%;
+            flex-direction: column;
+        }
+
+        /* Main Scrollable Area */
+        #viewport-bg {
+            scroll-behavior: smooth;
+            padding-bottom: 50vh; 
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* The container for all pages */
+        #pages-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px; 
+            padding-top: 20px;
+            transform-origin: top center;
+            transition: transform 0.2s ease;
+        }
+
+        /* Individual Page Style */
+        .page-sheet {
+            background: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            width: 210mm;
+            height: 297mm; 
+            padding: 2.54cm; 
+            overflow: hidden; 
+            position: relative;
+        }
+
+        /* The editable content area inside the page */
+        .page-content {
+            width: 100%;
+            height: 100%;
+            outline: none;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            line-height: 1.15; 
+            white-space: pre-wrap; 
+            word-wrap: break-word;
+        }
+
+        .page-content img {
+            max-width: 100%;
+            height: auto;
+            display: inline-block;
+            cursor: default;
+            border: 1px solid transparent;
+        }
+        .page-content img:hover { border: 1px dashed #2563eb; }
+
+        /* Placeholder on First Page */
+        .page-sheet:first-child .page-content:empty:before {
+            content: attr(data-placeholder);
+            color: #9ca3af;
+            font-style: italic;
+            pointer-events: none;
+        }
+
+        /* --- RIBBON UI STYLES --- */
+        .ribbon-container { 
+            background-color: #f3f4f6; 
+            border-bottom: 1px solid #d1d5db; 
+            user-select: none;
+        }
+        .ribbon-tabs { display: flex; background-color: #fff; padding-left: 1rem; border-bottom: 1px solid #e5e7eb; }
+        
+        .ribbon-tab {
+            padding: 8px 16px; cursor: pointer; font-size: 13px; color: #374151; border-top: 3px solid transparent;
+        }
+        .ribbon-tab:hover { background-color: #f3f4f6; }
+        .ribbon-tab.active {
+            color: #2563eb; border-top: 3px solid #2563eb; background-color: #f3f4f6; font-weight: 600;
+        }
+
+        .ribbon-panel { display: none; padding: 8px; gap: 8px; align-items: center; flex-wrap: wrap; height: 90px; }
+        .ribbon-panel.active { display: flex; }
+
+        .tool-btn {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 4px 8px; border-radius: 4px; font-size: 11px; color: #4b5563; min-width: 45px;
+            cursor: pointer; transition: background 0.1s; height: 100%;
+        }
+        .tool-btn:hover { background-color: #e5e7eb; color: #000; }
+        .tool-btn:active { background-color: #d1d5db; }
+        .tool-btn .material-icons { font-size: 22px; margin-bottom: 4px; }
+        
+        .separator { width: 1px; height: 40px; background-color: #d1d5db; margin: 0 4px; }
+        .ribbon-select { font-size: 12px; padding: 2px; border: 1px solid #d1d5db; border-radius: 4px; background-color: white; cursor: pointer; height: 24px; }
+        
+        .color-wrapper { position: relative; display: flex; justify-content: center; }
+        .color-picker-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+        .color-indicator { width: 20px; height: 4px; margin-top: 2px; border: 1px solid #ccc; }
+
+        /* Custom Modal */
+        #custom-margin-modal {
+            background: rgba(0,0,0,0.5);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; justify-content: center; align-items: center; z-index: 100;
+        }
+
+        /* --- PRINT STYLES --- */
+        @media print {
+            body { background: none !important; height: auto; overflow: visible; }
+            #login-overlay, .print\:hidden, .ribbon-container, #status-header { display: none !important; }
+            #app-interface { display: block !important; }
+            #viewport-bg { padding: 0; overflow: visible; height: auto; }
+            #pages-wrapper { gap: 0; padding: 0; display: block; transform: none !important; }
+            .page-sheet {
+                box-shadow: none !important; margin: 0 !important; page-break-after: always;
+                height: auto !important; min-height: 297mm; overflow: visible !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-overlay">
+        <div class="login-box">
+            <div class="mb-6">
+                <span class="material-icons text-6xl text-gray-700">lock</span>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Restricted Access</h2>
+            <p class="text-gray-500 text-sm mb-6">Enter the 7-phase security pass to view this document.</p>
+            
+            <input type="password" id="password-input" 
+                   class="w-full border-2 border-gray-300 p-3 rounded-lg focus:outline-none focus:border-blue-500 mb-4 text-center text-lg"
+                   placeholder="Enter Password"
+                   onkeyup="if(event.key === 'Enter') checkPassword()">
+            
+            <button onclick="checkPassword()" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-200">
+                Unlock Editor
+            </button>
+            
+            <p id="error-msg" class="text-red-500 text-sm mt-4 hidden">Access Denied: Incorrect Phase</p>
+        </div>
+    </div>
+
+    <div id="app-interface">
+        
+        <input type="file" id="img-upload-input" accept="image/*" hidden>
+
+        <header id="status-header" class="w-full flex-none flex justify-between items-center bg-white px-4 py-2 border-b border-gray-200 print:hidden z-50">
+            <div class="flex items-center gap-2">
+                <span class="material-icons text-blue-600">description</span>
+                <h1 class="font-bold text-gray-800 text-sm">Private Document Editor</h1>
+            </div>
+            <div class="text-xs text-gray-500 flex items-center gap-4">
+                <span id="status-indicator" class="font-medium text-green-600">Ready</span>
+                <span id="last-saved-time"></span>
+            </div>
+        </header>
+
+        <div class="ribbon-container flex-none print:hidden shadow-sm z-40">
+            <div class="ribbon-tabs">
+                <div class="ribbon-tab active" onclick="switchTab('home', this)">Home</div>
+                <div class="ribbon-tab" onclick="switchTab('insert', this)">Insert</div>
+                <div class="ribbon-tab" onclick="switchTab('layout', this)">Layout</div>
+                <div class="ribbon-tab" onclick="switchTab('view', this)">View</div>
+            </div>
+
+            <div id="tab-home" class="ribbon-panel active">
+                <div class="flex flex-col gap-1 mr-1">
+                    <select onchange="execCmd('fontName', this.value); this.selectedIndex=0;" class="ribbon-select w-32" title="Font Style">
+                        <option value="" selected disabled>Font</option>
+                        <option value="Times New Roman" style="font-family: 'Times New Roman'">Times New Roman</option>
+                        <option value="Arial" style="font-family: Arial">Arial</option>
+                        <option value="Calibri" style="font-family: Calibri">Calibri</option>
+                        <option value="Cambria" style="font-family: Cambria">Cambria</option>
+                        <option value="Courier New" style="font-family: 'Courier New'">Courier New</option>
+                    </select>
+                    <select onchange="execCmd('fontSize', this.value); this.selectedIndex=0;" class="ribbon-select w-16" title="Font Size">
+                        <option value="" selected disabled>Size</option>
+                        <option value="1">8pt</option>
+                        <option value="2">10pt</option>
+                        <option value="3">12pt</option>
+                        <option value="4">14pt</option>
+                        <option value="5">18pt</option>
+                        <option value="6">24pt</option>
+                        <option value="7">36pt</option>
+                    </select>
+                </div>
+                <div class="separator"></div>
+                <button class="tool-btn" onclick="execCmd('bold')" title="Bold (Ctrl+B)"><span class="material-icons">format_bold</span>Bold</button>
+                <button class="tool-btn" onclick="execCmd('italic')" title="Italic (Ctrl+I)"><span class="material-icons">format_italic</span>Italic</button>
+                <button class="tool-btn" onclick="execCmd('underline')" title="Underline (Ctrl+U)"><span class="material-icons">format_underlined</span>Underline</button>
+                <div class="separator"></div>
+                <div class="flex gap-1">
+                    <button class="tool-btn color-wrapper" title="Text Color">
+                        <span class="material-icons">format_color_text</span>
+                        <div class="color-indicator" id="text-color-bar" style="background-color: black;"></div>
+                        <input type="color" class="color-picker-input" onchange="execCmd('foreColor', this.value); document.getElementById('text-color-bar').style.backgroundColor = this.value;">
+                        <span class="text-[10px]">Color</span>
+                    </button>
+                    <button class="tool-btn color-wrapper" title="Highlight Color">
+                        <span class="material-icons">border_color</span>
+                        <div class="color-indicator" id="highlight-color-bar" style="background-color: yellow;"></div>
+                        <input type="color" class="color-picker-input" value="#ffff00" onchange="execCmd('hiliteColor', this.value); document.getElementById('highlight-color-bar').style.backgroundColor = this.value;">
+                        <span class="text-[10px]">Highlight</span>
+                    </button>
+                </div>
+                <div class="separator"></div>
+                <div class="flex flex-col justify-center">
+                     <select onchange="changeLineSpacing(this.value); this.selectedIndex=0;" class="ribbon-select w-24 mb-1" title="Line Spacing">
+                        <option value="" selected disabled>Line Spacing</option>
+                        <option value="1.0">1.0 (Single)</option>
+                        <option value="1.15">1.15 (Default)</option>
+                        <option value="1.5">1.5 (1.5 lines)</option>
+                        <option value="2.0">2.0 (Double)</option>
+                    </select>
+                    <div class="flex">
+                        <button class="tool-btn" style="min-width:30px" onclick="execCmd('justifyLeft')"><span class="material-icons" style="font-size:18px">format_align_left</span></button>
+                        <button class="tool-btn" style="min-width:30px" onclick="execCmd('justifyCenter')"><span class="material-icons" style="font-size:18px">format_align_center</span></button>
+                        <button class="tool-btn" style="min-width:30px" onclick="execCmd('justifyRight')"><span class="material-icons" style="font-size:18px">format_align_right</span></button>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <button class="tool-btn" onclick="execCmd('insertUnorderedList')"><span class="material-icons">format_list_bulleted</span>Bullets</button>
+                <button class="tool-btn" onclick="execCmd('insertOrderedList')"><span class="material-icons">format_list_numbered</span>Number</button>
+            </div>
+
+            <div id="tab-insert" class="ribbon-panel">
+                <button class="tool-btn" onclick="triggerImageUpload()"><span class="material-icons">add_photo_alternate</span>Picture</button>
+                <button class="tool-btn" onclick="insertLink()"><span class="material-icons">link</span>Link</button>
+                <button class="tool-btn" onclick="insertDate()"><span class="material-icons">calendar_today</span>Date</button>
+                <div class="separator"></div>
+                <button class="tool-btn" onclick="manualPageBreak()"><span class="material-icons">note_add</span>New Page</button>
+            </div>
+
+            <div id="tab-layout" class="ribbon-panel">
+                <div class="flex flex-col gap-2 mr-2">
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs font-bold w-12">Size:</label>
+                        <select onchange="changeSize(this.value)" class="ribbon-select w-24">
+                            <option value="a4" selected>A4</option>
+                            <option value="letter">Letter</option>
+                            <option value="legal">Legal</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs font-bold w-12">Margins:</label>
+                        <select onchange="handleMarginChange(this.value)" class="ribbon-select w-24">
+                            <option value="normal" selected>Normal</option>
+                            <option value="narrow">Narrow</option>
+                            <option value="wide">Wide</option>
+                            <option value="custom">Custom...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <button class="tool-btn" onclick="changeOrientation('portrait')"><span class="material-icons">crop_portrait</span>Portrait</button>
+                <button class="tool-btn" onclick="changeOrientation('landscape')"><span class="material-icons">crop_landscape</span>Landscape</button>
+            </div>
+
+            <div id="tab-view" class="ribbon-panel">
+                <button class="tool-btn" onclick="setZoom(1.0)"><span class="material-icons">center_focus_strong</span>100%</button>
+                <button class="tool-btn" onclick="setZoom(0.75)"><span class="material-icons">zoom_out</span>Zoom Out</button>
+                <button class="tool-btn" onclick="setZoom(1.25)"><span class="material-icons">zoom_in</span>Zoom In</button>
+                <div class="separator"></div>
+                <button class="tool-btn" onclick="window.print()"><span class="material-icons">print</span>Print</button>
+            </div>
+        </div>
+
+        <main id="viewport-bg">
+            <div id="pages-wrapper">
+                </div>
+        </main>
+
+        <div id="custom-margin-modal">
+            <div class="bg-white p-6 rounded-lg shadow-xl w-80">
+                <h3 class="text-lg font-bold mb-4 border-b pb-2">Custom Margins (cm)</h3>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div><label class="block text-xs font-bold mb-1 text-gray-600">Top</label><input type="number" id="margin-top" class="border p-2 w-full rounded" value="2.54" step="0.1"></div>
+                    <div><label class="block text-xs font-bold mb-1 text-gray-600">Bottom</label><input type="number" id="margin-bottom" class="border p-2 w-full rounded" value="2.54" step="0.1"></div>
+                    <div><label class="block text-xs font-bold mb-1 text-gray-600">Left</label><input type="number" id="margin-left" class="border p-2 w-full rounded" value="2.54" step="0.1"></div>
+                    <div><label class="block text-xs font-bold mb-1 text-gray-600">Right</label><input type="number" id="margin-right" class="border p-2 w-full rounded" value="2.54" step="0.1"></div>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button onclick="closeMarginModal()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">Cancel</button>
+                    <button onclick="applyCustomMargins()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- SECURITY CONFIG ---
+        // CHANGE THIS VALUE TO SET YOUR OWN PASSWORD
+        const ACCESS_PASSWORD = "7phases"; 
+        
+        function checkPassword() {
+            const input = document.getElementById('password-input');
+            const errorMsg = document.getElementById('error-msg');
+            const appInterface = document.getElementById('app-interface');
+            const loginOverlay = document.getElementById('login-overlay');
+
+            if (input.value === ACCESS_PASSWORD) {
+                // Unlock
+                loginOverlay.style.display = 'none';
+                appInterface.style.display = 'flex';
+                loadContent(); // Only load content after unlock
+            } else {
+                // Fail
+                errorMsg.classList.remove('hidden');
+                input.classList.add('border-red-500');
+                setTimeout(() => input.classList.remove('border-red-500'), 500);
+            }
+        }
+
+        // --- APP LOGIC ---
+        const LOCAL_STORAGE_KEY = 'private_doc_v5_content';
+        const pagesWrapper = document.getElementById('pages-wrapper');
+        const statusIndicator = document.getElementById('status-indicator');
+        const lastSavedTimeSpan = document.getElementById('last-saved-time');
+        const imgInput = document.getElementById('img-upload-input');
+        
+        let currentSize = 'a4'; 
+        let currentOrientation = 'portrait';
+        let debounceTimer;
+
+        const PAGE_DIMS = {
+            a4: { w: 210, h: 297 },
+            letter: { w: 215.9, h: 279.4 },
+            legal: { w: 215.9, h: 355.6 }
+        };
+
+        function createNewPage(htmlContent = '') {
+            const pageDiv = document.createElement('div');
+            pageDiv.className = 'page-sheet';
+            updateSinglePageStyle(pageDiv);
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'page-content';
+            contentDiv.contentEditable = true;
+            contentDiv.innerHTML = htmlContent;
+            contentDiv.setAttribute('data-placeholder', 'Start typing your document here...');
+            
+            contentDiv.addEventListener('input', () => { checkPagination(contentDiv); debouncedSave(); });
+            contentDiv.addEventListener('paste', () => setTimeout(() => { checkPagination(contentDiv); debouncedSave(); }, 50));
+
+            pageDiv.appendChild(contentDiv);
+            pagesWrapper.appendChild(pageDiv);
+            return contentDiv;
+        }
+
+        function checkPagination(element) {
+            const pageSheet = element.parentElement;
+            if (element.scrollHeight > element.clientHeight + 5) {
+                if (!pageSheet.nextElementSibling) {
+                    const newPageContent = createNewPage();
+                    newPageContent.focus();
+                } else {
+                    const nextPageContent = pageSheet.nextElementSibling.querySelector('.page-content');
+                    if(nextPageContent) nextPageContent.focus();
+                }
+            }
+        }
+
+        function manualPageBreak() {
+            const newPage = createNewPage();
+            newPage.focus();
+            newPage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            debouncedSave();
+        }
+
+        function updateSinglePageStyle(pageDiv) {
+            let width = PAGE_DIMS[currentSize].w;
+            let height = PAGE_DIMS[currentSize].h;
+            if (currentOrientation === 'landscape') [width, height] = [height, width];
+            pageDiv.style.width = width + 'mm';
+            pageDiv.style.height = height + 'mm';
+        }
+
+        function updateAllPagesLayout() {
+            document.querySelectorAll('.page-sheet').forEach(page => updateSinglePageStyle(page));
+            updateStatus(`Layout: ${currentSize.toUpperCase()} / ${currentOrientation}`);
+        }
+
+        function changeSize(val) { currentSize = val; updateAllPagesLayout(); }
+        function changeOrientation(val) { currentOrientation = val; updateAllPagesLayout(); }
+
+        function handleMarginChange(val) {
+            if (val === 'custom') document.getElementById('custom-margin-modal').style.display = 'flex';
+            else {
+                let m = '2.54cm'; 
+                if (val === 'narrow') m = '1.27cm'; if (val === 'wide') m = '5.08cm';
+                applyMarginsToAll(m, m, m, m);
+            }
+        }
+        function closeMarginModal() { document.getElementById('custom-margin-modal').style.display = 'none'; }
+        function applyCustomMargins() {
+            const t = document.getElementById('margin-top').value;
+            const b = document.getElementById('margin-bottom').value;
+            const l = document.getElementById('margin-left').value;
+            const r = document.getElementById('margin-right').value;
+            applyMarginsToAll(t+'cm', r+'cm', b+'cm', l+'cm');
+            closeMarginModal();
+        }
+        function applyMarginsToAll(t, r, b, l) {
+            document.querySelectorAll('.page-sheet').forEach(p => { p.style.padding = `${t} ${r} ${b} ${l}`; });
+            debouncedSave();
+        }
+
+        function changeLineSpacing(val) {
+            const sel = window.getSelection();
+            if (sel.rangeCount > 0) {
+                let el = sel.anchorNode;
+                while (el && !el.classList?.contains('page-content') && el.tagName !== 'BODY') {
+                    if (el.nodeType === 1 && (getComputedStyle(el).display === 'block' || getComputedStyle(el).display === 'list-item')) {
+                        el.style.lineHeight = val; debouncedSave(); return;
+                    }
+                    el = el.parentElement;
+                }
+                if(el && el.classList.contains('page-content')) { el.style.lineHeight = val; debouncedSave(); }
+            }
+        }
+
+        function setZoom(scale) {
+            pagesWrapper.style.transform = `scale(${scale})`;
+            pagesWrapper.style.marginBottom = scale < 1 ? '-200px' : '0';
+        }
+
+        function triggerImageUpload() { imgInput.click(); }
+        imgInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    document.execCommand('insertImage', false, evt.target.result);
+                    debouncedSave();
+                }
+                reader.readAsDataURL(file);
+            }
+            this.value = '';
+        });
+
+        function insertLink() { const url = prompt("Enter URL:", "https://"); if (url) execCmd('createLink', url); }
+        function insertDate() { execCmd('insertText', new Date().toLocaleDateString()); }
+
+        function switchTab(name, el) {
+            document.querySelectorAll('.ribbon-panel').forEach(e => e.classList.remove('active'));
+            document.querySelectorAll('.ribbon-tab').forEach(e => e.classList.remove('active'));
+            document.getElementById('tab-' + name).classList.add('active');
+            el.classList.add('active');
+        }
+
+        function execCmd(cmd, val = null) {
+            document.execCommand(cmd, false, val);
+            debouncedSave();
+        }
+
+        function saveContent() {
+            updateStatus('Saving...', true);
+            const contents = [];
+            document.querySelectorAll('.page-content').forEach(div => contents.push(div.innerHTML));
+            try {
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contents));
+                localStorage.setItem(LOCAL_STORAGE_KEY + '_ts', new Date().toISOString());
+                updateStatus('Saved');
+                lastSavedTimeSpan.innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            } catch (e) {
+                updateStatus('⚠️ Storage Full', false);
+            }
+        }
+
+        function debouncedSave() {
+            clearTimeout(debounceTimer);
+            updateStatus('Typing...', true);
+            debounceTimer = setTimeout(saveContent, 1000);
+        }
+
+        function updateStatus(msg, isSaving=false) {
+            statusIndicator.innerText = msg;
+            statusIndicator.className = isSaving ? 'font-medium text-blue-500 animate-pulse' : (msg.includes('Full') ? 'font-medium text-red-500' : 'font-medium text-green-600');
+        }
+
+        function loadContent() {
+            try {
+                const json = localStorage.getItem(LOCAL_STORAGE_KEY);
+                if (json) {
+                    const contents = JSON.parse(json);
+                    if (Array.isArray(contents) && contents.length > 0) contents.forEach(html => createNewPage(html));
+                    else createNewPage();
+                    updateStatus('Loaded');
+                    const ts = localStorage.getItem(LOCAL_STORAGE_KEY + '_ts');
+                    if(ts) lastSavedTimeSpan.innerText = new Date(ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                } else { createNewPage(); updateStatus('Ready (New)'); }
+            } catch (e) { createNewPage(); }
+        }
+    </script>
+</body>
+</html>
