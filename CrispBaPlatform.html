@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -830,7 +831,11 @@ menu-item:hover {
     .message-row { display:flex; gap:12px; align-items:flex-start; }
     .message-row.ai { justify-content:flex-start; }
     .message-row.user { justify-content:flex-end; }
-    .message-icon { width:36px; height:36px;font-weight: bold;font-size:10px; border-radius:50%; flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#667eea,#764ba2); color:white; font-weight:700; }
+    .message-icon { background-image: url("crispba-logo-icon.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;width:36px; height:36px;font-weight: bold;font-size:10px; border-radius:40%; flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; color:white; font-weight:700; }
+    .message-icon-sender { width:36px; height:36px;font-weight: bold;font-size:10px; border-radius:40%; flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#667eea,#764ba2); color:white; font-weight:700; }
     .message-bubble { max-width:78%; padding:12px 14px; border-radius:12px; font-size:14px; line-height:1.4; }
     .message-bubble.ai { background: rgba(102,126,234,0.08); color: var(--color-dark); border-top-left-radius:4px; }
     .message-bubble.user { background: #5f3bf6e3; color: white; border:1px solid rgba(0,0,0,0.06); border-top-right-radius:4px; }
@@ -2318,7 +2323,7 @@ ease-in-out infinite alternate; }
       </div>
       <div id="aiChatMessages" class="ai-chat-messages">
         <div class="message-row ai">
-          <div class="message-icon" aria-hidden="true">CB</div>
+          <div class="message-icon" aria-hidden="true"></div>
           <div class="message-bubble ai">Hello! I'm here to help with your questions. Ask me anything about CrispBa, and I am a programmed assistant designed to provide support.</div>
         </div>
       </div>
@@ -2606,7 +2611,7 @@ ease-in-out infinite alternate; }
       const userRow = document.createElement('div');
       userRow.className = 'message-row user';
       const youIcon = document.createElement('div');
-      youIcon.className = 'message-icon';
+      youIcon.className = 'message-icon-sender';
       youIcon.textContent = 'YOU';
       const userBubble = document.createElement('div');
       userBubble.className = 'message-bubble user';
@@ -2626,7 +2631,7 @@ ease-in-out infinite alternate; }
         aiRow.className = 'message-row ai';
         const aiIcon = document.createElement('div');
         aiIcon.className = 'message-icon';
-        aiIcon.textContent = 'CB';
+        aiIcon.textContent = '';
         const aiBubble = document.createElement('div');
         aiBubble.className = 'message-bubble ai';
         aiBubble.textContent = aiResponse;
