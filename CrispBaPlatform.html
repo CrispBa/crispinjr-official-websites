@@ -2012,8 +2012,22 @@ ease-in-out infinite alternate; }
       <nav class="nav">
         <div class="nav-left">
           <div class="logo">
-            <span class="logo-icon">CB</span>
-            CrispBa
+               <img style="
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 20%;
+        border: 1px solid rgba(#667eea 80%, #764ba2);
+    background: linear-gradient(135deg, #667eea 80%, #764ba2);
+
+        transition: var(--transition);
+        /* NOTE: The border-radius, background, and display properties
+           may not work reliably on all browsers when applied directly to the &lt;img&gt; tag.
+           The standard way is to use a container (as shown in the previous response).
+        */
+    " height="40" width="40" alt="CB Logo Icon" src="crispba-logo-icon.png">CrispBa
           </div>
           <!-- Original nav-links hidden, moved to menu -->
           <div class="nav-links" style="display: none;">
