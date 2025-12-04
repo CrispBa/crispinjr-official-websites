@@ -7,17 +7,402 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CrispBa | More Apps</title>
     <link rel="shortcut icon" href="ma.png" type="image/x-icon">
-    <link rel="shortcut icon" href="ma.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+        :root {
+            /* Define your custom colors */
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --text-color: #343a40;
+            --card-bg-color: #ffffff;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            
+            /* Variables for Navigation & Background */
+            --transition: all 0.3s ease;
+            --border-radius: 12px;
+        }
+
+        /* --- ANIMATION KEYFRAMES (Kept for shapes) --- */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        /* The icon-wobble keyframes are no longer necessary but kept for cleanliness */
+        @keyframes icon-wobble {
+            0% { transform: translateY(-2px) scale(1); } 
+            50% { transform: translateY(2px) scale(1.05); } 
+            100% { transform: translateY(-2px) scale(1); }
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* Static CrispBaPlatform gradient */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* --- NAVIGATION BAR (.nav) STYLES (UPDATED) --- */
+        .nav {
+            /* Glass Effect */
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            
+            border-radius: var(--border-radius);
+            padding: 10px 32px;
+            
+            /* Fixed Position */
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 1000;
+            
+            /* Layout: Center the single element */
+            display: flex;
+            justify-content: center; /* Center the content horizontally */
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+
+        /* --- CENTERED TITLE (ONLY ELEMENT KEPT) --- */
+        .nav-center {
+            text-align: center;
+            /* Use flex: 1 and min-width to ensure it takes up the full width for centering */
+            flex: 1; 
+            min-width: 0; 
+            padding: 0 20px;
+        }
+
+        .nav-center h2 {
+            margin: 0;
+            font-size: 1.5rem; 
+            font-weight: 800;
+            color: white;
+            white-space: nowrap; 
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        /* The .nav-left and .nav-right styles and their content are removed in the HTML */
+        
+        /* --- ANIMATED SHAPES CSS (Kept) --- */
+        .animated-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        /* Base style for all animated shapes (glass effect) */
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Box shape */
+        .shape.box {
+            width: 100px;
+            height: 100px;
+            animation: float 8s ease-in-out infinite, pulse 4s ease-in-out infinite;
+        }
+
+        /* Circle shape */
+        .shape.circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            animation: float 10s ease-in-out infinite, pulse 5s ease-in-out infinite;
+        }
+
+        /* Triangle shape (using borders) */
+        .shape.triangle {
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 86px solid rgba(255, 255, 255, 0.1);
+            background: transparent;
+            animation: float 12s ease-in-out infinite, pulse 6s ease-in-out infinite;
+        }
+        /* --- END ANIMATED SHAPES CSS --- */
+
+        /* --- Main Content Layout --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto; 
+            padding: 100px 20px 0 20px; /* Top padding to clear fixed nav */
+            position: relative; 
+            z-index: 1; 
+        }
+
+        /* --- App Card Styling (Unchanged) --- */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .app-card {
+            background-color: var(--card-bg-color);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 32px rgba(38, 38, 38, 0.76);
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .app-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            background: url('AMfiles.png');
+            background-size:cover; no-repeat;
+            object-fit:contain;
+            border-radius: 10px;
+            opacity: 85%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-right: 15px;
+           backdrop-filter: blur(15px);
+box-shadow: 0px -1px 29px rgb(38 38 38 / 24%);
+        }
+
+        .app-card h2 {
+            margin: 0;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .app-card p {
+            font-size: 0.95rem;
+            flex-grow: 1;
+        }
+
+        .download-links {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .download-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .download-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .download-btn i {
+            margin-right: 8px;
+        }
+.footer {
+
+    background: transparent;
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    padding: 20px 40px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 0px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .footer-content p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+  .footer {
+        padding: 20px;
+      }
+
+    </style>
 </head>
-<style>
-#p {
-  color:blue;
-  font-weight: 700px;
-]
-</style>
+
 <body>
-<h1>
-<p>Under Contructions</p>
-</h1>
+    <div class="animated-shapes">
+        <div class="shape box" style="top: 20%; left: 15%; animation-delay: 0s;"></div>
+        <div class="shape box" style="bottom: 40%; left: 30%; animation-delay: 4s;"></div>
+        
+        <div class="shape circle" style="bottom: 10%; right: 5%; animation-delay: 2s;"></div>
+        <div class="shape circle" style="top: 10%; right: 40%; animation-delay: 9s;"></div>
+        
+        <div class="shape triangle" style="top: 60%; right: 25%; animation-delay: 7s;"></div>
+        <div class="shape triangle" style="top: 40%; left: 10%; animation-delay: 5s;"></div>
+    </div>
+    <nav class="nav">
+        <div class="nav-center">
+            <h2>All CrispBa Applications</h2>
+        </div>
+        </nav>
+    <div class="container">
+        
+        <div class="app-grid">
+
+            <div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon">   
+</div>
+                    <h2>CrispChat</h2>
+                </div>
+                <p>A fast, secure, and private messaging application designed for seamless communication with friends and family. Features end-to-end encryption and custom themes.</p>
+                <div class="download-links">
+                    <a href="https://link-to-appstore.com/crispchat" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i>   Download</a>
+                    <a href="https://link-to-playstore.com/crispchat" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Play Store</a>
+                </div>
+            </div>
+
+
+            <div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon"></i></div>
+                    <h2>BaPlanner</h2>
+                </div>
+                <p>The ultimate productivity tool for managing your tasks, schedules, and goals. Syncs across all devices and offers powerful organization features.</p>
+                <div class="download-links">
+                    <a href="https://link-to-desktop-download.com/baplanner" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i></i> Download</a>
+                    <a href="https://link-to-appstore.com/baplanner" class="download-btn" target="_blank"><i class="fab fa-apple"></i> iOS</a>
+                </div>
+            </div>
+<div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon">  </div>
+                    <h2>CrispChat</h2>
+                </div>
+                <p>A fast, secure, and private messaging application designed for seamless communication with friends and family. Features end-to-end encryption and custom themes.</p>
+                <div class="download-links">
+                    <a href="https://link-to-appstore.com/crispchat" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i>   Download</a>
+                    <a href="https://link-to-playstore.com/crispchat" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Play Store</a>
+                </div>
+            </div><div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon">  </div>
+                    <h2>CrispChat</h2>
+                </div>
+                <p>A fast, secure, and private messaging application designed for seamless communication with friends and family. Features end-to-end encryption and custom themes.</p>
+                <div class="download-links">
+                    <a href="https://link-to-appstore.com/crispchat" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i>  Download</a>
+                    <a href="https://link-to-playstore.com/crispchat" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Play Store</a>
+                </div>
+            </div><div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon">  </div>
+                    <h2>CrispChat</h2>
+                </div>
+                <p>A fast, secure, and private messaging application designed for seamless communication with friends and family. Features end-to-end encryption and custom themes.</p>
+                <div class="download-links">
+                    <a href="https://link-to-appstore.com/crispchat" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i>  Download</a>
+                    <a href="https://link-to-playstore.com/crispchat" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Play Store</a>
+                </div>
+            </div><div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon">  </div>
+                    <h2>CrispChat</h2>
+                </div>
+                <p>A fast, secure, and private messaging application designed for seamless communication with friends and family. Features end-to-end encryption and custom themes.</p>
+                <div class="download-links">
+                    <a href="https://link-to-appstore.com/crispchat" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i>  Download</a>
+                    <a href="https://link-to-playstore.com/crispchat" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Play Store</a>
+                </div>
+            </div><div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon">  </div>
+                    <h2>CrispChat</h2>
+                </div>
+                <p>A fast, secure, and private messaging application designed for seamless communication with friends and family. Features end-to-end encryption and custom themes.</p>
+                <div class="download-links">
+                    <a href="https://link-to-appstore.com/crispchat" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i>   Download</a>
+                    <a href="https://link-to-playstore.com/crispchat" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Play Store</a>
+                </div>
+            </div><div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon">  </div>
+                    <h2>CrispChat</h2>
+                </div>
+                <p>A fast, secure, and private messaging application designed for seamless communication with friends and family. Features end-to-end encryption and custom themes.</p>
+                <div class="download-links">
+                    <a href="https://link-to-appstore.com/crispchat" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i> Download</a>
+                    <a href="https://link-to-playstore.com/crispchat" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Play Store</a>
+                </div>
+            </div>
+            <div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon"></div>
+                    <h2>PhotoCrisp</h2>
+                </div>
+                <p>Easy-to-use photo editing software with professional-grade filters and tools. Enhance your images with just a few taps or clicks.</p>
+                <div class="download-links">
+                    <a href="https://link-to-web-app.com/photocrisp" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i> Download</a>
+                    <a href="https://link-to-playstore.com/photocrisp" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Android</a>
+                </div>
+            </div>
+            
+            </div>
+        
+    </div>
+<br>
+    <footer class="footer">
+      <div class="footer-content">
+        <p>&copy; 2025 CrispinJr Cobelo</p>
+  <p>Developed by <a href="https://www.facebook.com/crispinjr.cobelo" target="_blank" rel="noopener noreferrer" class="footer-crispba" style="font-weight:700;color: blue;text-decoration:none;opacity: 65%;">CrispBa</a></p>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
