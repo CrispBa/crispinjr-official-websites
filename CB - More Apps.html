@@ -1,41 +1,103 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CrispBa | More Apps</title>
     <link rel="shortcut icon" href="ma.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <style>
-html, body {
-  height: 100%;
-  margin: 0;
-}
 
-body {
-  display: flex;
-  flex-direction: column;
-}
+    <style>
         :root {
-            /* Define your custom colors */
             --primary-color: #007bff;
             --secondary-color: #6c757d;
             --text-color: #343a40;
-            --card-bg-color: #ffffff;
-            --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            
-            /* Variables for Navigation & Background */
             --transition: all 0.3s ease;
             --border-radius: 12px;
         }
 
-        /* --- ANIMATION KEYFRAMES (Kept for shapes) --- */
+        /* --- BUTTON LOADING ANIMATION (NEW) --- */
+        .download-btn.loading {
+            pointer-events: none; /* Prevent double clicking */
+            cursor: wait;
+        }
+
+        /* Hide the original text/icon when loading */
+        .download-btn.loading .icon-container,
+        .download-btn.loading .text-container {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* The Spinner Circle */
+        .download-btn.loading::after {
+            content: "";
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            /* Center the spinner */
+            top: calc(50% - 12px);
+            left: calc(50% - 12px);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: btn-spin 0.8s linear infinite;
+            z-index: 10;
+        }
+
+        @keyframes btn-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* --- PAGE LOADER CSS --- */
+        .no-scroll {
+            overflow: hidden !important;
+        }
+
+        .page-loader {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.9); 
+            z-index: 99999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-inner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 4px solid rgba(0, 0, 0, 0.08);
+            border-top-color: var(--primary-color); 
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- EXISTING ANIMATION KEYFRAMES --- */
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-30px) rotate(180deg); }
@@ -45,72 +107,94 @@ body {
             0%, 100% { opacity: 0.3; }
             50% { opacity: 0.6; }
         }
-        
-        /* The icon-wobble keyframes are no longer necessary but kept for cleanliness */
-        @keyframes icon-wobble {
-            0% { transform: translateY(-2px) scale(1); } 
-            50% { transform: translateY(2px) scale(1.05); } 
-            100% { transform: translateY(-2px) scale(1); }
+
+        @keyframes blinkCursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes logoFade {
+            0% { opacity: 0.6; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            background-color: white;
+            animation: blinkCursor 0.75s step-end infinite;
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            height: 1.2em; 
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            /* Static CrispBaPlatform gradient */
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed; 
             min-height: 100vh;
-            
             color: var(--text-color);
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden; 
         }
 
-        /* --- NAVIGATION BAR (.nav) STYLES (UPDATED) --- */
+        /* --- NAVIGATION BAR --- */
         .nav {
-            /* Glass Effect */
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); 
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            
             border-radius: var(--border-radius);
-            padding: 10px 32px;
-            
-            /* Fixed Position */
+            padding: 15px 32px;
             position: fixed;
             top: 20px;
             left: 20px;
             right: 20px;
             z-index: 1000;
-            
-            /* Layout: Center the single element */
             display: flex;
-            justify-content: center; /* Center the content horizontally */
+            justify-content: space-between; 
             align-items: center;
-            flex-wrap: nowrap;
         }
 
-        /* --- CENTERED TITLE (ONLY ELEMENT KEPT) --- */
+        .nav-logo {
+            height: 40px; 
+            width: auto;
+            margin-right: 15px;
+            border-radius: 8px; 
+            animation: logoFade 2s infinite alternate ease-in-out; 
+            flex-shrink: 0; 
+            cursor: pointer;
+        }
+
         .nav-center {
             text-align: center;
-            /* Use flex: 1 and min-width to ensure it takes up the full width for centering */
-            flex: 1; 
-            min-width: 0; 
-            padding: 0 20px;
+            flex: 1;
+            min-width: 0;
+            min-height: 2rem; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 40px; 
         }
 
         .nav-center h2 {
             margin: 0;
-            font-size: 1.5rem; 
+            font-size: 1.5rem;
             font-weight: 800;
             color: white;
-            white-space: nowrap; 
+            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
-        /* The .nav-left and .nav-right styles and their content are removed in the HTML */
-        
-        /* --- ANIMATED SHAPES CSS (Kept) --- */
+
+        /* --- ANIMATED SHAPES --- */
         .animated-shapes {
             position: fixed;
             top: 0;
@@ -122,7 +206,6 @@ body {
             overflow: hidden;
         }
 
-        /* Base style for all animated shapes (glass effect) */
         .shape {
             position: absolute;
             background: rgba(255, 255, 255, 0.1);
@@ -130,14 +213,12 @@ body {
             border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Box shape */
         .shape.box {
             width: 100px;
             height: 100px;
             animation: float 8s ease-in-out infinite, pulse 4s ease-in-out infinite;
         }
 
-        /* Circle shape */
         .shape.circle {
             width: 80px;
             height: 80px;
@@ -145,7 +226,6 @@ body {
             animation: float 10s ease-in-out infinite, pulse 5s ease-in-out infinite;
         }
 
-        /* Triangle shape (using borders) */
         .shape.triangle {
             width: 0;
             height: 0;
@@ -155,40 +235,66 @@ body {
             background: transparent;
             animation: float 12s ease-in-out infinite, pulse 6s ease-in-out infinite;
         }
-        /* --- END ANIMATED SHAPES CSS --- */
 
-        /* --- Main Content Layout --- */
+        /* --- CONTAINER --- */
         .container {
             max-width: 1200px;
-            margin: 0 auto; 
-            padding: 100px 20px 0 20px; /* Top padding to clear fixed nav */
-            position: relative; 
-            z-index: 1; 
+            width: 100%;
+            margin: 0 auto;
+            padding: 120px 20px 40px 20px;
+            position: relative;
+            z-index: 1;
+            box-sizing: border-box; 
+            flex: 1; 
         }
 
-        /* --- App Card Styling (Unchanged) --- */
         .app-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 35px; 
+            width: 100%;
         }
 
+        /* --- APP CARD --- */
         .app-card {
-            background-color: var(--card-bg-color);
+            background-color: rgba(255, 255, 255, 0.9); 
             border-radius: 12px;
             padding: 25px;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s, box-shadow 0.3s;
             display: flex;
             flex-direction: column;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 12px 32px rgba(38, 38, 38, 0.76);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+            height: 100%; 
+            box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            z-index: 1;
+            box-shadow: none; 
         }
 
-        .app-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        /* Glow Element */
+        .app-card::before {
+            content: "";
+            position: absolute;
+            top: 15px; 
+            left: 10px;
+            right: 10px;
+            bottom: -5px;
+            z-index: -1; 
+            border-radius: inherit;
+            filter: blur(25px); 
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
         }
+
+        .app-card:hover { transform: translateY(-5px); }
+        .app-card:hover::before { opacity: 0.9; }
+
+        /* Random Gradients */
+        .app-card:nth-child(3n+1)::before { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .app-card:nth-child(3n+2)::before { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #f68084 100%); }
+        .app-card:nth-child(3n+3)::before { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
 
         .app-header {
             display: flex;
@@ -197,212 +303,585 @@ body {
         }
 
         .app-icon {
-            width: 50px;
-            height: 50px;
-            background-color: var(--primary-color);
-            background: url('AMfiles.png');
-            background-size:cover; no-repeat;
-            object-fit:contain;
-            border-radius: 10px;
-            opacity: 85%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            margin-right: 15px;
-           backdrop-filter: blur(15px);
-box-shadow: 0px -1px 29px rgb(38 38 38 / 24%);
+
+    width: 50px;
+    height: 50px;
+    background-color: #56565740;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 10px;
+    opacity: 0.9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    margin-right: 15px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
         }
 
         .app-card h2 {
             margin: 0;
             font-weight: 600;
             color: var(--text-color);
+            font-size: 1.25rem;
+            word-break: break-word;
         }
 
         .app-card p {
             font-size: 0.95rem;
-            flex-grow: 1;
+            flex-grow: 1; 
+            color: #495057;
+            line-height: 1.6;
+            margin-bottom: 20px;
         }
 
+        /* --- BUTTONS --- */
         .download-links {
-            margin-top: 20px;
-            display: flex;
+            margin-top: auto;
+            display: inline-flex;
+            align-self: center; 
             gap: 10px;
-            justify-content: flex-end;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%; 
         }
 
         .download-btn {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: background-color 0.3s;
-            display: inline-flex;
+           
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    height: 3rem;
+    padding: 0 1.5rem;
+    border-radius: 1.5rem;
+    background: #4CC713;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.85em;
+    flex: 3;
+    min-width: 130px;
+    user-select: none;
+    -webkit-user-select: none;
+    box-sizing: border-box;
+    flex-direction: row;
+    align-items: center;
+        }
+
+        .download-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(82.3deg, rgba(150, 93, 233, 1) 10.8%, rgba(99, 88, 238, 1) 94.3%);
+            transform: scaleX(0); 
+            transform-origin: 0 50%;
+            transition: transform 0.475s ease;
+            z-index: 0; 
+        }
+
+        .download-btn:hover::before { transform: scaleX(1); }
+
+        .icon-container {
+            position: relative;
+            z-index: 1;
+            width: 15px; 
+            height: 20px;
+            display: block;
+        }
+
+        .icon-container::before {
+            content: ' ';
+            position: absolute;
+            left: 0;
+            bottom: 4px;
+            width: 12px;
+            height: 2px;
+            border-style: solid;
+            border-width: 0 2px 2px;
+            border-color: #fff;
+            transition: border-color 0.3s;
+        }
+
+        .icon-container::after {
+            content: ' ';
+            position: absolute;
+            left: 4px;
+            top: 50%;
+            margin-top: -6px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 4px 4px 0 4px;
+            border-color: transparent;
+            border-top-color: #fff;
+            animation: downloadArrow 1s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .download-btn:hover .icon-container::before { border-color: #cdefbd; }
+        .download-btn:hover .icon-container::after { border-top-color: #cdefbd; animation-play-state: running; }
+
+        .text-container {
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            height: 1.2em;
+            text-align: left;
+        }
+
+        .text-main, .text-size {
+            display: block;
+            white-space: nowrap;
+            transition: transform 0.4s ease;
+        }
+
+        .text-main { transform: translateY(0%); }
+        .text-size { position: absolute; top: 0; left: 0; transform: translateY(120%); color: #cdefbd; font-weight: 700; }
+
+        .download-btn:hover .text-main { transform: translateY(-150%); }
+        .download-btn:hover .text-size { transform: translateY(0%); }
+
+        @keyframes downloadArrow {
+            0% { margin-top: -6px; opacity: 1; }
+            0.001% { margin-top: -14px; opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { margin-top: 0; opacity: 0.4; }
+        }
+
+        .black-store-btn {
+           
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3rem;
+    background-color: #000;
+    color: #fff;
+    border: 2px solid #000;
+    border-radius: 9999px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s 
+ease;
+    width: 130px;
+    box-sizing: border-box;
+    overflow: hidden;
+    flex: 3;
+    width: 10px;
+    padding: 11px;        }
+
+        .black-store-btn:hover { background-color: transparent; color: #000; }
+
+        .black-store-btn .icon {
+            height: 1.5rem;
+            width: 1.5rem;
+            font-size: 1.5rem; 
+            display: flex;
             align-items: center;
+            justify-content: center;
         }
 
-        .download-btn:hover {
-            background-color: #0056b3;
+        .black-store-btn .texts {
+            margin-left: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
         }
 
-        .download-btn i {
-            margin-right: 8px;
+        .black-store-btn .text-1 {
+            margin-bottom: 0.2rem;
+            font-size: 0.65rem; 
+            line-height: 1;
+            text-transform: uppercase;
         }
-.footer {
 
-    background: transparent;
-    backdrop-filter: blur(10px);
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
-    padding: 20px 40px;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.8);
-    padding: 0px;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    }
+        .black-store-btn .text-2 { 
+    font-weight: 550;
+    font-size: 0.7rem;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+    gap: 0.7em;}
+        .black-store-btn:hover .icon { color: #000; fill: #000; }
 
-    .footer-content p {
-      margin: 5px 0;
-      font-size: 14px;
-    }
-  .footer {
-        padding: 20px;
-      }
+        /* --- FOOTER --- */
+        .footer {
+            background: transparent;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 10;
+            margin-top: 40px;
+        }
 
+        .footer-content p { margin: 5px 0; font-size: 14px; }
+        .footer-crispba {
+            font-weight: 700;
+            color: #e2e2ff !important;
+            text-decoration: none;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+        .footer-crispba:hover { opacity: 0.8; text-decoration: underline; }
+
+        /* --- MOBILE RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .container { padding: 90px 20px 30px 20px; }
+            .nav {
+                padding: 10px 15px;
+                top: 10px; left: 10px; right: 10px;
+                justify-content: flex-start;
+            }
+            .nav-logo { height: 32px; margin-right: 10px; }
+            .nav-center { margin-right: 0; text-align: left; justify-content: flex-start; }
+            .nav-center h2 { font-size: 1.1rem; }
+            
+            .app-grid { gap: 20px; }
+            .app-card { padding: 20px; height: auto; }
+            
+            .download-links {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .download-btn, .black-store-btn {
+                width: 100%;
+                margin-bottom: 0;
+                flex: none; 
+            }
+        }
     </style>
 </head>
 
 <body>
+    <div id="pageLoader" class="page-loader" aria-hidden="false" role="status" aria-live="polite">
+        <div class="loader-inner">
+            <div class="spinner" aria-hidden="true"></div>
+        </div>
+    </div>
+
     <div class="animated-shapes">
         <div class="shape box" style="top: 20%; left: 15%; animation-delay: 0s;"></div>
         <div class="shape box" style="bottom: 40%; left: 30%; animation-delay: 4s;"></div>
-        
         <div class="shape circle" style="bottom: 10%; right: 5%; animation-delay: 2s;"></div>
         <div class="shape circle" style="top: 10%; right: 40%; animation-delay: 9s;"></div>
-        
         <div class="shape triangle" style="top: 60%; right: 25%; animation-delay: 7s;"></div>
         <div class="shape triangle" style="top: 40%; left: 10%; animation-delay: 5s;"></div>
     </div>
+
     <nav class="nav">
+        <img src="favicon.png" alt="CrispBa Logo" class="nav-logo">
         <div class="nav-center">
-            <h2>All CrispBa Applications</h2>
+            <h2><span id="typing-text">All CrispBa</span><span class="cursor"></span></h2>
         </div>
-        </nav>
+    </nav>
+
     <div class="container">
-        
         <div class="app-grid">
 
             <div class="app-card">
                 <div class="app-header">
-                    <div class="app-icon">   
-</div>
-                    <h2>CrispChat</h2>
+                    <div class="app-icon" style="background-image: url('bg-eraser-icn.png');"></div>
+                    <h2>Background Eraser</h2>
                 </div>
-                <p>A fast, secure, and private messaging application designed for seamless communication with friends and family. Features end-to-end encryption and custom themes.</p>
+                <p>A powerful tool designed to erase image backgrounds and save them as transparent PNG files.</p>
                 <div class="download-links">
-                    <a href="https://link-to-appstore.com/crispchat" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i>   Download</a>
-                    <a href="https://link-to-playstore.com/crispchat" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Play Store</a>
+                    <a href="com.handycloset.android.eraser.apk" class="download-btn" target="_blank">
+                        <span class="icon-container"></span>
+                        <span class="text-container">
+                            <span class="text-main">Download</span>
+                            <span class="text-size">9.58 MB</span>
+                        </span>
+                    </a>
+                    <a class="black-store-btn" href="https://play.google.com/store/apps/details?id=com.handycloset.android.eraser&hl=en&referrer=utm_source%3Dgoogle%26utm_medium%3Dorganic%26utm_term%3Dbackground+eraser+apk+png&pcampaignid=APPU_1_MQMzacjmM8fCvr0PisPE6QM&pli=1" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 512 512">
+                            <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
+                        </svg>
+                        <span class="texts">
+                            <span class="text-1">GET IT ON</span>
+                            <span class="text-2">Google Play</span>
+                        </span>
+                    </a>
                 </div>
             </div>
 
+            <div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon" style="background: linear-gradient(135deg, #ffd700 0%, #d2691e 100%);"><i class="fas fa-book-bible"></i></div>
+                    <h2>Bilingual Bible</h2>
+                </div>
+                <p>Read verses in dual languages to deepen your faith and understanding of the holy scriptures.</p>
+                <div class="download-links">
+                    <a href="#" class="download-btn" target="_blank">
+                        <span class="icon-container"></span>
+                        <span class="text-container">
+                            <span class="text-main">Download</span>
+                            <span class="text-size">32.1 MB</span>
+                        </span>
+                    </a>
+                    <a class="black-store-btn" href="#" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 512 512">
+                            <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
+                        </svg>
+                        <span class="texts">
+                            <span class="text-1">GET IT ON</span>
+                            <span class="text-2">Google Play</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
 
             <div class="app-card">
                 <div class="app-header">
-                    <div class="app-icon"></i></div>
-                    <h2>BaPlanner</h2>
+                    <div class="app-icon" style="background: linear-gradient(135deg, #1f4037 0%, #99f2c8 100%);"><i class="fas fa-brain"></i></div>
+                    <h2>Perplexity</h2>
                 </div>
-                <p>The ultimate productivity tool for managing your tasks, schedules, and goals. Syncs across all devices and offers powerful organization features.</p>
+                <p>Your personal AI search companion providing accurate answers and trustworthy sources for every single question.</p>
                 <div class="download-links">
-                    <a href="https://link-to-desktop-download.com/baplanner" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i></i> Download</a>
-                    <a href="https://link-to-appstore.com/baplanner" class="download-btn" target="_blank"><i class="fab fa-apple"></i> iOS</a>
+                    <a href="#" class="download-btn" target="_blank">
+                        <span class="icon-container"></span>
+                        <span class="text-container">
+                            <span class="text-main">Download</span>
+                            <span class="text-size">32.1 MB</span>
+                        </span>
+                    </a>
+                    <a class="black-store-btn" href="#" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 512 512">
+                            <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
+                        </svg>
+                        <span class="texts">
+                            <span class="text-1">GET IT ON</span>
+                            <span class="text-2">Google Play</span>
+                        </span>
+                    </a>
                 </div>
             </div>
-<div class="app-card">
-                <div class="app-header">
-                    <div class="app-icon">  </div>
-                    <h2>CrispChat</h2>
-                </div>
-                <p>A fast, secure, and private messaging application designed for seamless communication with friends and family. Features end-to-end encryption and custom themes.</p>
-                <div class="download-links">
-                    <a href="https://link-to-appstore.com/crispchat" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i>   Download</a>
-                    <a href="https://link-to-playstore.com/crispchat" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Play Store</a>
-                </div>
-            </div><div class="app-card">
-                <div class="app-header">
-                    <div class="app-icon">  </div>
-                    <h2>CrispChat</h2>
-                </div>
-                <p>A fast, secure, and private messaging application designed for seamless communication with friends and family. Features end-to-end encryption and custom themes.</p>
-                <div class="download-links">
-                    <a href="https://link-to-appstore.com/crispchat" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i>  Download</a>
-                    <a href="https://link-to-playstore.com/crispchat" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Play Store</a>
-                </div>
-            </div><div class="app-card">
-                <div class="app-header">
-                    <div class="app-icon">  </div>
-                    <h2>CrispChat</h2>
-                </div>
-                <p>A fast, secure, and private messaging application designed for seamless communication with friends and family. Features end-to-end encryption and custom themes.</p>
-                <div class="download-links">
-                    <a href="https://link-to-appstore.com/crispchat" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i>  Download</a>
-                    <a href="https://link-to-playstore.com/crispchat" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Play Store</a>
-                </div>
-            </div><div class="app-card">
-                <div class="app-header">
-                    <div class="app-icon">  </div>
-                    <h2>CrispChat</h2>
-                </div>
-                <p>A fast, secure, and private messaging application designed for seamless communication with friends and family. Features end-to-end encryption and custom themes.</p>
-                <div class="download-links">
-                    <a href="https://link-to-appstore.com/crispchat" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i>  Download</a>
-                    <a href="https://link-to-playstore.com/crispchat" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Play Store</a>
-                </div>
-            </div><div class="app-card">
-                <div class="app-header">
-                    <div class="app-icon">  </div>
-                    <h2>CrispChat</h2>
-                </div>
-                <p>A fast, secure, and private messaging application designed for seamless communication with friends and family. Features end-to-end encryption and custom themes.</p>
-                <div class="download-links">
-                    <a href="https://link-to-appstore.com/crispchat" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i>   Download</a>
-                    <a href="https://link-to-playstore.com/crispchat" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Play Store</a>
-                </div>
-            </div><div class="app-card">
-                <div class="app-header">
-                    <div class="app-icon">  </div>
-                    <h2>CrispChat</h2>
-                </div>
-                <p>A fast, secure, and private messaging application designed for seamless communication with friends and family. Features end-to-end encryption and custom themes.</p>
-                <div class="download-links">
-                    <a href="https://link-to-appstore.com/crispchat" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i> Download</a>
-                    <a href="https://link-to-playstore.com/crispchat" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Play Store</a>
-                </div>
-            </div>
+
             <div class="app-card">
                 <div class="app-header">
-                    <div class="app-icon"></div>
-                    <h2>PhotoCrisp</h2>
+                    <div class="app-icon" style="background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);"><i class="fas fa-print"></i></div>
+                    <h2>PrinterShare</h2>
                 </div>
-                <p>Easy-to-use photo editing software with professional-grade filters and tools. Enhance your images with just a few taps or clicks.</p>
+                <p>Print documents and photos directly from your mobile device to any supported Wi-Fi or Bluetooth, or USB Printers.</p>
                 <div class="download-links">
-                    <a href="https://link-to-web-app.com/photocrisp" class="download-btn" target="_blank"><i class="fa fa-download" style="color: white;"></i> Download</a>
-                    <a href="https://link-to-playstore.com/photocrisp" class="download-btn" target="_blank"><i class="fab fa-google-play"></i> Android</a>
+                    <a href="#" class="download-btn" target="_blank">
+                        <span class="icon-container"></span>
+                        <span class="text-container">
+                            <span class="text-main">Download</span>
+                            <span class="text-size">32.1 MB</span>
+                        </span>
+                    </a>
+                    <a class="black-store-btn" href="#" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 512 512">
+                            <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
+                        </svg>
+                        <span class="texts">
+                            <span class="text-1">GET IT ON</span>
+                            <span class="text-2">Google Play</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon" style="background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);"><i class="fas fa-code"></i></div>
+                    <h2>Acode</h2>
+                </div>
+                <p>A lightweight yet powerful code editor for web development and programming on your Android device.</p>
+                <div class="download-links">
+                    <a href="#" class="download-btn" target="_blank">
+                        <span class="icon-container"></span>
+                        <span class="text-container">
+                            <span class="text-main">Download</span>
+                            <span class="text-size">32.1 MB</span>
+                        </span>
+                    </a>
+                    <a class="black-store-btn" href="#" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 512 512">
+                            <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
+                        </svg>
+                        <span class="texts">
+                            <span class="text-1">GET IT ON</span>
+                            <span class="text-2">Google Play</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon" style="background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);"><i class="fas fa-cubes"></i></div>
+                    <h2>Sketchware Pro</h2>
+                </div>
+                <p>Create native Android apps directly on your smartphone using visual block-based programming logic.</p>
+                <div class="download-links">
+                    <a href="#" class="download-btn" target="_blank">
+                        <span class="icon-container"></span>
+                        <span class="text-container">
+                            <span class="text-main">Download</span>
+                            <span class="text-size">32.1 MB</span>
+                        </span>
+                    </a>
+                    <a class="black-store-btn" href="#" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 512 512">
+                            <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
+                        </svg>
+                        <span class="texts">
+                            <span class="text-1">GET IT ON</span>
+                            <span class="text-2">Google Play</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon" style="background: linear-gradient(135deg, #fce38a 0%, #f38181 100%);"><i class="fas fa-smile"></i></div>
+                    <h2>Lucky Patcher</h2>
+                </div>
+                <p>Modify application permissions, remove ads, and bypass license verification on your Android device.</p>
+                <div class="download-links">
+                    <a href="#" class="download-btn" target="_blank">
+                        <span class="icon-container"></span>
+                        <span class="text-container">
+                            <span class="text-main">Download</span>
+                            <span class="text-size">32.1 MB</span>
+                        </span>
+                    </a>
+                    <a class="black-store-btn" href="#" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 512 512">
+                            <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
+                        </svg>
+                        <span class="texts">
+                            <span class="text-1">GET IT ON</span>
+                            <span class="text-2">Google Play</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon" style="background: linear-gradient(45deg, #3a0088, #d82b7e);"><i class="fas fa-camera"></i></div>
+                    <h2>Picsart</h2>
+                </div>
+                <p>Unlock your full creative potential with the ultimate all-in-one photo and video platform.</p>
+                <div class="download-links">
+                    <a href="#" class="download-btn" target="_blank">
+                        <span class="icon-container"></span>
+                        <span class="text-container">
+                            <span class="text-main">Download</span>
+                            <span class="text-size">124 MB</span>
+                        </span>
+                    </a>
+                    <a class="black-store-btn" href="#" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 512 512">
+                            <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
+                        </svg>
+                        <span class="texts">
+                            <span class="text-1">GET IT ON</span>
+                            <span class="text-2">Google Play</span>
+                        </span>
+                    </a>
                 </div>
             </div>
             
-            </div>
-        
+        </div>
     </div>
-<br>
+
     <footer class="footer">
-      <div class="footer-content">
-        <p>&copy; 2025 CrispinJr Cobelo</p>
-  <p>Developed by <a href="https://www.facebook.com/crispinjr.cobelo" target="_blank" rel="noopener noreferrer" class="footer-crispba" style="font-weight:700;color: blue;text-decoration:none;opacity: 65%;">CrispBa</a></p>
-      </div>
+        <div class="footer-content">
+            <p>© 2025 CrispinJr Cobelo</p>
+            <p>Developed by <a href="https://www.facebook.com/crispinjr.cobelo" target="_blank" rel="noopener noreferrer" class="footer-crispba">CrispBa</a></p>
+        </div>
     </footer>
-  </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- 1. Page Loader Logic ---
+            const loader = document.getElementById('pageLoader');
+            if (loader) {
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                }, 500); 
+            }
+
+            // --- 2. Button Loading Logic (NEW) ---
+            const downloadBtns = document.querySelectorAll('.download-btn');
+            
+            downloadBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    // We DO NOT prevent default here so the link still works/downloads
+                    const button = this;
+                    
+                    // Add loading class to show spinner
+                    button.classList.add('loading');
+                    
+                    // Remove loading class after 3 seconds (simulating download start)
+                    setTimeout(() => {
+                        button.classList.remove('loading');
+                    }, 3000);
+                });
+            });
+
+            // --- 3. Typing Logic ---
+            const typingElement = document.getElementById('typing-text');
+            const textToType = "All CrispBa Applications";
+            const typeSpeed = 100; 
+            const deleteSpeed = 50; 
+            const pauseTime = 2000; 
+            const pauseTimeDelete = 500; 
+
+            let charIndex = 0;
+            let isDeleting = false;
+
+            function typeEffect() {
+                const currentText = textToType;
+
+                if (isDeleting) {
+                    typingElement.textContent = currentText.substring(0, charIndex--);
+                    if (charIndex < 0) {
+                        isDeleting = false;
+                        charIndex = 0;
+                        setTimeout(typeEffect, pauseTimeDelete);
+                        return;
+                    }
+                } else {
+                    typingElement.textContent = currentText.substring(0, charIndex++);
+                    if (charIndex > currentText.length) {
+                        isDeleting = true;
+                        setTimeout(typeEffect, pauseTime);
+                        return;
+                    }
+                }
+                setTimeout(typeEffect, isDeleting ? deleteSpeed : typeSpeed);
+            }
+            typeEffect();
+        });
+    </script>
 </body>
 </html>
