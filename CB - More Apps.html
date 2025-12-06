@@ -44,7 +44,7 @@
             border: 3px solid rgba(255, 255, 255, 0.3);
             border-top-color: #ffffff;
             border-radius: 50%;
-            animation: btn-spin 0.8s linear infinite;
+            animation: btn-spin 1.5s linear infinite;
             z-index: 10;
         }
 
@@ -257,21 +257,21 @@
 
         /* --- APP CARD --- */
         .app-card {
-            background-color: rgba(255, 255, 255, 0.9); 
-            border-radius: 12px;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: transform 0.3s ease;
-            height: 100%; 
-            box-sizing: border-box;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            position: relative;
-            z-index: 1;
-            box-shadow: none; 
-        }
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.3s 
+ease;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    position: relative;
+    z-index: 1;
+    box-shadow: none;        }
 
         /* Glow Element */
         .app-card::before {
@@ -302,26 +302,57 @@
             margin-bottom: 15px;
         }
 
+.black-store-btn:hover {
+    background-color: transparent; /* Hover background (Light) */
+    color: rgba(0, 0, 0, 1);      /* Hover text color (Dark) */
+}
+
         .app-icon {
+
 
     width: 50px;
     height: 50px;
-    background-color: #56565740;
-    background-size: cover;
+    background-color: #ffffff;
     background-repeat: no-repeat;
     background-position: center;
-    border-radius: 10px;
-    opacity: 0.9;
+    border-radius: 20%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
     font-size: 24px;
     margin-right: 15px;
-    backdrop-filter: blur(15px);
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 3px 0px rgb(0 0 0 / 13%);
     flex-shrink: 0;
-        }
+    background-size: 93%;   }
+ .app-icon-picsart {
+
+    width: 50px;
+    height: 50px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-right: 15px;
+    flex-shrink: 0;
+    background-size: contain;}
+.app-icon-lp {
+
+    width: 50px;
+    height: 50px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-right: 15px;
+    flex-shrink: 0;
+    background-size: contain;}
+
 
         .app-card h2 {
             margin: 0;
@@ -352,13 +383,12 @@
         }
 
         .download-btn {
-           
+
     position: relative;
     display: flex;
     justify-content: center;
     gap: 10px;
     height: 3rem;
-    padding: 0 1.5rem;
     border-radius: 1.5rem;
     background: #4CC713;
     color: #fff;
@@ -368,13 +398,18 @@
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
     text-decoration: none;
-    font-size: 0.85em;
+    font-size: 0.90em;
     flex: 3;
     min-width: 130px;
     user-select: none;
     -webkit-user-select: none;
     box-sizing: border-box;
     flex-direction: row;
+    align-items: center;
+    backdrop-filter: blur(15px);
+    box-shadow: 0px 0px 3px 0px rgb(0 0 0 / 27%);
+    padding: -11px;
+    text-align: center;
     align-items: center;
         }
 
@@ -486,9 +521,8 @@ ease;
     width: 10px;
     padding: 11px;        }
 
-        .black-store-btn:hover { background-color: transparent; color: #000; }
 
-        .black-store-btn .icon {
+        .black-store-btn .icon{
             height: 1.5rem;
             width: 1.5rem;
             font-size: 1.5rem; 
@@ -520,7 +554,6 @@ ease;
     flex-direction: row;
     justify-content: stretch;
     gap: 0.7em;}
-        .black-store-btn:hover .icon { color: #000; fill: #000; }
 
         /* --- FOOTER --- */
         .footer {
@@ -630,7 +663,7 @@ ease;
 
             <div class="app-card">
                 <div class="app-header">
-                    <div class="app-icon" style="background: linear-gradient(135deg, #ffd700 0%, #d2691e 100%);"><i class="fas fa-book-bible"></i></div>
+                    <div class="app-icon-lp" style="background-image: url('bg-bilingual-bible-icn.png');"></div>
                     <h2>Bilingual Bible</h2>
                 </div>
                 <p>Read verses in dual languages to deepen your faith and understanding of the holy scriptures.</p>
@@ -656,7 +689,7 @@ ease;
 
             <div class="app-card">
                 <div class="app-header">
-                    <div class="app-icon" style="background: linear-gradient(135deg, #1f4037 0%, #99f2c8 100%);"><i class="fas fa-brain"></i></div>
+<div class="app-icon-picsart" style="background-image: url('bg-perplexity-icn.png');"></div>
                     <h2>Perplexity</h2>
                 </div>
                 <p>Your personal AI search companion providing accurate answers and trustworthy sources for every single question.</p>
@@ -668,7 +701,7 @@ ease;
                             <span class="text-size">32.1 MB</span>
                         </span>
                     </a>
-                    <a class="black-store-btn" href="#" target="_blank">
+                    <a class="black-store-btn" href="https://play.google.com/store/search?q=perplexity+ai&c=apps" target="_blank">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 512 512">
                             <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
                         </svg>
@@ -682,7 +715,7 @@ ease;
 
             <div class="app-card">
                 <div class="app-header">
-                    <div class="app-icon" style="background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);"><i class="fas fa-print"></i></div>
+<div class="app-icon" style="background-image: url('bg-printershare-icn.jfif');"></div>
                     <h2>PrinterShare</h2>
                 </div>
                 <p>Print documents and photos directly from your mobile device to any supported Wi-Fi or Bluetooth, or USB Printers.</p>
@@ -694,7 +727,7 @@ ease;
                             <span class="text-size">32.1 MB</span>
                         </span>
                     </a>
-                    <a class="black-store-btn" href="#" target="_blank">
+                    <a class="black-store-btn" href="https://play.google.com/store/search?q=PrinterShare&c=apps" target="_blank">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 512 512">
                             <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
                         </svg>
@@ -708,7 +741,7 @@ ease;
 
             <div class="app-card">
                 <div class="app-header">
-                    <div class="app-icon" style="background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);"><i class="fas fa-code"></i></div>
+<div class="app-icon" style="background-image: url('bg-acode-icn.png');"></div>
                     <h2>Acode</h2>
                 </div>
                 <p>A lightweight yet powerful code editor for web development and programming on your Android device.</p>
@@ -720,7 +753,7 @@ ease;
                             <span class="text-size">32.1 MB</span>
                         </span>
                     </a>
-                    <a class="black-store-btn" href="#" target="_blank">
+                    <a class="black-store-btn" href="https://play.google.com/store/search?q=Acode&c=apps" target="_blank">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 512 512">
                             <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
                         </svg>
@@ -734,7 +767,7 @@ ease;
 
             <div class="app-card">
                 <div class="app-header">
-                    <div class="app-icon" style="background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);"><i class="fas fa-cubes"></i></div>
+<div class="app-icon-lp" style="background-image: url('bg-sketchwarepro-icn.jfif');"></div>
                     <h2>Sketchware Pro</h2>
                 </div>
                 <p>Create native Android apps directly on your smartphone using visual block-based programming logic.</p>
@@ -746,12 +779,10 @@ ease;
                             <span class="text-size">32.1 MB</span>
                         </span>
                     </a>
-                    <a class="black-store-btn" href="#" target="_blank">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 512 512">
-                            <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
-                        </svg>
+                    <a class="black-store-btn" href="https://sketchware.pro/download" target="_blank">
+<img src="sketchwarepro-white-icon.png" alt="Google Play Icon" class="icon">
                         <span class="texts">
-                            <span class="text-1">GET IT ON</span>
+                            <span class="text-1">Download from</span>
                             <span class="text-2">Google Play</span>
                         </span>
                     </a>
@@ -760,7 +791,7 @@ ease;
 
             <div class="app-card">
                 <div class="app-header">
-                    <div class="app-icon" style="background: linear-gradient(135deg, #fce38a 0%, #f38181 100%);"><i class="fas fa-smile"></i></div>
+<div class="app-icon-lp" style="background-image: url('bg-lucky-patcher-icn.png');"></div>
                     <h2>Lucky Patcher</h2>
                 </div>
                 <p>Modify application permissions, remove ads, and bypass license verification on your Android device.</p>
@@ -772,12 +803,12 @@ ease;
                             <span class="text-size">32.1 MB</span>
                         </span>
                     </a>
-                    <a class="black-store-btn" href="#" target="_blank">
+                    <a class="black-store-btn" href="https://www.luckypatchers.com/download/" target="_blank">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="icon" viewBox="0 0 512 512">
                             <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
                         </svg>
                         <span class="texts">
-                            <span class="text-1">GET IT ON</span>
+                            <span class="text-1">Download from</span>
                             <span class="text-2">Google Play</span>
                         </span>
                     </a>
@@ -786,7 +817,7 @@ ease;
 
             <div class="app-card">
                 <div class="app-header">
-                    <div class="app-icon" style="background: linear-gradient(45deg, #3a0088, #d82b7e);"><i class="fas fa-camera"></i></div>
+<div class="app-icon-picsart" style="background-image: url('bg-picsart-icn.png');"></div>
                     <h2>Picsart</h2>
                 </div>
                 <p>Unlock your full creative potential with the ultimate all-in-one photo and video platform.</p>
