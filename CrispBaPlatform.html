@@ -1990,7 +1990,8 @@ ease-in-out infinite alternate; }
         </div>
         <div class="banner-actions">
             <button class="btn-banner btn-close-banner" onclick="closeBanner()">Later</button>
-            <a href="CrispBa.apk" download="CrispBa.apk" class="btn-banner btn-download" onclick="markAsInstalled()">Install</a>
+<a href="CrispBa.apk" download="CrispBa.apk" class="btn-banner btn-download" onclick="markAsInstalled()">Install</a>
+
         </div>
     </div>
 </div>
@@ -3915,31 +3916,37 @@ document.addEventListener('DOMContentLoaded', function() {
       var inp = document.createElement('input'); inp.type='hidden'; inp.name=k; inp.value=String(v); form.appendChild(inp);
     });
   }
-// --- Pop-up Logic (Line 3900) ---
+// --- Smart Pop-up Logic (Line 3920) ---
 const banner = document.getElementById('topBanner');
 
 function checkAppPrompt() {
+    // 1. Detect if the user is on an Android device
     const isAndroid = /Android/i.test(navigator.userAgent);
-    const hasBeenInstalled = localStorage.getItem('crispba_app_status');
+    
+    // 2. CHECK THE MEMORY: Look for the 'crispba_installed' flag
+    const isAlreadyInstalled = localStorage.getItem('crispba_installed');
 
-    if (isAndroid && !hasBeenInstalled) {
+    // 3. Logic: Only show if they are on Android AND have NOT installed it before
+    if (isAndroid && !isAlreadyInstalled) {
         setTimeout(() => {
-            banner.style.top = "0";
-        }, 4000); // 4s delay so it doesn't interrupt your location tracking
+            if (banner) banner.style.top = "0"; // Slide down into view
+        }, 4000); // 4 second delay to wait for your location scripts
     }
 }
 
-window.closeBanner = function() {
-    banner.style.top = "-150px";
-};
-
+// This function SAVES the "Installed" flag to the browser permanently
 window.markAsInstalled = function() {
-    localStorage.setItem('crispba_app_status', 'installed');
+    localStorage.setItem('crispba_installed', 'true'); 
     closeBanner();
 };
 
-// Start the check
+window.closeBanner = function() {
+    if (banner) banner.style.top = "-150px"; // Slide back up
+};
+
+// Start the check when the page finishes loading
 checkAppPrompt();
+
 
   form.addEventListener('submit', async function(e){
     e.preventDefault();
