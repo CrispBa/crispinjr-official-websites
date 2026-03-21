@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Quest</title>
+    <link rel="shortcut icon" href="favicon(BQ).png" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon(BQ).png" type="image/x-icon">
+
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root { 
+            --gold: #FFD700; 
+            --gold-gradient: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            --glass: rgba(0, 0, 0, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --bg-dark: #03070e;
+        }
+
+        #toast { 
+            position: fixed; 
+            bottom: 30px; 
+            left: 50%; 
+            transform: translateX(-50%) translateY(150px); 
+            background: var(--gold); 
+            color: #000; 
+            padding: 12px 25px; 
+            border-radius: 50px; 
+            font-weight: 800; 
+            font-size: 0.85rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            z-index: 9999;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        #toast.show { transform: translateX(-50%) translateY(0); }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body { 
+            font-family: 'Poppins', sans-serif; background: var(--bg-dark); color: white; min-height: 100vh;
+            background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1438109491414-7198515b166b?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover; background-position: center; background-attachment: fixed;
+        }
+
+        i, .lucide { width: 18px !important; height: 18px !important; display: inline-block; }
+
+        header { 
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; 
+            background: rgba(3, 7, 14, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo { font-family: 'Cinzel', serif; color: var(--gold); font-size: 1rem; letter-spacing: 2px; }
+        .points-display { display: flex; align-items: center; gap: 8px; background: var(--gold-gradient); color: #3a2a00; padding: 6px 16px; border-radius: 50px; font-weight: 800; }
+
+        .search-area { padding: 15px 20px 5px; }
+        .search-box { display: flex; background: rgba(255,255,255,0.07); border: 1px solid var(--glass-border); border-radius: 15px; padding: 4px; }
+        .search-input { flex: 1; background: transparent; border: none; padding: 10px 15px; color: white; outline: none; font-family: 'Poppins'; }
+        .search-go { background: var(--gold-gradient); border: none; width: 50px; height: 40px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #3a2a00; }
+
+        nav { display: flex; justify-content: space-around; padding: 12px; background: rgba(0,0,0,0.4); border-bottom: 1px solid var(--glass-border); margin-bottom: 10px; }
+        .nav-btn { background: transparent; border: none; color: #666; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .nav-btn.active { color: var(--gold); }
+        .nav-btn span { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
+
+        .container { padding: 10px 20px 50px; max-width: 600px; margin: 0 auto; }
+        .section { display: none; }
+        .section.active { display: block; animation: fadeInUp 0.5s ease; }
+
+        .verse-card { backdrop-filter: blur(25px); border-radius: 30px; border: 1px solid var(--glass-border); padding: 30px; text-align: center; }
+        .verse-image-container { width: 100%; height: 150px; border-radius: 20px; margin-bottom: 20px; overflow: hidden; border: 1px solid var(--glass-border); }
+        .verse-image-container img { width: 100%; height: 100%; object-fit: cover; }
+
+        #vRef { font-family: 'Cinzel'; color: var(--gold); font-size: 1.4rem; margin-bottom: 10px; }
+        #vText { line-height: 1.6; color: #eee; font-style: italic; font-size: 1rem; min-height: 60px; }
+
+        .timer-wrap { position: relative; width: 90px; height: 90px; margin: 20px auto; }
+        svg.timer-svg { transform: rotate(-90deg); width: 90px; height: 90px; }
+        .circle-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 6; }
+        .circle-progress { fill: none; stroke: var(--gold); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset 1s linear; }
+        .timer-val { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 800; }
+
+        .btn-claim { background: var(--gold-gradient); color: #3a2a00; border: none; padding: 18px; border-radius: 18px; width: 100%; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+
+        .shop-card { 
+    background: rgb(12 18 5 / 42%);padding: 18px; border-radius: 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--glass-border); position: relative; }
+        .free-badge { background: #ff4444; color: white; font-size: 0.6rem; padding: 2px 8px; border-radius: 5px; position: absolute; top: -8px; left: 15px; font-weight: 800; }
+        .history-item { padding: 12px 15px; border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); margin-bottom: 8px; border-radius: 12px; font-size: 0.8rem; }
+        .status-badge { float: right; font-weight: 800; font-size: 0.7rem; }
+
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
+        .modal.active { display: flex; }
+        .modal-box { background: #16213e; border: 2px solid var(--gold); padding: 25px; border-radius: 15px; width: 100%; max-width: 400px; text-align: center; }
+        .modal-box input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid var(--gold); background: rgba(0,0,0,0.3); color: white; outline: none; }
+        .btn-submit { background: #4CAF50; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; margin-top: 10px; }
+
+        .architect-footer { text-align: center; margin-top: 40px; opacity: 0.5; font-size: 0.7rem; }
+        .dev-highlight { color: var(--gold); font-weight: 800; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><img src="favicon(BQ).png" width="32" height="32" style="transform: translate(3px, 10px);">
+BIBLE QUEST</div>
+        <div class="points-display"><i data-lucide="zap"></i> <span id="pts">0</span></div>
+    </header>
+
+    <div class="search-area">
+        <div class="search-box">
+            <input type="text" id="vSearch" class="search-input" placeholder="Search (e.g. John 3:16)">
+            <button class="search-go" onclick="manualSearch()"><i data-lucide="search"></i></button>
+        </div>
+    </div>
+
+    <nav>
+        <button class="nav-btn active" onclick="showTab('meditate', this)"><i data-lucide="book-open"></i><span>Quest</span></button>
+        <button class="nav-btn" onclick="showTab('shop', this)"><i data-lucide="gem"></i><span>Shop</span></button>
+        <button class="nav-btn" onclick="showTab('logs', this)"><i data-lucide="scroll"></i><span>History</span></button>
+    </nav>
+
+    <div class="container">
+        <section id="meditate" class="section active">
+            <div class="verse-card">
+                <div class="verse-image-container"><img id="verseImg" src="https://picsum.photos/seed/bible/600/400" alt="Visual"></div>
+                <h3 id="vRef">Seeker</h3>
+                <p id="vText">Fetching the light...</p>
+                <div class="timer-wrap">
+                    <svg class="timer-svg" viewBox="0 0 100 100">
+                        <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+                        <circle id="pCircle" class="circle-progress" cx="50" cy="50" r="45"></circle>
+                    </svg>
+                    <div class="timer-val" id="timerTxt">--</div>
+                </div>
+                <button id="claimBtn" class="btn-claim" onclick="claimAndNext()" disabled>Wait...</button>
+            </div>
+        </section>
+
+        <section id="shop" class="section">
+            <h3 style="color:var(--gold); margin-bottom:15px; font-family:'Cinzel';">Store</h3>
+            <div id="shopList"></div>
+        </section>
+
+        <section id="logs" class="section">
+            <h3 style="color:var(--gold); margin-bottom:15px; font-family:'Cinzel';">History</h3>
+            <div id="logContent"></div>
+        </section>
+
+        <footer class="architect-footer">
+            <p>BIBLE QUEST <span style="color: white;">v18.0</span></p>
+            <p>BY DEVELOPER: 
+    <a href="https://www.facebook.com/crispinjr.cobelo" target="_blank" style="text-decoration: none;">
+        <span class="dev-highlight">CrispinJr Cobelo</span>
+    </a>
+</p>
+        </footer>
+    </div>
+
+    <div id="toast">Not enough points!</div>
+
+    <div class="modal" id="redeemModal">
+        <div class="modal-box">
+            <h3 style="color:var(--gold); font-family:'Cinzel'; margin-bottom:15px;">Verify GCash</h3>
+            <input type="text" id="gName" placeholder="GCash Registered Name">
+            <input type="tel" id="gNum" placeholder="GCash Number (09...)">
+            <input type="email" id="gEmail" placeholder="Email for Receipt">
+            <button class="btn-submit" onclick="processRedeem()">Submit Redemption</button>
+            <button onclick="closeModal()" style="background:none; border:none; color:white; width:100%; margin-top:15px; opacity:0.5; cursor:pointer;">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        (function() { emailjs.init("sNrp_awwUxXi4RU6O"); })();
+        lucide.createIcons();
+
+        // Your Specific SheetDB API URL
+        const SHEETDB_URL = "https://sheetdb.io/api/v1/tlwztm94nt1ti"; 
+
+        let state = JSON.parse(localStorage.getItem('bq_final_v18')) || { pts: 0, logs: [], firstClaim: true };
+        let activeReward = null;
+        let currentChars = 0;
+        let tInt = null;
+        const POOL = ["John 3:16", "Psalm 23:1", "Proverbs 3:5", "Philippians 4:13", "Romans 8:28"];
+
+        function init() { updateUI(); renderShop(); loadRandom(); syncStatus(); }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
+        // Sync local logs with Google Sheet status
+        async function syncStatus() {
+            try {
+                const res = await fetch(SHEETDB_URL);
+                const data = await res.json();
+                
+                state.logs = state.logs.map(log => {
+                    // Search for matching GCash number and amount in the sheet
+                    const match = data.find(row => log.includes(row.gcash_number) && row.status === "Success");
+                    if (match) {
+                        return log.replace("PENDING...", "SUCCESS ✅").replace("color: #ffa500", "color: #4CAF50");
+                    }
+                    return log;
+                });
+                save();
+            } catch (e) { console.log("Sync delayed"); }
+        }
+
+        async function loadVerse(ref) {
+            try {
+                const res = await fetch(`https://bible-api.com/${encodeURIComponent(ref)}`);
+                const data = await res.json();
+                if(data.text) {
+                    document.getElementById('vRef').innerText = data.reference;
+                    document.getElementById('vText').innerText = `"${data.text.trim()}"`;
+                    currentChars = data.text.trim().length;
+                    document.getElementById('verseImg').src = `https://picsum.photos/seed/${Math.random()}/600/400`;
+                    startTimer();
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        function startTimer() {
+            let tLeft = 60; 
+            const circle = document.getElementById('pCircle');
+            const btn = document.getElementById('claimBtn');
+            const txt = document.getElementById('timerTxt');
+            btn.disabled = true; btn.innerText = "Meditating...";
+            if(tInt) clearInterval(tInt);
+            tInt = setInterval(() => {
+                tLeft--; txt.innerText = tLeft + "s";
+                circle.style.strokeDashoffset = 283 - ((60 - tLeft) / 60 * 283);
+                if(tLeft <= 0) { clearInterval(tInt); txt.innerText = "AMEN"; btn.disabled = false; btn.innerText = `Claim +${currentChars} Pts`; }
+            }, 1000);
+        }
+
+        function claimAndNext() {
+            state.pts += currentChars;
+            state.logs.unshift(`${new Date().toLocaleTimeString()}: ${document.getElementById('vRef').innerText} +${currentChars} pts`);
+            save();
+            document.getElementById('claimBtn').innerText = "Saved!";
+            setTimeout(loadRandom, 1000);
+        }
+
+        function renderShop() {
+    const rewards = [{v:1, c:500}, {v:50, c:25000}, {v:100, c:50000}, {v:500, c:250000}];
+    document.getElementById('shopList').innerHTML = rewards.map(i => {
+        // Free 1 Peso for newbie logic
+        const isFree = (i.v === 1 && state.firstClaim);
+        const cost = isFree ? 0 : i.c;
+        
+        return `
+        <div class="shop-card">
+            ${isFree ? '<span class="free-badge">NEWBIE GIFT</span>' : ''}
+            <b>
+                <img src="bg-gcash-icn.png" width="32" height="32" style="transform: translate(1px, 4px); margin-right: 10px;">
+                <span style="display: inline-block; transform: translate(0px, -6px);">₱${i.v} GCash</span>
+            </b>
+            <button onclick="openModal(${i.v}, ${cost})" style="background:var(--gold-gradient); border:none; padding:10px 15px; border-radius:10px; font-weight:900; cursor:pointer; color:#3a2a00;">
+                ${isFree ? 'FREE' : cost.toLocaleString() + ' PTS'}
+            </button>
+        </div>
+    `}).join('');
+}
+
+        function openModal(val, cost) {
+            if(state.pts < cost) return showToast("Not enough points!");
+            activeReward = { val, cost };
+            document.getElementById('redeemModal').classList.add('active');
+        }
+
+        function closeModal() { document.getElementById('redeemModal').classList.remove('active'); }
+
+        async function processRedeem() {
+            const name = document.getElementById('gName').value;
+            const mobile = document.getElementById('gNum').value;
+            const email = document.getElementById('gEmail').value;
+            if(!name || !mobile || !email) return showToast("Fill all fields!");
+
+            // 1. Send to EmailJS
+            emailjs.send("service_rc5eqhl", "template_ha5fvkh", {
+                method: "GCASH", mobile: mobile, extra_data: name, user_email: email, peso_value: "₱" + activeReward.val
+            });
+
+            // 2. Log to Google Sheet via SheetDB
+            try {
+                await fetch(SHEETDB_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        data: [{ "gcash_number": mobile, "name": name, "amount": activeReward.val, "status": "Pending" }]
+                    })
+                });
+            } catch (e) { console.error("Sheet Sync Error"); }
+
+            // 3. Update State
+            state.pts -= activeReward.cost;
+            if(activeReward.val === 1) state.firstClaim = false; // Disable newbie gift after use
+            state.logs.unshift(`${new Date().toLocaleTimeString()}: Redeemed ₱${activeReward.val} (${mobile}) <span class="status-badge" style="color:#ffa500">PENDING...</span>`);
+            
+            save(); renderShop(); closeModal();
+            showToast("Redemption Recorded!");
+        }
+
+        function showTab(id, el) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            el.classList.add('active');
+            if(id === 'logs') {
+                syncStatus(); // Check for updates whenever history is viewed
+                document.getElementById('logContent').innerHTML = state.logs.map(l => `<div class="history-item">${l}</div>`).join('') || "No logs.";
+            }
+        }
+
+        function manualSearch() { const q = document.getElementById('vSearch').value; if(q) loadVerse(q); }
+        function loadRandom() { loadVerse(POOL[Math.floor(Math.random() * POOL.length)]); }
+        function save() { localStorage.setItem('bq_final_v18', JSON.stringify(state)); updateUI(); }
+        function updateUI() { document.getElementById('pts').innerText = state.pts.toLocaleString(); }
+        
+        init();
+    </script>
+</body>
+</html>
