@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>📖 Bible Quest - Learn & Earn</title>
+    <title>📖 Bible Quest - GCash Edition</title>
     
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
@@ -12,19 +12,16 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #FFD700; --deep-blue: #0a0e1a; --royal-blue: #16213e; --white: #ffffff; --success: #4CAF50; --error: #ff4b2b; }
+        :root { --gold: #FFD700; --deep-blue: #0a0e1a; --gcash-blue: #007dfe; --white: #ffffff; --success: #4CAF50; --error: #ff4b2b; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Poppins', sans-serif; background-color: var(--deep-blue); color: var(--white); min-height: 100vh; overflow-x: hidden; }
         
-        /* Header & Points */
         header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--gold); position: sticky; top: 0; background: var(--deep-blue); z-index: 1000; }
-        .logo { font-family: 'Cinzel', serif; color: var(--gold); font-weight: 700; font-size: 1.1rem; }
-        .stat-pill { background: rgba(255, 215, 0, 0.15); border: 1px solid var(--gold); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; cursor: pointer; transition: 0.2s; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); } }
+        .logo { font-family: 'Cinzel', serif; color: var(--gold); font-weight: 700; font-size: 1.1rem; cursor: pointer; }
+        .stat-pill { background: rgba(255, 215, 0, 0.15); border: 1px solid var(--gold); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; cursor: pointer; }
 
-        /* Navigation */
         .nav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 10px; max-width: 500px; margin: 0 auto; }
-        .nav-item { background: rgba(255, 255, 255, 0.05); padding: 12px 2px; border-radius: 10px; text-align: center; font-size: 0.75rem; cursor: pointer; color: #888; transition: 0.3s; }
+        .nav-item { background: rgba(255, 255, 255, 0.05); padding: 12px 2px; border-radius: 10px; text-align: center; font-size: 0.75rem; cursor: pointer; color: #888; }
         .nav-item.active { background: var(--gold); color: var(--deep-blue); font-weight: 700; }
 
         .container { padding: 15px 15px 100px; max-width: 800px; margin: 0 auto; }
@@ -32,307 +29,254 @@
         .section-box.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* UI Elements */
+        /* GCash Style Cards */
         .card { background: rgba(255,255,255,0.04); padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 4px solid var(--gold); }
-        .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
-        .reward-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 12px; padding: 15px; text-align: center; }
-        
-        /* History & Status */
-        .history-item { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px; border: 1px solid rgba(255,255,255,0.1); }
-        .status-pending { color: #ff9800; font-weight: bold; font-size: 0.7rem; border: 1px solid #ff9800; padding: 2px 6px; border-radius: 4px; }
-        .status-success { color: var(--success); font-weight: bold; font-size: 0.7rem; border: 1px solid var(--success); padding: 2px 6px; border-radius: 4px; }
-        
-        /* Buttons */
-        .btn { background: var(--gold); color: var(--deep-blue); border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; font-size: 0.9rem; }
-        .receipt-btn { background: var(--success); color: white; border: none; padding: 6px 12px; border-radius: 5px; font-size: 0.75rem; font-weight: bold; cursor: pointer; align-self: flex-start; }
+        .reward-card { background: var(--gcash-blue); color: white; padding: 20px; border-radius: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+        .reward-card:active { transform: scale(0.98); }
+        .gcash-logo-app { background: white; color: var(--gcash-blue); font-weight: 900; padding: 5px 10px; border-radius: 8px; font-size: 0.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
-        /* Modal */
+        .btn { background: var(--gold); color: var(--deep-blue); border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; }
+        .btn:disabled { opacity: 0.5; }
+        .history-item { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.1); }
+        .receipt-btn { background: var(--success); color: white; border: none; padding: 6px 12px; border-radius: 5px; font-size: 0.75rem; margin-top: 10px; }
+
         .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
         .modal.active { display: flex; }
         .modal-box { background: #16213e; border: 2px solid var(--gold); padding: 25px; border-radius: 15px; width: 100%; max-width: 400px; }
         input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid var(--gold); background: rgba(0,0,0,0.3); color: white; outline: none; }
         
-        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--gold); color: var(--deep-blue); padding: 12px 25px; border-radius: 30px; font-weight: 700; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 3000; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--gold); color: var(--deep-blue); padding: 12px 25px; border-radius: 30px; font-weight: 700; transition: 0.4s; z-index: 3000; }
         #toast.show { transform: translateX(-50%) translateY(0); }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">📖 BIBLE QUEST</div>
-        <div class="stat-pill" onclick="openStore()">⭐ <span id="pointsDisplay">0</span></div>
+        <div class="logo" onclick="adminTrigger()">📖 BIBLE QUEST</div>
+        <div class="stat-pill" onclick="showTab('gift')">⭐ <span id="pointsDisplay">0</span></div>
     </header>
 
     <nav class="nav-grid">
         <div id="nav-daily" class="nav-item active" onclick="showTab('daily', this)">Daily</div>
+        <div id="nav-reading" class="nav-item" onclick="showTab('reading', this)">Reading</div>
         <div id="nav-quiz" class="nav-item" onclick="showTab('quiz', this)">Quiz</div>
-        <div id="nav-learn" class="nav-item" onclick="showTab('learn', this)">Learn</div>
         <div id="nav-history" class="nav-item" onclick="showTab('history', this)">History</div>
     </nav>
 
     <main class="container">
         <section id="daily" class="section-box active">
             <div class="card">
-                <p id="verseText" style="font-style:italic; font-size: 0.95rem;">"Thy word is a lamp unto my feet, and a light unto my path."</p>
+                <p id="dailyVerse" style="font-style:italic;"></p>
                 <button id="dailyBtn" class="btn" style="margin-top:20px;" onclick="claimDaily()">Claim Daily Bread (+50)</button>
+            </div>
+        </section>
+
+        <section id="reading" class="section-box">
+            <div class="card">
+                <h3 style="color:var(--gold); margin-bottom:10px;">Meditation</h3>
+                <p id="readingPassage" style="font-size: 0.9rem; line-height: 1.6; color: #ccc; margin-bottom: 20px;"></p>
+                <div id="readTimerDisplay" style="text-align:center; font-size: 1.5rem; color:var(--gold); margin-bottom:10px;">30s</div>
+                <button id="readRewardBtn" class="btn" onclick="claimReadingReward()" disabled>Meditate to earn +100</button>
             </div>
         </section>
 
         <section id="quiz" class="section-box">
             <div class="card">
-                <h4 style="color:var(--gold); margin-bottom:10px;">Daily Quiz</h4>
-                <p id="quizQuestion">Who built the ark before the great flood?</p>
-                <button class="btn" style="margin-top:15px;" onclick="answerQuiz(true)">Noah</button>
-                <button class="btn" style="margin-top:10px; background:#333; color:#ccc;" onclick="answerQuiz(false)">Moses</button>
-            </div>
-        </section>
-
-        <section id="learn" class="section-box">
-            <div class="card" style="text-align:center;">
-                <p>Meditate on the Word</p>
-                <h1 id="timer" style="color:var(--gold); font-size: 3rem; margin:15px 0;">10s</h1>
-                <button id="learnBtn" class="btn" disabled>Waiting...</button>
+                <p>Which sea did Moses part to help the Israelites escape?</p>
+                <button class="btn" style="margin-top:15px;" onclick="answerQuiz(true)">The Red Sea</button>
+                <button class="btn" style="margin-top:10px; background:#333; color:#ccc;" onclick="answerQuiz(false)">The Dead Sea</button>
             </div>
         </section>
 
         <section id="history" class="section-box">
-            <h3 style="color:var(--gold); margin-bottom:20px;">Redemption History</h3>
+            <h3 style="color:var(--gold); margin-bottom:15px;">Transaction History</h3>
             <div id="historyList"></div>
         </section>
 
         <section id="gift" class="section-box">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                <h3 style="color:var(--gold);">🎁 Reward Shop</h3>
-                <button onclick="showTab('daily', document.getElementById('nav-daily'))" style="background:none; border:none; color:var(--gold); font-weight:bold; cursor:pointer;">✖ Close</button>
-            </div>
-            <div class="rewards-grid" id="rewardsList"></div>
+            <h3 style="color:var(--gold); margin-bottom:15px;">💙 GCash Redemption</h3>
+            <div id="rewardsList"></div>
+            <button onclick="showTab('daily')" style="background:none; border:none; color:var(--gold); width:100%; margin-top:20px;">✖ Exit Shop</button>
+        </section>
+
+        <section id="adminPanel" class="section-box">
+            <h3 style="color:var(--gold); margin-bottom:15px;">🛠️ Admin Control</h3>
+            <div id="adminStats" class="card" style="text-align:center;"></div>
+            <div id="adminList"></div>
+            <button class="btn" style="background:var(--error); color:white; margin-top:15px;" onclick="clearAdminHistory()">🗑️ Wipe All History</button>
         </section>
     </main>
 
     <div class="modal" id="redeemModal">
         <div class="modal-box">
-            <h3 id="modalTitle" style="color:var(--gold); text-align:center; margin-bottom:15px;">Redeem</h3>
-            <input type="text" id="details" placeholder="Full Account Name (Required)">
-            <input type="tel" id="mobile" placeholder="Mobile Number (09...)">
-            <input type="email" id="email" placeholder="Email Address">
-            <button id="submitBtn" class="btn" style="background:var(--success); color:white; margin-top:15px;" onclick="processRedeem()">Submit Redemption</button>
-            <button onclick="closeModal()" style="background:none; border:none; color:white; width:100%; margin-top:20px; opacity:0.5; cursor:pointer;">Cancel</button>
+            <h3 id="modalTitle" style="color:var(--gold); margin-bottom:15px;">Verify GCash</h3>
+            <input type="text" id="details" placeholder="GCash Registered Name">
+            <input type="tel" id="mobile" placeholder="GCash Number (09...)">
+            <input type="email" id="email" placeholder="Email for Receipt">
+            <button id="submitBtn" class="btn" style="background:var(--success); color:white;" onclick="processRedeem()">Submit Redemption</button>
+            <button onclick="closeModal()" style="background:none; border:none; color:white; width:100%; margin-top:15px; opacity:0.5;">Cancel</button>
         </div>
     </div>
 
     <div id="toast">Points updated! ✨</div>
 
     <script>
-        // CONFIGURATION
         const SERVICE_ID = "service_rc5eqhl"; 
         const TEMPLATE_ID = "template_ha5fvkh"; 
 
+        // GCASH ONLY REWARDS
         const REWARDS = [
-            { type: 'GCash', val: 1, cost: 50 },
-            { type: 'GCash', val: 50, cost: 2200 },
-            { type: 'GCash', val: 100, cost: 4400 },
-            { type: 'Smart', val: 50, cost: 2200 },
-            { type: 'TNT', val: 50, cost: 2200 },
-            { type: 'DITO', val: 50, cost: 2200 }
+            {type:'GCash', val:1, cost:50},
+            {type:'GCash', val:50, cost:2200},
+            {type:'GCash', val:100, cost:4400},
+            {type:'GCash', val:200, cost:8500},
+            {type:'GCash', val:500, cost:20000}
         ];
 
-        const BIBLE_VERSES = [
-            '"For I know the plans I have for you..." - Jeremiah 29:11',
-            '"I can do all things through Christ..." - Philippians 4:13',
-            '"The Lord is my shepherd; I shall not want." - Psalm 23:1',
-            '"Seek first the kingdom of God..." - Matthew 6:33',
-            '"Commit your work to the Lord..." - Proverbs 16:3'
+        const PASSAGES = [
+            "\"The Lord is my shepherd; I shall not want.\" - Psalm 23:1",
+            "\"For God so loved the world, that he gave his only Son...\" - John 3:16",
+            "\"Seek first the kingdom of God...\" - Matthew 6:33"
         ];
-
-        // STATE MANAGEMENT
-        let state = JSON.parse(localStorage.getItem('bq_final_save')) || { 
-            points: 100, 
-            lastDaily: "", 
-            quizDone: false, 
-            history: [] 
-        };
+        
+        let state = JSON.parse(localStorage.getItem('bq_final_v4')) || { points: 100, lastDaily: "", lastRead: "", history: [] };
         let activeReward = null;
+        let logoClicks = 0;
+        let readTimer = null;
 
         function init() {
             checkForApproval();
             updateUI();
             renderRewards();
             renderHistory();
+            document.getElementById('dailyVerse').innerText = PASSAGES[new Date().getDate() % PASSAGES.length];
         }
 
-        // MAGIC APPROVAL ENGINE
         function checkForApproval() {
             const urlParams = new URLSearchParams(window.location.search);
             const approveId = urlParams.get('approve');
-            
             if (approveId) {
                 const index = state.history.findIndex(h => h.id == approveId);
-                if (index !== -1) {
-                    if (state.history[index].status === 'SUCCESS') {
-                        showToast("Already approved! ✅");
-                    } else {
-                        state.history[index].status = 'SUCCESS';
-                        save();
-                        renderHistory();
-                        alert("✅ SUCCESS! Transaction #" + approveId + " has been verified.");
-                    }
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                } else {
-                    alert("❌ Request ID not found in your history.");
-                }
+                if (index !== -1) { state.history[index].status = 'SUCCESS'; }
+                else { state.history.push({ id: approveId, type: "GCash", val: "Verified", name: "System", date: new Date().toLocaleDateString(), status: 'SUCCESS' }); }
+                save(); renderHistory();
+                alert("✅ GCash Approved!");
+                window.history.replaceState({}, document.title, window.location.pathname);
             }
-        }
-
-        // REDEMPTION LOGIC
-        function processRedeem() {
-            const mobile = document.getElementById('mobile').value;
-            const accountName = document.getElementById('details').value;
-            const email = document.getElementById('email').value;
-            const btn = document.getElementById('submitBtn');
-
-            if(!mobile || !accountName || !email) return alert("Please fill all fields!");
-
-            const requestId = Math.floor(100000 + Math.random() * 900000);
-            btn.disabled = true; btn.innerText = "Sending to Server...";
-
-            const params = { 
-                method: activeReward.type, 
-                mobile: mobile, 
-                extra_data: accountName, 
-                user_email: email, 
-                peso_value: "₱" + activeReward.val,
-                request_id: requestId
-            };
-
-            emailjs.send(SERVICE_ID, TEMPLATE_ID, params).then(() => {
-                state.points -= activeReward.cost;
-                state.history.push({ 
-                    id: requestId, 
-                    type: activeReward.type, 
-                    val: activeReward.val, 
-                    name: accountName,
-                    date: new Date().toLocaleDateString(),
-                    status: 'PENDING' 
-                });
-                save(); renderHistory(); closeModal(); 
-                showToast("Sent! Your ID is: " + requestId);
-                btn.disabled = false; btn.innerText = "Submit Redemption";
-            }, (err) => {
-                alert("EmailJS Error: Check your IDs!");
-                btn.disabled = false;
-            });
-        }
-
-        // RECEIPT DOWNLOAD
-        function downloadReceipt(index) {
-            const data = state.history[index];
-            const randomVerse = BIBLE_VERSES[Math.floor(Math.random() * BIBLE_VERSES.length)];
-
-            const receiptText = `
-📖 BIBLE QUEST OFFICIAL RECEIPT 📖
-----------------------------------
-STATUS:    SUCCESSFUL ✅
-REWARD:    ${data.type} ₱${data.val}
-NAME:      ${data.name}
-DATE:      ${data.date}
-REF ID:    #${data.id}
-----------------------------------
-DAILY BREAD:
-${randomVerse}
-----------------------------------
-Thank you for studying with us!
-            `;
-
-            const element = document.createElement("a");
-            const file = new Blob([receiptText], {type: 'text/plain'});
-            element.href = URL.createObjectURL(file);
-            element.download = `Receipt_${data.id}.txt`;
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-            showToast("Receipt Saved! 📂");
-        }
-
-        // UI RENDERING
-        function renderHistory() {
-            const list = document.getElementById('historyList');
-            if(state.history.length === 0) { list.innerHTML = '<p style="text-align:center; opacity:0.5; padding:20px;">No requests yet.</p>'; return; }
-            list.innerHTML = state.history.map((h, i) => `
-                <div class="history-item">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <strong>${h.type} ₱${h.val}</strong><br>
-                            <small style="opacity:0.6;">${h.date} | ID: ${h.id}</small>
-                        </div>
-                        <span class="${h.status === 'SUCCESS' ? 'status-success' : 'status-pending'}">${h.status}</span>
-                    </div>
-                    ${h.status === 'SUCCESS' ? `<button class="receipt-btn" onclick="downloadReceipt(${i})">📂 Save Receipt</button>` : ''}
-                </div>
-            `).reverse().join('');
         }
 
         function renderRewards() {
             document.getElementById('rewardsList').innerHTML = REWARDS.map(r => `
-                <div class="reward-card">
-                    <div style="font-weight:700; font-size:1.1rem;">₱${r.val}</div>
-                    <div style="font-size:0.7rem; color:var(--gold); margin-bottom:10px;">${r.cost.toLocaleString()} pts</div>
-                    <button class="btn" style="padding:6px; font-size:0.7rem;" onclick="openModal('${r.type}', ${r.val}, ${r.cost})">Redeem ${r.type}</button>
+                <div class="reward-card" onclick="openModal('${r.type}', ${r.val}, ${r.cost})">
+                    <div>
+                        <div class="gcash-logo-app">GCash</div>
+                        <div style="font-weight:700; font-size:1.2rem; margin-top:5px;">₱${r.val}</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <b style="color:var(--gold);">${r.cost.toLocaleString()}</b>
+                        <div style="font-size:0.6rem; opacity:0.8;">Points Needed</div>
+                    </div>
                 </div>
             `).join('');
         }
 
-        // SYSTEM FUNCTIONS
-        function claimDaily() {
+        function startReadingTimer() {
             const today = new Date().toDateString();
-            if(state.lastDaily === today) return showToast("Come back tomorrow!");
-            state.points += 50; state.lastDaily = today; save(); showToast("+50 Points! ✨");
-        }
-
-        function answerQuiz(correct) {
-            if(state.quizDone) return showToast("Quiz finished for today!");
-            if(correct) { state.points += 20; state.quizDone = true; save(); showToast("Correct! +20 pts"); }
-            else { showToast("Wrong answer!"); }
-        }
-
-        function startLearn() {
-            let s = 10; const b = document.getElementById('learnBtn');
-            b.disabled = true; b.innerText = "Meditating...";
-            const timer = setInterval(() => {
-                s--; document.getElementById('timer').innerText = s + "s";
+            document.getElementById('readingPassage').innerText = PASSAGES[new Date().getDate() % PASSAGES.length];
+            if(state.lastRead === today) {
+                document.getElementById('readRewardBtn').innerText = "Already read today!";
+                document.getElementById('readTimerDisplay').innerText = "✅";
+                return;
+            }
+            let s = 30;
+            const btn = document.getElementById('readRewardBtn');
+            const disp = document.getElementById('readTimerDisplay');
+            btn.disabled = true;
+            if(readTimer) clearInterval(readTimer);
+            readTimer = setInterval(() => {
+                s--; disp.innerText = s + "s";
                 if(s <= 0) {
-                    clearInterval(timer); b.disabled = false; b.innerText = "Claim Reward";
-                    b.onclick = () => { state.points += 30; save(); showToast("+30 Points! 📖"); b.innerText = "Done"; b.disabled = true; };
+                    clearInterval(readTimer);
+                    disp.innerText = "Done!"; btn.disabled = false; btn.innerText = "Claim +100 Points";
                 }
             }, 1000);
         }
 
-        function openStore() {
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.querySelectorAll('.section-box').forEach(s => s.classList.remove('active'));
-            document.getElementById('gift').classList.add('active');
-            showToast("Rewards Store 🎁");
+        function claimReadingReward() {
+            state.points += 100; state.lastRead = new Date().toDateString();
+            save(); showToast("+100 Points! 📖");
+            document.getElementById('readRewardBtn').disabled = true;
+            document.getElementById('readRewardBtn').innerText = "Claimed";
         }
 
+        function processRedeem() {
+            const name = document.getElementById('details').value;
+            const mobile = document.getElementById('mobile').value;
+            const email = document.getElementById('email').value;
+            if(!name || !mobile || !email) return alert("Please fill up everything!");
+            const reqId = Math.floor(100000 + Math.random() * 900000);
+            emailjs.send(SERVICE_ID, TEMPLATE_ID, { method: "GCASH", mobile, extra_data: name, user_email: email, peso_value: "₱" + activeReward.val, request_id: reqId });
+            state.points -= activeReward.cost;
+            state.history.push({ id: reqId, type: "GCash", val: activeReward.val, name: name, date: new Date().toLocaleDateString(), status: 'PENDING' });
+            save(); renderHistory(); closeModal(); showToast("Redemption Pending... 💸");
+        }
+
+        function adminTrigger() {
+            logoClicks++;
+            if(logoClicks >= 5) { showTab('adminPanel'); renderAdmin(); logoClicks = 0; }
+        }
+
+        function renderAdmin() {
+            const totalHistorySpent = state.history.reduce((sum, h) => {
+                const match = REWARDS.find(r => r.val === h.val);
+                return sum + (match ? match.cost : 0);
+            }, 0);
+            document.getElementById('adminStats').innerHTML = `<small>Total Earned</small><h3>${(state.points + totalHistorySpent).toLocaleString()} pts</h3>`;
+            document.getElementById('adminList').innerHTML = state.history.map((h, i) => `
+                <div class="history-item">ID: ${h.id} | ${h.name} <br> <button class="receipt-btn" onclick="forceSuccess(${i})">Manual Approve ✅</button></div>
+            `).reverse().join('');
+        }
+
+        function forceSuccess(i) { state.history[i].status = 'SUCCESS'; save(); renderAdmin(); renderHistory(); }
+        function clearAdminHistory() { if(confirm("Delete all?")) { state.history = []; save(); renderAdmin(); renderHistory(); } }
         function showTab(id, el) {
             document.querySelectorAll('.section-box').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(el) el.classList.add('active');
-            if(id === 'learn') startLearn();
+            if(id === 'reading') startReadingTimer();
         }
-
-        function openModal(type, val, cost) {
-            if(state.points < cost) return showToast("Not enough points! ❌");
-            activeReward = { type, val, cost };
-            document.getElementById('modalTitle').innerText = `Redeem ${type} ₱${val}`;
-            document.getElementById('redeemModal').classList.add('active');
+        function renderHistory() {
+            const list = document.getElementById('historyList');
+            if(state.history.length === 0) { list.innerHTML = "<p style='text-align:center; opacity:0.5;'>No transactions yet.</p>"; return; }
+            list.innerHTML = state.history.map((h, i) => `
+                <div class="history-item">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span><b>GCash ₱${h.val}</b><br><small>Ref: ${h.id}</small></span>
+                        <span style="color:${h.status==='SUCCESS'?'#4CAF50':'#FFD700'}">${h.status}</span>
+                    </div>
+                    ${h.status === 'SUCCESS' ? `<button class="receipt-btn" onclick="downloadReceipt(${i})">Save Receipt</button>` : ''}
+                </div>
+            `).reverse().join('');
         }
-
-        function save() { localStorage.setItem('bq_final_save', JSON.stringify(state)); updateUI(); }
-        function updateUI() { document.getElementById('pointsDisplay').innerText = state.points.toLocaleString(); }
+        function downloadReceipt(i) {
+            const h = state.history[i];
+            const text = `GCASH RECEIPT\nID: ${h.id}\nNAME: ${h.name}\nAMOUNT: ₱${h.val}\nSTATUS: SUCCESS ✅`;
+            const blob = new Blob([text], {type: 'text/plain'});
+            const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+            a.download = `GCash_Receipt_${h.id}.txt`; a.click();
+        }
+        function claimDaily() {
+            const t = new Date().toDateString();
+            if(state.lastDaily === t) return showToast("Come back tomorrow!");
+            state.points += 50; state.lastDaily = t; save(); showToast("+50 Points!");
+        }
+        function answerQuiz(c) { if(c) { state.points += 20; save(); showToast("Correct! +20"); } else { showToast("Wrong!"); } }
+        function openModal(t, v, c) { if(state.points < c) return showToast("Not enough points!"); activeReward = {type:t, val:v, cost:c}; document.getElementById('redeemModal').classList.add('active'); }
         function closeModal() { document.getElementById('redeemModal').classList.remove('active'); }
+        function save() { localStorage.setItem('bq_final_v4', JSON.stringify(state)); updateUI(); }
+        function updateUI() { document.getElementById('pointsDisplay').innerText = state.points.toLocaleString(); }
         function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
-
         init();
     </script>
 </body>
