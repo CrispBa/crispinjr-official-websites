@@ -103,7 +103,24 @@
     </style>
 </head>
 <body>
+<div id="authOverlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg-dark); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px;">
+    <div class="modal-box" id="loginBox">
+        <h2 style="color:var(--gold); font-family:'Cinzel'; margin-bottom:20px;">Bible Quest Login</h2>
+        <input type="email" id="authEmail" placeholder="Email Address">
+        <input type="password" id="authPass" placeholder="Password">
+        <button class="btn-submit" onclick="handleAuth('login')">Login</button>
+        <p style="margin-top:15px; font-size:0.8rem; opacity:0.7;">New seeker? <span onclick="toggleAuthMode()" style="color:var(--gold); cursor:pointer; font-weight:800;">Create Account</span></p>
+    </div>
 
+    <div class="modal-box" id="registerBox" style="display:none;">
+        <h2 style="color:var(--gold); font-family:'Cinzel'; margin-bottom:20px;">Join the Quest</h2>
+        <input type="text" id="regName" placeholder="Full Name">
+        <input type="email" id="regEmail" placeholder="Email Address">
+        <input type="password" id="regPass" placeholder="Create Password">
+        <button class="btn-submit" style="background:var(--gold-gradient); color:#3a2a00;" onclick="handleAuth('register')">Register</button>
+        <p style="margin-top:15px; font-size:0.8rem; opacity:0.7;">Already have account? <span onclick="toggleAuthMode()" style="color:var(--gold); cursor:pointer; font-weight:800;">Login here</span></p>
+    </div>
+</div>
     <header>
         <div class="logo">
             <img src="favicon(BQ).png" width="32" height="32" style="transform: translate(3px, 10px);">
@@ -176,13 +193,78 @@
     </div>
 
     <script>
+// Function to switch between Login and Register screens
+function toggleAuthMode() {
+    const lBox = document.getElementById('loginBox');
+    const rBox = document.getElementById('registerBox');
+    lBox.style.display = lBox.style.display === 'none' ? 'block' : 'none';
+    rBox.style.display = rBox.style.display === 'none' ? 'block' : 'none';
+}
+
+// Function to handle Login and Registration
+async function handleAuth(mode) {
+    const email = mode === 'login' ? document.getElementById('authEmail').value : document.getElementById('regEmail').value;
+    const pass = mode === 'login' ? document.getElementById('authPass').value : document.getElementById('regPass').value;
+    const name = mode === 'login' ? "" : document.getElementById('regName').value;
+
+    if (!email || !pass) return showToast("Please fill all fields");
+
+    showToast("Connecting...");
+
+    try {
+        if (mode === 'register') {
+            // Check if user exists
+            const check = await fetch(`${SHEETDB_URL}/search?email=${email}&sheet=Users`);
+            const existing = await check.json();
+            if (existing.length > 0) return showToast("Email already exists!");
+
+            // Add new user to Google Sheet
+            await fetch(`${SHEETDB_URL}?sheet=Users`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ data: [{ email, password: pass, name, points: 0 }] })
+            });
+            showToast("Success! Now Login.");
+            toggleAuthMode();
+        } else {
+            // Login: Find user by email
+            const res = await fetch(`${SHEETDB_URL}/search?email=${email}&sheet=Users`);
+            const data = await res.json();
+
+            if (data.length > 0 && data[0].password === pass) {
+                // Login Success: Load their points and hide the overlay
+                state.pts = parseInt(data[0].points) || 0;
+                state.userEmail = email; 
+                document.getElementById('authOverlay').style.display = 'none';
+                save(); // Save locally and sync
+                showToast(`Welcome back, ${data[0].name}!`);
+            } else {
+                showToast("Wrong email or password");
+            }
+        }
+    } catch (e) {
+        showToast("Error connecting to server");
+    }
+}
+
+// Function to sync current points back to Google Sheets
+async function syncPointsToCloud() {
+    if (!state.userEmail) return;
+    try {
+        await fetch(`${SHEETDB_URL}/email/${state.userEmail}?sheet=Users`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: { points: state.pts } })
+        });
+    } catch (e) { console.log("Cloud sync failed"); }
+}
         (function() { emailjs.init("sNrp_awwUxXi4RU6O"); })();
         lucide.createIcons();
 
         // Using your specific API and pointing to "Verse - API" tab
         const SHEETDB_URL = "https://sheetdb.io/api/v1/ccvlogbwdhz5i";
 
-        let state = JSON.parse(localStorage.getItem('bq_final_v18')) || { pts: 0, logs: [], firstClaim: true };
+        let state = JSON.parse(localStorage.getItem('bq_final_v18')) || { pts: 0, logs: [], firstClaim: true, userEmail: null };
         let activeReward = null;
         let currentChars = 0;
         let tInt = null;
@@ -370,7 +452,16 @@ function manualSearch() {
     } 
 }
         function loadRandom() { loadVerse(POOL[Math.floor(Math.random() * POOL.length)]); }
-        function save() { localStorage.setItem('bq_final_v18', JSON.stringify(state)); updateUI(); }
+function save() { 
+    // This saves the data locally on the phone/browser
+    localStorage.setItem('bq_final_v18', JSON.stringify(state)); 
+    
+    // This updates the number you see on the screen
+    updateUI(); 
+    
+    // NEW: This sends the points to your Google Sheet "Users" tab
+    syncPointsToCloud(); 
+}
         function updateUI() { document.getElementById('pts').innerText = state.pts.toLocaleString(); }
         
         init();
