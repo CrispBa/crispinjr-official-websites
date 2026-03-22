@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bible Quest</title>
     <link rel="shortcut icon" href="favicon(BQ).png" type="image/x-icon">
-    <link rel="shortcut icon" href="favicon(BQ).png" type="image/x-icon">
-
     
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -87,8 +85,7 @@
 
         .btn-claim { background: var(--gold-gradient); color: #3a2a00; border: none; padding: 18px; border-radius: 18px; width: 100%; font-weight: 900; cursor: pointer; text-transform: uppercase; }
 
-        .shop-card { 
-    background: rgb(12 18 5 / 42%);padding: 18px; border-radius: 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--glass-border); position: relative; }
+        .shop-card { background: rgb(12 18 5 / 42%); padding: 18px; border-radius: 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--glass-border); position: relative; }
         .free-badge { background: #ff4444; color: white; font-size: 0.6rem; padding: 2px 8px; border-radius: 5px; position: absolute; top: -8px; left: 15px; font-weight: 800; }
         .history-item { padding: 12px 15px; border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); margin-bottom: 8px; border-radius: 12px; font-size: 0.8rem; }
         .status-badge { float: right; font-weight: 800; font-size: 0.7rem; }
@@ -108,14 +105,16 @@
 <body>
 
     <header>
-        <div class="logo"><img src="favicon(BQ).png" width="32" height="32" style="transform: translate(3px, 10px);">
-BIBLE QUEST</div>
+        <div class="logo">
+            <img src="favicon(BQ).png" width="32" height="32" style="transform: translate(3px, 10px);">
+            BIBLE QUEST
+        </div>
         <div class="points-display"><i data-lucide="zap"></i> <span id="pts">0</span></div>
     </header>
 
     <div class="search-area">
         <div class="search-box">
-            <input type="text" id="vSearch" class="search-input" placeholder="Search (e.g. John 3:16)">
+            <input type="text" id="vSearch" class="search-input" placeholder="Search (e.g. Genesis 1:1)">
             <button class="search-go" onclick="manualSearch()"><i data-lucide="search"></i></button>
         </div>
     </div>
@@ -156,10 +155,10 @@ BIBLE QUEST</div>
         <footer class="architect-footer">
             <p>BIBLE QUEST <span style="color: white;">v18.0</span></p>
             <p>BY DEVELOPER: 
-    <a href="https://www.facebook.com/crispinjr.cobelo" target="_blank" style="text-decoration: none;">
-        <span class="dev-highlight">CrispinJr Cobelo</span>
-    </a>
-</p>
+                <a href="https://www.facebook.com/crispinjr.cobelo" target="_blank" style="text-decoration: none;">
+                    <span class="dev-highlight">CrispinJr Cobelo</span>
+                </a>
+            </p>
         </footer>
     </div>
 
@@ -180,8 +179,8 @@ BIBLE QUEST</div>
         (function() { emailjs.init("sNrp_awwUxXi4RU6O"); })();
         lucide.createIcons();
 
-        // Your Specific SheetDB API URL
-        const SHEETDB_URL = "https://sheetdb.io/api/v1/tlwztm94nt1ti"; 
+        // Using your specific API and pointing to "Verse - API" tab
+        const SHEETDB_URL = "https://sheetdb.io/api/v1/ccvlogbwdhz5i";
 
         let state = JSON.parse(localStorage.getItem('bq_final_v18')) || { pts: 0, logs: [], firstClaim: true };
         let activeReward = null;
@@ -198,14 +197,11 @@ BIBLE QUEST</div>
             setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
 
-        // Sync local logs with Google Sheet status
         async function syncStatus() {
             try {
                 const res = await fetch(SHEETDB_URL);
                 const data = await res.json();
-                
                 state.logs = state.logs.map(log => {
-                    // Search for matching GCash number and amount in the sheet
                     const match = data.find(row => log.includes(row.gcash_number) && row.status === "Success");
                     if (match) {
                         return log.replace("PENDING...", "SUCCESS ✅").replace("color: #ffa500", "color: #4CAF50");
@@ -217,21 +213,47 @@ BIBLE QUEST</div>
         }
 
         async function loadVerse(ref) {
+            const vRefElem = document.getElementById('vRef');
+            const vTextElem = document.getElementById('vText');
+            const btn = document.getElementById('claimBtn');
+            vTextElem.innerText = "Consulting the scriptures...";
+            btn.disabled = true;
+
             try {
-                const res = await fetch(`https://bible-api.com/${encodeURIComponent(ref)}`);
-                const data = await res.json();
-                if(data.text) {
-                    document.getElementById('vRef').innerText = data.reference;
-                    document.getElementById('vText').innerText = `"${data.text.trim()}"`;
-                    currentChars = data.text.trim().length;
-                    document.getElementById('verseImg').src = `https://picsum.photos/seed/${Math.random()}/600/400`;
-                    startTimer();
+                // FIXED: Searching the correct tab "Verse - API"
+                const sheetResponse = await fetch(`${SHEETDB_URL}/search?Reference=${encodeURIComponent(ref)}&sheet=Verse - API`);
+                const sheetData = await sheetResponse.json();
+
+                if (sheetData && sheetData.length > 0) {
+                    const verse = sheetData[0];
+                    vRefElem.innerText = verse.Reference;
+                    vTextElem.innerText = `"${verse.Text}"`;
+                    currentChars = verse.Text.length;
+                } else {
+                    const publicRes = await fetch(`https://bible-api.com/${encodeURIComponent(ref)}`);
+                    const publicData = await publicRes.json();
+                    if(publicData.text) {
+                        vRefElem.innerText = publicData.reference;
+                        vTextElem.innerText = `"${publicData.text.trim()}"`;
+                        currentChars = publicData.text.trim().length;
+                    } else {
+                        showToast("Verse not found.");
+                        return;
+                    }
                 }
-            } catch(e) { console.error(e); }
+                document.getElementById('verseImg').src = `https://picsum.photos/seed/${Math.random()}/600/400`;
+                startTimer();
+            } catch(error) {
+                const fallback = POOL[Math.floor(Math.random() * POOL.length)];
+                vRefElem.innerText = fallback + " (Offline)";
+                vTextElem.innerText = "The Lord is my shepherd; I shall not want.";
+                currentChars = 40;
+                startTimer();
+            }
         }
 
         function startTimer() {
-            let tLeft = 60; 
+            let tLeft = 60;
             const circle = document.getElementById('pCircle');
             const btn = document.getElementById('claimBtn');
             const txt = document.getElementById('timerTxt');
@@ -240,7 +262,12 @@ BIBLE QUEST</div>
             tInt = setInterval(() => {
                 tLeft--; txt.innerText = tLeft + "s";
                 circle.style.strokeDashoffset = 283 - ((60 - tLeft) / 60 * 283);
-                if(tLeft <= 0) { clearInterval(tInt); txt.innerText = "AMEN"; btn.disabled = false; btn.innerText = `Claim +${currentChars} Pts`; }
+                if(tLeft <= 0) { 
+                    clearInterval(tInt);
+                    txt.innerText = "AMEN";
+                    btn.disabled = false;
+                    btn.innerText = `Claim +${currentChars} Pts`;
+                }
             }, 1000);
         }
 
@@ -253,25 +280,23 @@ BIBLE QUEST</div>
         }
 
         function renderShop() {
-    const rewards = [{v:1, c:500}, {v:50, c:25000}, {v:100, c:50000}, {v:500, c:250000}];
-    document.getElementById('shopList').innerHTML = rewards.map(i => {
-        // Free 1 Peso for newbie logic
-        const isFree = (i.v === 1 && state.firstClaim);
-        const cost = isFree ? 0 : i.c;
-        
-        return `
-        <div class="shop-card">
-            ${isFree ? '<span class="free-badge">NEWBIE GIFT</span>' : ''}
-            <b>
-                <img src="bg-gcash-icn.png" width="32" height="32" style="transform: translate(1px, 4px); margin-right: 10px;">
-                <span style="display: inline-block; transform: translate(0px, -6px);">₱${i.v} GCash</span>
-            </b>
-            <button onclick="openModal(${i.v}, ${cost})" style="background:var(--gold-gradient); border:none; padding:10px 15px; border-radius:10px; font-weight:900; cursor:pointer; color:#3a2a00;">
-                ${isFree ? 'FREE' : cost.toLocaleString() + ' PTS'}
-            </button>
-        </div>
-    `}).join('');
-}
+            const rewards = [{v:1, c:500}, {v:50, c:25000}, {v:100, c:50000}, {v:500, c:250000}];
+            document.getElementById('shopList').innerHTML = rewards.map(i => {
+                const isFree = (i.v === 1 && state.firstClaim);
+                const cost = isFree ? 0 : i.c;
+                return `
+                <div class="shop-card">
+                    ${isFree ? '<span class="free-badge">NEWBIE GIFT</span>' : ''}
+                    <b>
+                        <img src="bg-gcash-icn.png" width="32" height="32" style="transform: translate(1px, 4px); margin-right: 10px;">
+                        <span style="display: inline-block; transform: translate(0px, -6px);">₱${i.v} GCash</span>
+                    </b>
+                    <button onclick="openModal(${i.v}, ${cost})" style="background:var(--gold-gradient); border:none; padding:10px 15px; border-radius:10px; font-weight:900; cursor:pointer; color:#3a2a00;">
+                        ${isFree ? 'FREE' : cost.toLocaleString() + ' PTS'}
+                    </button>
+                </div>`;
+            }).join('');
+        }
 
         function openModal(val, cost) {
             if(state.pts < cost) return showToast("Not enough points!");
@@ -287,12 +312,10 @@ BIBLE QUEST</div>
             const email = document.getElementById('gEmail').value;
             if(!name || !mobile || !email) return showToast("Fill all fields!");
 
-            // 1. Send to EmailJS
             emailjs.send("service_rc5eqhl", "template_ha5fvkh", {
                 method: "GCASH", mobile: mobile, extra_data: name, user_email: email, peso_value: "₱" + activeReward.val
             });
 
-            // 2. Log to Google Sheet via SheetDB
             try {
                 await fetch(SHEETDB_URL, {
                     method: 'POST',
@@ -303,9 +326,8 @@ BIBLE QUEST</div>
                 });
             } catch (e) { console.error("Sheet Sync Error"); }
 
-            // 3. Update State
             state.pts -= activeReward.cost;
-            if(activeReward.val === 1) state.firstClaim = false; // Disable newbie gift after use
+            if(activeReward.val === 1) state.firstClaim = false;
             state.logs.unshift(`${new Date().toLocaleTimeString()}: Redeemed ₱${activeReward.val} (${mobile}) <span class="status-badge" style="color:#ffa500">PENDING...</span>`);
             
             save(); renderShop(); closeModal();
@@ -318,12 +340,22 @@ BIBLE QUEST</div>
             document.getElementById(id).classList.add('active');
             el.classList.add('active');
             if(id === 'logs') {
-                syncStatus(); // Check for updates whenever history is viewed
+                syncStatus();
                 document.getElementById('logContent').innerHTML = state.logs.map(l => `<div class="history-item">${l}</div>`).join('') || "No logs.";
             }
         }
 
-        function manualSearch() { const q = document.getElementById('vSearch').value; if(q) loadVerse(q); }
+        function manualSearch() { 
+            const input = document.getElementById('vSearch');
+            let q = input.value.trim();
+            if(q) { 
+                // Auto-capitalize first letter for better matching (e.g., genesis -> Genesis)
+                q = q.charAt(0).toUpperCase() + q.slice(1);
+                loadVerse(q); 
+                input.value = ""; 
+                input.blur();
+            } 
+        }
         function loadRandom() { loadVerse(POOL[Math.floor(Math.random() * POOL.length)]); }
         function save() { localStorage.setItem('bq_final_v18', JSON.stringify(state)); updateUI(); }
         function updateUI() { document.getElementById('pts').innerText = state.pts.toLocaleString(); }
