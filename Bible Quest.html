@@ -114,7 +114,7 @@
 
     <div class="search-area">
         <div class="search-box">
-            <input type="text" id="vSearch" class="search-input" placeholder="Search (e.g. Genesis 1:1)">
+            <input type="text" id="vSearch" class="search-input" placeholder="Search (e.g. Genesis 1:1, 2 Corinthians 5:7, Matthew 6:9 )">
             <button class="search-go" onclick="manualSearch()"><i data-lucide="search"></i></button>
         </div>
     </div>
@@ -220,34 +220,39 @@
             btn.disabled = true;
 
             try {
-                // FIXED: Searching the correct tab "Verse - API"
                 const sheetResponse = await fetch(`${SHEETDB_URL}/search?Reference=${encodeURIComponent(ref)}&sheet=Verse - API`);
                 const sheetData = await sheetResponse.json();
 
+                let verseText = "";
                 if (sheetData && sheetData.length > 0) {
                     const verse = sheetData[0];
                     vRefElem.innerText = verse.Reference;
-                    vTextElem.innerText = `"${verse.Text}"`;
-                    currentChars = verse.Text.length;
+                    verseText = verse.Text;
                 } else {
                     const publicRes = await fetch(`https://bible-api.com/${encodeURIComponent(ref)}`);
                     const publicData = await publicRes.json();
                     if(publicData.text) {
                         vRefElem.innerText = publicData.reference;
-                        vTextElem.innerText = `"${publicData.text.trim()}"`;
-                        currentChars = publicData.text.trim().length;
+                        verseText = publicData.text.trim();
                     } else {
                         showToast("Verse not found.");
                         return;
                     }
                 }
+
+                vTextElem.innerText = `"${verseText}"`;
+                
+                // ADD THIS LINE: Counts words by splitting by spaces and filtering out empties
+                currentChars = verseText.split(/\s+/).filter(word => word.length > 0).length;
+
                 document.getElementById('verseImg').src = `https://picsum.photos/seed/${Math.random()}/600/400`;
                 startTimer();
             } catch(error) {
                 const fallback = POOL[Math.floor(Math.random() * POOL.length)];
                 vRefElem.innerText = fallback + " (Offline)";
                 vTextElem.innerText = "The Lord is my shepherd; I shall not want.";
-                currentChars = 40;
+                // REPLACE THIS: Fallback count for the sentence above (9 words)
+                currentChars = 9; 
                 startTimer();
             }
         }
@@ -271,9 +276,10 @@
             }, 1000);
         }
 
-        function claimAndNext() {
+function claimAndNext() {
             state.pts += currentChars;
-            state.logs.unshift(`${new Date().toLocaleTimeString()}: ${document.getElementById('vRef').innerText} +${currentChars} pts`);
+            // Updated log text to say "words" instead of "pts" for clarity
+            state.logs.unshift(`${new Date().toLocaleTimeString()}: ${document.getElementById('vRef').innerText} +${currentChars} words`);
             save();
             document.getElementById('claimBtn').innerText = "Saved!";
             setTimeout(loadRandom, 1000);
@@ -344,18 +350,25 @@
                 document.getElementById('logContent').innerHTML = state.logs.map(l => `<div class="history-item">${l}</div>`).join('') || "No logs.";
             }
         }
-
-        function manualSearch() { 
-            const input = document.getElementById('vSearch');
-            let q = input.value.trim();
-            if(q) { 
-                // Auto-capitalize first letter for better matching (e.g., genesis -> Genesis)
-                q = q.charAt(0).toUpperCase() + q.slice(1);
-                loadVerse(q); 
-                input.value = ""; 
-                input.blur();
-            } 
+function manualSearch() { 
+    const input = document.getElementById('vSearch');
+    let q = input.value.trim();
+    
+    if(q) { 
+        // NEW: Check if the user typed "Help"
+        if(q.toLowerCase() === "help") {
+            window.open("https://crispba.github.io/crispinjr-official-websites/Help%20-%20Suggest%20-%20Error.html", "_blank");
+            input.value = "";
+            return; 
         }
+
+        // Existing Verse Search Logic
+        q = q.charAt(0).toUpperCase() + q.slice(1);
+        loadVerse(q); 
+        input.value = ""; 
+        input.blur();
+    } 
+}
         function loadRandom() { loadVerse(POOL[Math.floor(Math.random() * POOL.length)]); }
         function save() { localStorage.setItem('bq_final_v18', JSON.stringify(state)); updateUI(); }
         function updateUI() { document.getElementById('pts').innerText = state.pts.toLocaleString(); }
