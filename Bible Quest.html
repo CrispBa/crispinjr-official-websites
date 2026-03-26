@@ -11,6 +11,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 
     <style>
+	html {display: flex;justify-content: space-evenly;flex-direction: column;}
+
+body {
+    /* display: flex; */
+}
         :root {
             --gold: #FFD700;
             --gold-gradient: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
@@ -19,6 +24,8 @@
             --bg-dark: #03070e;
             --success: #4CAF50;
             --error: #ff4444;
+            display: flex;
+            flex-wrap: wrap;
         }
         .password-wrapper {
     position: relative;
@@ -70,7 +77,7 @@
 }
         #toast.show { transform: translateX(-50%) translateY(0); }
 
-        * {margin: 0;padding: 0;box-sizing: border-box;-webkit-tap-highlight-color: transparent;}
+        * {margin: 0;box-sizing: border-box;-webkit-tap-highlight-color: transparent;}
 
         body {
             font-family: 'Poppins', sans-serif;
@@ -123,7 +130,7 @@ display: flex;
         }
         .points-display:hover { transform: scale(1.05); }
 
-        .search-area { padding: 15px 20px 10px; }
+        .search-area {padding: 15px 20px 10px;}
 
         .search-box:focus-within { 
             border-color: var(--gold);
@@ -133,14 +140,14 @@ display: flex;
 
         .search-input::placeholder { color: rgba(255, 255, 255, 0.5); }
 
-.search-box { 
+.search-box {
     display: flex; /* Aligns input and button horizontally */
-    align-items: center; 
+    align-items: center;
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid rgb(255 255 255 / 4%);
     border-radius: 18px; /* Matches the rounded look in your image */
     padding: 4px; /* Creates the "inset" look for the button */
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(3px);
     transition: all 0.3s ease;
 }
 
@@ -155,7 +162,13 @@ display: flex;
     font-family: 'Poppins';
     font-size: 0.9rem;
 }
-
+button.search-go {
+    background: yellow;
+    border: gold;
+    border-radius: 80px 30px 60px 40px;
+    height: 35px;
+    padding: 10px 10px 20px 20px;
+}
 .search-go 
     background: var(--gold-gradient);
     border: none;
