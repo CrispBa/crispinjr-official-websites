@@ -149,7 +149,10 @@ display: flex;
             background: rgba(255,255,255,0.08);
         }
 
-        .search-input::placeholder { color: rgba(255, 255, 255, 0.5); }
+        .search-input::placeholder { color: rgba(255, 255, 255, 0.5);white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px; }
 
 .search-box {
     display: flex; /* Aligns input and button horizontally */
@@ -161,8 +164,6 @@ display: flex;
     backdrop-filter: blur(3px);
     transition: all 0.3s ease;
 }
-
-.search-input {flex: 1;background: transparent;border: none;padding: 10px 5px;color: white;outline: none;font-family: 'Poppins';font-size: 0.9rem;/* display: flex; *//* margin: 0px; *//* align-content: stretch; */}
 button.search-go {
     background: yellow;
     border: gold;
@@ -170,11 +171,53 @@ button.search-go {
     height: 35px;
     padding: 10px 10px 20px 20px;
 }
-
+.search-input {
+    --shadow-color: transparent;
+    box-shadow: 0px 2px 18px var(--shadow-color);
+    transition: box-shadow 0.3s ease;
+    outline: none;
+    font-weight: 300 !important;
+}
 div.search-box {
     padding: 4px 10px 4px 2px;
     display: flex;
     justify-content: flex-end;
+}
+.search-input {
+ width: 100%;
+    padding: 16px 20px;
+    font-size: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    transition: var(--transition);
+    font-family: 'Roboto';
+    font-weight: 300;
+}
+.search-input, search-box {
+    flex: 1;
+    background: #ffd70000;
+    border: none;
+    /* padding-right: 15px; */
+    height: 100%;
+    color: white;
+    outline: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    line-height: normal;
+    /* padding-left: 15px; */
+}
+
+#vSearch {
+    /* background-color: red; */
+    /* display: flex; */
+    /* flex-wrap: nowrap; */
+    /* flex-direction: row; */
+    /* align-content: stretch; */
+    /* justify-content: space-evenly; */
+    /* align-items: center; */
 }
 .search-go 
     background: var(--gold-gradient);
@@ -916,7 +959,7 @@ div#loginBox.modal-box {
 
     <div class="search-area">
     <div class="search-box">
-        <input type="text" id="vSearch" class="search-input" placeholder="Seek (e.g. 2 Corinthians 5:7)">
+        <input type="text" id="vSearch" class="search-input" placeholder="Seek here (e.g. Genesis 1:1)">
         <button class="search-go" onclick="manualSearch()">
             <i data-lucide="search"></i>
         </button>
