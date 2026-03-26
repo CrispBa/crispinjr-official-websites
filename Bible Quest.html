@@ -83,7 +83,7 @@
             background-attachment: fixed;
         }
 
-        i, .lucide { width: 18px !important; height: 18px !important; display: inline-block; }
+        i, .lucide {width: 18px !important;height: 18px !important;display: inline-block;}
 
         header { 
 padding: 10px 15px; 
@@ -124,51 +124,76 @@ display: flex;
         .points-display:hover { transform: scale(1.05); }
 
         .search-area { padding: 15px 20px 10px; }
-        .search-box { 
-            display: flex;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid rgb(255 255 255 / 4%);
-    border-radius: 18px;
-    padding: 6px;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-        }
+
         .search-box:focus-within { 
             border-color: var(--gold);
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
             background: rgba(255,255,255,0.08);
         }
-        .search-input { 
-            flex: 1; 
-            background: transparent; 
-            border: none; 
-            padding: 12px 15px; 
-            color: white; 
-            outline: none; 
-            font-family: 'Poppins';
-            font-size: 0.9rem;
-        }
+
         .search-input::placeholder { color: rgba(255, 255, 255, 0.5); }
-        .search-go { 
-            background: var(--gold-gradient); 
-            border: none; 
-            width: 90px; 
-            height: 42px; 
-            border-radius: 14px; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            color: #3a2a00;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.25);
-        }
-        .search-go:hover { 
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
-        }
-        .search-go:active { transform: translateY(0); }
+
+.search-box { 
+    display: flex; /* Aligns input and button horizontally */
+    align-items: center; 
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgb(255 255 255 / 4%);
+    border-radius: 18px; /* Matches the rounded look in your image */
+    padding: 4px; /* Creates the "inset" look for the button */
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.search-input {
+
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 10px 5px;
+    color: white;
+    outline: none;
+    font-family: 'Poppins';
+    font-size: 0.9rem;
+}
+
+.search-go 
+    background: var(--gold-gradient);
+    border: none;
+    width: 60px; /* Narrower width for a circular/pill look inside the box */
+    height: 40px;
+    border-radius: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #3a2a00;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    padding-right: 5;
+}
+
+.search-go:hover { 
+    transform: scale(1.05); /* Slight pop effect on hover */
+}
+.search-go:hover { 
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+}        .search-go:active { transform: translateY(0); }
 
         nav { 
 display: flex;
@@ -845,11 +870,13 @@ width: 100%;
     </header>
 
     <div class="search-area">
-        <div class="search-box">
-            <input type="text" id="vSearch" class="search-input" placeholder="Search (e.g. Genesis 1:1, 2 Corinthians 5:7, Matthew 6:9 )">
-            <button class="search-go" onclick="manualSearch()"><i data-lucide="search"></i></button>
-        </div>
+    <div class="search-box">
+        <input type="text" id="vSearch" class="search-input" placeholder="Search (e.g. Genesis 1:1, 2 Corinthians 5:7, Matthew 6:9 )">
+        <button class="search-go" onclick="manualSearch()">
+            <i data-lucide="search"></i>
+        </button>
     </div>
+</div>
 
     <nav>
         <button class="nav-btn active" onclick="showTab('meditate', this)"><i data-lucide="book-open"></i><span>Quest</span></button>
