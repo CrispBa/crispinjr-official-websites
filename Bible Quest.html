@@ -17,28 +17,60 @@
             --glass: rgba(0, 0, 0, 0.75);
             --glass-border: rgba(255, 255, 255, 0.15);
             --bg-dark: #03070e;
+            --success: #4CAF50;
+            --error: #ff4444;
         }
+        .password-wrapper {
+    position: relative;
+    width: 100%;
+}
 
-        #toast { 
-            position: fixed; 
-            bottom: 30px; 
-            left: 50%; 
-            transform: translateX(-50%) translateY(150px); 
-            background: var(--gold); 
-            color: #000; 
-            padding: 12px 25px; 
-            border-radius: 50px; 
-            font-weight: 800; 
-            font-size: 0.85rem;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            z-index: 9999;
-            white-space: nowrap;
-            pointer-events: none;
-        }
+/* Hide the eye icon by default */
+.password-wrapper i, .password-wrapper .lucide {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--gold);
+    width: 20px !important;
+    height: 20px !important;
+    opacity: 0.8;
+    display: none; /* Hidden */
+    z-index: 10;
+}
+
+/* Show the icon ONLY when the user starts typing 
+   (i.e., when the placeholder is NOT shown) */
+.password-wrapper input:not(:placeholder-shown) + i,
+.password-wrapper input:not(:placeholder-shown) + .lucide {
+    display: block;
+}
+
+.password-wrapper input {
+    padding-right: 45px !important;
+}
+#toast { 
+    position: fixed; 
+    bottom: 100px; 
+    left: 50%; 
+    transform: translateX(-50%) translateY(150px); 
+    background: var(--gold); 
+    color: #000; 
+    padding: 12px 25px; 
+    border-radius: 50px; 
+    font-weight: 800; 
+    font-size: 0.85rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    /* This must be higher than the authOverlay z-index */
+    z-index: 100001 !important; 
+    white-space: nowrap;
+    pointer-events: none;
+}
         #toast.show { transform: translateX(-50%) translateY(0); }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * {margin: 0;padding: 0;box-sizing: border-box;-webkit-tap-highlight-color: transparent;}
 
         body { 
             font-family: 'Poppins', sans-serif; background: var(--bg-dark); color: white; min-height: 100vh;
@@ -49,84 +81,755 @@
         i, .lucide { width: 18px !important; height: 18px !important; display: inline-block; }
 
         header { 
-            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; 
-            background: rgba(3, 7, 14, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
+padding: 10px 15px; 
+    gap: 10px;
+ display: flex; justify-content: space-between; align-items: center; 
+            backdrop-filter: blur(1px);
+            border-bottom: 2px solid rgb(255 255 255 / 8%);
+            box-shadow: 0 8px 32px rgba(255, 215, 0, 0.1);
+        }
+/* Add this to your <style> section */
+
+        .logo { 
+            font-family: 'Cinzel', serif; 
+            color: var(--gold); 
+            font-size: 1rem; 
+            letter-spacing: 2px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            text-align: left;
         }
 
-        .logo { font-family: 'Cinzel', serif; color: var(--gold); font-size: 1rem; letter-spacing: 2px; }
-        .points-display { display: flex; align-items: center; gap: 8px; background: var(--gold-gradient); color: #3a2a00; padding: 6px 16px; border-radius: 50px; font-weight: 800; }
+        .points-display { 
+display: flex;
+    align-items: center;
+    gap: 1px;
+    background: var(--gold-gradient);
+    color: #3a2a00;
+    padding: 3px 10px;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    box-shadow: inset 1px 0px 20px rgba(255, 215, 0, 0.3);
+    letter-spacing: 1px;
+    transition: transform 0.3s ease;
+        }
+        .points-display:hover { transform: scale(1.05); }
 
-        .search-area { padding: 15px 20px 5px; }
-        .search-box { display: flex; background: rgba(255,255,255,0.07); border: 1px solid var(--glass-border); border-radius: 15px; padding: 4px; }
-        .search-input { flex: 1; background: transparent; border: none; padding: 10px 15px; color: white; outline: none; font-family: 'Poppins'; }
-        .search-go { background: var(--gold-gradient); border: none; width: 80px; height: 40px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #3a2a00; }
+        .search-area { padding: 15px 20px 10px; }
+        .search-box { 
+            display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgb(255 255 255 / 4%);
+    border-radius: 18px;
+    padding: 6px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+        }
+        .search-box:focus-within { 
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+            background: rgba(255,255,255,0.08);
+        }
+        .search-input { 
+            flex: 1; 
+            background: transparent; 
+            border: none; 
+            padding: 12px 15px; 
+            color: white; 
+            outline: none; 
+            font-family: 'Poppins';
+            font-size: 0.9rem;
+        }
+        .search-input::placeholder { color: rgba(255, 255, 255, 0.5); }
+        .search-go { 
+            background: var(--gold-gradient); 
+            border: none; 
+            width: 90px; 
+            height: 42px; 
+            border-radius: 14px; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #3a2a00;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.25);
+        }
+        .search-go:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+        .search-go:active { transform: translateY(0); }
 
-        nav { display: flex; justify-content: space-around; padding: 12px; background: rgba(0,0,0,0.4); border-bottom: 1px solid var(--glass-border); margin-bottom: 10px; }
-        .nav-btn { background: transparent; border: none; color: #666; cursor: pointer; display: flex; align-items: center; gap: 8px; }
-        .nav-btn.active { color: var(--gold); }
-        .nav-btn span { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
+        nav { 
+display: flex;
+    justify-content: space-around;
+    padding: 14px 12px;
+    border-bottom: 2px solid rgb(255 255 255 / 3%);
+    margin-bottom: 12px;
+        }
+        .nav-btn {
+            background: transparent;
+            border: 2px solid transparent;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            gap: 4px;
+        }
+        .nav-btn:hover {
+            color: var(--gold);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+        .nav-btn.active { 
+            color: var(--gold);
+            border-color: var(--gold);
+            background: rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+        .nav-btn span { 
+            font-size: 0.75rem; 
+            font-weight: 800; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-        .container { padding: 10px 20px 50px; max-width: 600px; margin: 0 auto; }
+        .container { padding: 12px 20px 50px; max-width: 600px; margin: 0 auto; }
         .section { display: none; }
-        .section.active { display: block; animation: fadeInUp 0.5s ease; }
+        .section.active { display: block; animation: fadeInUp 0.6s ease; }
 
-        .verse-card { backdrop-filter: blur(7px); border-radius: 30px; border: 1px solid var(--glass-border); padding: 30px; text-align: center; }
-        .verse-image-container { width: 100%; height: 150px; border-radius: 20px; margin-bottom: 20px; overflow: hidden; border: 1px solid var(--glass-border); }
-        .verse-image-container img { width: 100%; height: 100%; object-fit: cover; }
+.stop-scrolling {
+    height: 100%;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
+        .verse-card {
+            backdrop-filter: blur(15px);
+            background: linear-gradient(135deg, rgb(22 33 62 / 0%), rgba(15, 15, 35, 0.4));
+            border-radius: 30px;
+            border: 2px solid var(--glass-border);
+            padding: 32px 25px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .verse-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.15);
+        }
 
-        #vRef { font-family: 'Cinzel'; color: var(--gold); font-size: 1.4rem; margin-bottom: 10px; }
-        #vText { line-height: 1.6; color: #eee; font-style: italic; font-size: 1rem; min-height: 60px; }
+        .verse-image-container { 
+            width: 100%; 
+            height: 160px; 
+            border-radius: 22px; 
+            margin-bottom: 24px; 
+            overflow: hidden; 
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+        .verse-image-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, transparent 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .verse-image-container img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .verse-card:hover .verse-image-container img { transform: scale(1.05); }
 
-        .timer-wrap { position: relative; width: 90px; height: 90px; margin: 20px auto; }
-        svg.timer-svg { transform: rotate(-90deg); width: 90px; height: 90px; }
+        #vRef { 
+            font-family: 'Cinzel'; 
+            color: var(--gold); 
+            font-size: 1.5rem; 
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+        #vText { 
+            line-height: 1.8; 
+            color: #e0e0e0; 
+            font-style: italic; 
+            font-size: 1.02rem; 
+            min-height: 70px;
+            letter-spacing: 0.3px;
+        }
+
+        .timer-wrap { position: relative; width: 100px; height: 100px; margin: 28px auto; }
+        svg.timer-svg { transform: rotate(-90deg); width: 100px; height: 100px; }
         .circle-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 6; }
-        .circle-progress { fill: none; stroke: var(--gold); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset 1s linear; }
-        .timer-val { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 800; }
+        .circle-progress { 
+            fill: none; 
+            stroke: var(--gold); 
+            stroke-width: 6; 
+            stroke-linecap: round; 
+            stroke-dasharray: 283; 
+            stroke-dashoffset: 283; 
+            transition: stroke-dashoffset 1s linear;
+            }
+        .timer-val { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
 
-        .btn-claim { background: var(--gold-gradient); color: #3a2a00; border: none; padding: 18px; border-radius: 18px; width: 100%; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        .btn-claim { 
+            background: var(--gold-gradient); 
+            color: #3a2a00; 
+            border: none; 
+            padding: 18px 24px; 
+            border-radius: 16px; 
+            width: 100%; 
+            font-weight: 900; 
+            cursor: pointer; 
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-claim::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        .btn-claim:hover::before { left: 100%; }
+        .btn-claim:hover:not(:disabled) { 
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 215, 0, 0.5);
+        }
+        .btn-claim:disabled { opacity: 0.7; cursor: not-allowed; }
 
-        .shop-card { background: rgb(12 18 5 / 42%); padding: 18px; border-radius: 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--glass-border); position: relative; }
-        .free-badge { background: #ff4444; color: white; font-size: 0.6rem; padding: 2px 8px; border-radius: 5px; position: absolute; top: -8px; left: 15px; font-weight: 800; }
-        .history-item { padding: 12px 15px; border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); margin-bottom: 8px; border-radius: 12px; font-size: 0.8rem; }
-        .status-badge { float: right; font-weight: 800; font-size: 0.7rem; }
+        .shop-card {
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.3), rgba(15, 15, 35, 0.3));
+            padding: 10px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid rgb(255 255 255 / 5%);
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+        .shop-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+        }
 
-        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
+        .free-badge { 
+            background: linear-gradient(135deg, #ff4444, #ff6b6b);
+            color: white; 
+            font-size: 0.65rem; 
+            padding: 4px 10px; 
+            border-radius: 6px; 
+            position: absolute; 
+            top: -10px; 
+            left: 16px; 
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(255, 68, 68, 0.4);
+        }
+
+        .history-item { 
+            padding: 14px 16px; 
+            border-bottom: 1px solid var(--glass-border); 
+            background: rgba(255,255,255,0.02);
+            margin-bottom: 10px; 
+            border-radius: 12px; 
+            font-size: 0.8rem;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        .history-item:hover {
+            background: rgba(255, 215, 0, 0.05);
+            border-left-color: var(--gold);
+        }
+
+        .status-badge { 
+            float: right; 
+            font-weight: 800; 
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal { 
+            display: none; 
+            position: fixed; 
+            top:0; 
+            left:0; 
+            width:100%; 
+            height:100%; 
+            background: rgba(0,0,0,0.92);
+            z-index: 2000; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
         .modal.active { display: flex; }
-        .modal-box { background: #16213e; border: 2px solid var(--gold); padding: 25px; border-radius: 15px; width: 100%; max-width: 400px; text-align: center; }
-        .modal-box input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid var(--gold); background: rgba(0,0,0,0.3); color: white; outline: none; }
-        .btn-submit { background: #4CAF50; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .modal-box {
+    background: linear-gradient(136deg, #16213e, #0f0f2300);
+    border: 2px solid var(--gold);
+    padding: 25px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 215, 0, 0.25);
+    animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(20px);
+        }
+        .modal-box input{
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid var(--gold);
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    outline: none;
+    font-size:15px;
+}
+        .modal-box input:focus {
+            background: rgba(0,0,0,0.5);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            border-color: var(--gold);
+        }
+        .modal-box input::placeholder { color: rgba(255, 255, 255, 0.5); }
 
-        .architect-footer { text-align: center; margin-top: 40px; opacity: 0.5; font-size: 0.7rem; }
-        .dev-highlight { color: var(--gold); font-weight: 800; }
+        .btn-submit { 
+            background: var(--success);
+            color: white; 
+            border: none; 
+            padding: 14px 24px; 
+            border-radius: 12px; 
+            width: 100%; 
+            font-weight: 700; 
+            cursor: pointer; 
+            margin-top: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 18px rgba(76, 175, 80, 0.3);
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.5);
+        }
 
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
+        .architect-footer { 
+            text-align: center; 
+            margin-top: 45px; 
+            opacity: 0.6; 
+            font-size: 0.75rem;
+            line-height: 1.8;
+        }
+        .dev-highlight { 
+            color: var(--gold); 
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .dev-highlight:hover { text-decoration: underline; }
+
+        .logout-btn { 
+background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    color: #ccc;
+    padding: 0px 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.6rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+        }
+        .logout-btn:hover { 
+            background: rgba(255,255,255,0.15);
+            color: white; 
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+            transform: translateY(-1px);
+        }
+
+        @keyframes fadeInUp { 
+            from { opacity: 0; transform: translateY(15px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================
+           AUTH OVERLAY ANIMATIONS & STYLING
+           ============================================ */
+        @keyframes fadeInBackdrop {
+            from { backdrop-filter: blur(0px); background: rgba(0,0,0,0); }
+            to { backdrop-filter: blur(10px); background: rgba(0,0,0,0.95); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes floatIn {
+            from { opacity: 0; transform: translateY(50px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: -1000px 0; }
+            50% { background-position: 1000px 0; }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.2), 0 8px 32px rgba(255, 215, 0, 0.1); }
+            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.4), 0 8px 32px rgba(255, 215, 0, 0.2); }
+        }
+
+        #authOverlay::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(100, 150, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #authOverlay > div::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: unset;
+        }
+
+        #authOverlay > div > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        #loginBox, #registerBox {
+            animation: fadeInUp 0.6s ease 0.2s backwards;
+        }
+
+        /* Login/Register Form Inputs */
+    
+        #authOverlay input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        #authOverlay input:valid {
+            /* border-color: #4CAF50; */
+        }
+        /* Primary Buttons (BEGIN QUEST, ENTER THE QUEST) */
+        #authOverlay button[onclick*="handleAuth"] {
+            background: var(--gold-gradient);
+            color: #3a2a00;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        #authOverlay button[onclick*="handleAuth"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.5);
+            letter-spacing: 2px;
+        }
+
+        #authOverlay button[onclick*="handleAuth"]:active {
+            transform: translateY(-1px);
+        }
+
+        /* Secondary Buttons */
+        #authOverlay button[onclick*="toggleAuthMode"] {
+            background: transparent;
+            color: var(--gold);
+            border: 2px solid var(--gold);
+            transition: all 0.3s ease;
+        }
+
+        #authOverlay button[onclick*="toggleAuthMode"]:hover {
+            background: rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Guest Button */
+        #authOverlay button[onclick*="continueAsGuest"] {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+        }
+
+        #authOverlay button[onclick*="continueAsGuest"]:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        /* File Input Styling */
+        #authOverlay input[type="file"] {
+            padding: 12px;
+            cursor: pointer;
+            border: 2px dashed rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+/* Login Overlay Styling from Example */
+#authOverlay {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    /* This uses the Unsplash image already in your code */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                      url('https://images.unsplash.com/photo-1438109491414-7198515b166b?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+}
+
+#authOverlay > div {
+    position: relative;
+    z-index: 100000 !important;
+    background: linear-gradient(135deg, #16213e, #0f0f23);
+    border: 2px solid #ababab2e;
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+    max-width: 340px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.2);
+        background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                      url('data:image/jpeg;base64,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');
+    background-size: cover;
+    background-position: center;
+}
+#authOverlay h2 {
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+/* 1. This is how the boxes look NORMALLY (no yellow) */
+#authOverlay input {
+    width: 100%;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.05);
+    /* Change the yellow border to a subtle, dark border */
+    border: 2px solid rgba(255, 215, 0, 0.1); 
+    border-radius: 12px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease; /* This makes the yellow "glow" fade in smoothly */
+    outline: none; /* Removes the default blue browser outline */
+}
+
+/* 2. This is what happens when the user CLICKS or STARTS TYPING */
+#authOverlay input:focus {
+    border-color: var(--gold); /* The yellow color appears */
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); /* Optional: adds a slight glow */
+}
+#authOverlay button {
+    width: 100%;
+    padding: 11px;
+    margin-top: 10px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 900;
+    cursor: pointer;
+    background: var(--gold-gradient);
+    color: #3a2a00;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#authOverlay button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.5);
+}
+
+@keyframes floatIn {
+    from { opacity: 0; transform: translateY(50px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes fadeInBackdrop {
+    from { backdrop-filter: blur(0px); background: rgba(0,0,0,0); }
+    to { backdrop-filter: blur(10px); background: rgba(0,0,0,0.95); }
+}
+        #authOverlay input[type="file"]:hover {
+            border-color: rgba(255, 215, 0, 0.6);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        /* Typography in Auth */
+      
+        #authOverlay p {
+            color: #ccc;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            animation: fadeInUp 0.6s ease 0.1s backwards;
+        }
+
+        @keyframes inputFocus {
+            0% { box-shadow: 0 4px 15px rgba(255, 215, 0, 0.1); }
+            100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1); }
+        }
+
+        #authOverlay input:focus {
+            animation: inputFocus 0.3s ease forwards;
+        }
+
+        /* Success State for Inputs */
+        @keyframes successPulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(76, 175, 80, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(76, 175, 80, 0.5); }
+        }
+
+            border-color: #cee3cf36;
+            animation: successPulse 2s ease infinite;
+        }
+
+        /* Button Ripple Effect */
+        @keyframes ripple {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+
+        #authOverlay button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        #authOverlay button:active::after {
+            animation: ripple 0.6s ease-out;
+        }
+
+        /* Form Progress Indicator */
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        #authOverlay input[type="text"],
+        #authOverlay input[type="email"],
+        #authOverlay input[type="password"],
+        #authOverlay input[type="file"] {
+            animation: slideInRight 0.5s ease backwards;
+        }
+
+        #authOverlay input[type="text"] { animation-delay: 0.1s; }
+        #authOverlay input[type="email"] { animation-delay: 0.2s; }
+        #authOverlay input[type="password"] { animation-delay: 0.3s; }
+        #authOverlay input[type="file"] { animation-delay: 0.15s; }
+
+        /* Mobile Responsive Design */
+        @media (max-width: 480px) {
+
+            #authOverlay > div {
+                width: 95%;
+                max-width: 98vw;
+                height: auto;
+                min-height: 60vw;
+                padding: 18px 8px;
+            }
+
+            #authOverlay h2 {
+                font-size: 1.3rem;
+                margin-bottom: 8px;
+            }
+
+            #authOverlay p {
+                font-size: 0.8rem;
+                margin-bottom: 12px;
+            }
+
+            #authOverlay input {
+                padding: 10px;
+                margin: 6px 0;
+                font-size: 16px;
+                border-radius: 10px;
+            }
+
+            #authOverlay button {
+                padding: 10px;
+                margin-top: 8px;
+                font-size: 0.9rem;
+                border-radius: 10px;
+            }
+        }
     </style>
 </head>
 <body>
-<div id="authOverlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg-dark); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px;">
-    <div class="modal-box" id="loginBox">
-        <h2 style="color:var(--gold); font-family:'Cinzel'; margin-bottom:20px;">Bible Quest Login</h2>
-        <input type="email" id="authEmail" placeholder="Email Address">
-        <input type="password" id="authPass" placeholder="Password">
-        <button class="btn-submit" onclick="handleAuth('login')">Login</button>
-        <p style="margin-top:15px; font-size:0.8rem; opacity:0.7;">New seeker? <span onclick="toggleAuthMode()" style="color:var(--gold); cursor:pointer; font-weight:800;">Create Account</span></p>
-    </div>
-
-    <div class="modal-box" id="registerBox" style="display:none;">
-        <h2 style="color:var(--gold); font-family:'Cinzel'; margin-bottom:20px;">Join the Quest</h2>
-        <input type="text" id="regName" placeholder="Full Name">
-        <input type="email" id="regEmail" placeholder="Email Address">
-        <input type="password" id="regPass" placeholder="Create Password">
-        <button class="btn-submit" style="background:var(--gold-gradient); color:#3a2a00;" onclick="handleAuth('register')">Register</button>
-        <p style="margin-top:15px; font-size:0.8rem; opacity:0.7;">Already have account? <span onclick="toggleAuthMode()" style="color:var(--gold); cursor:pointer; font-weight:800;">Login here</span></p>
-    </div>
-</div>
     <header>
         <div class="logo">
-            <img src="favicon(BQ).png" width="32" height="32" style="transform: translate(3px, 10px);">
+            <img src="favicon(BQ).png" width="32" height="32" style="align-items: flex-start;">
             BIBLE QUEST
         </div>
-        <div class="points-display"><i data-lucide="zap"></i> <span id="pts">0</span></div>
+      
+<div class="user-controls">
+        <div class="points-display">
+            <i data-lucide="zap"></i> 
+            <span id="pts">0</span>
+        </div>
+        <button onclick="logout()" class="logout-btn" id="logoutBtn" style="display: none;">Logout</button>
+    </div>
     </header>
 
     <div class="search-area">
@@ -192,106 +895,325 @@
         </div>
     </div>
 
+<div id="authOverlay">
+    <div class="modal-box" id="loginBox">
+        <h2 style="color:var(--gold); font-family:'Cinzel'; margin-bottom:20px;">Bible Quest Login</h2>
+        <input type="email" id="authEmail" placeholder="Email Address">
+        <div class="password-wrapper">
+    <input type="password" id="authPass" placeholder="Password">
+    <i data-lucide="eye" onclick="togglePassword('authPass', this)"></i>
+</div>
+        <button class="btn-submit" onclick="handleAuth('login')">Login</button>
+        <p style="margin-top:15px; font-size:0.8rem; opacity:0.7;">
+            New seeker? <span onclick="toggleAuthMode()" style="color:var(--gold); cursor:pointer; font-weight:800;">Create Account</span>
+        </p>
+    </div>
+
+    <div class="modal-box" id="registerBox" style="display:none;">
+<h2 style="color: #cee3cf99; font-family:'Cinzel'; margin-bottom:20px;">Join the Quest</h2>
+               
+
+    <input type="text" id="regName" placeholder="Full Name">
+    <input type="email" id="regEmail" placeholder="Email Address">
+    
+    <div class="password-wrapper">
+        <input type="password" id="regPass" placeholder="Create Password">
+        <i data-lucide="eye" onclick="togglePassword('regPass', this)"></i>
+    </div>
+    
+    <button class="btn-submit" onclick="handleAuth('register')">CREATE ACCOUNT</button>
+    <p style="margin-top:15px; font-size:0.8rem; opacity:0.7;">
+        Already a seeker? <span onclick="toggleAuthMode()" style="color:var(--gold); cursor:pointer; font-weight:800; text-decoration: underline;">Login here</span>
+    </p>
+</div>
     <script>
-// Function to switch between Login and Register screens
+ function togglePassword(inputId, iconEl) {
+    const input = document.getElementById(inputId);
+    
+    // If the input is currently hidden (password), show it (text)
+    if (input.type === "password") {
+        input.type = "text";
+        iconEl.setAttribute('data-lucide', 'eye'); // Change icon to 'closed eye'
+    } else {
+        // If it is currently visible (text), hide it (password)
+        input.type = "password";
+        iconEl.setAttribute('data-lucide', 'eye-off'); // Change icon back to 'open eye'
+    }
+    
+    // Refresh the Lucide icons to show the change
+    lucide.createIcons();
+}
+// ============================================
+// CONFIGURATION - DEFINE FIRST
+// ============================================
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybG812WHGcFbiqrpZTthPpeLtYcu7rkHVYpHdGkwWQszru0tS_4eOWxa1Dy0C4kQh5Ow/exec";
+
+let state = JSON.parse(localStorage.getItem('bq_final_v18')) || { pts: 0, logs: [], firstClaim: true, userEmail: 'https://i.imgur.com/Bu2aW8n.png' };
+let activeReward = null;
+let currentChars = 0;
+let tInt = null;
+const POOL = ["John 3:16", "Psalm 23:1", "Proverbs 3:5", "Philippians 4:13", "Romans 8:28"];
+
+
+
+// ============================================
+// TOAST NOTIFICATION FUNCTION
+// ============================================
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    if (!toast) {
+        console.log("Toast:", msg);
+        return;
+    }
+    toast.innerText = msg;
+    toast.classList.add('show');
+    setTimeout(() => { toast.classList.remove('show'); }, 3000);
+}
+
+// ============================================
+// MODAL HELPER FUNCTIONS
+// ============================================
+function openModal(val, cost) {
+    if(state.pts < cost) return showToast("Not enough points!");
+    activeReward = { val, cost };
+    document.getElementById('redeemModal').classList.add('active');
+}
+
+function closeModal() { 
+    document.getElementById('redeemModal').classList.remove('active'); 
+}
+
+// ============================================
+// REGISTRATION PROGRESS TRACKER
+// ============================================
+function updateRegProgress() {
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass = document.getElementById('regPass').value.trim();
+
+    let completed = 0;
+    let total = 5;
+
+    if (name.length > 0) completed++;
+    if (email.includes('@')) completed++;
+    if (pass.length >= 6) completed++;
+
+    const progress = (completed / total) * 100;
+    const progressBar = document.getElementById('regProgress');
+    if (progressBar) {
+        progressBar.style.width = progress + '%';
+        progressBar.style.opacity = progress > 0 ? '1' : '0.3';
+    }
+
+    console.log(`[PROGRESS] Registration ${Math.round(progress)}% - File: ${hasFile ? '✓' : '✗'}, Cropped: ${hasCropped ? '✓' : '✗'}, Name: ${name.length > 0 ? '✓' : '✗'}, Email: ${email.includes('@') ? '✓' : '✗'}, Pass: ${pass.length >= 6 ? '✓' : '✗'}`);
+}
+
+
 function toggleAuthMode() {
     const lBox = document.getElementById('loginBox');
     const rBox = document.getElementById('registerBox');
+    // Switches display between 'block' and 'none'
     lBox.style.display = lBox.style.display === 'none' ? 'block' : 'none';
     rBox.style.display = rBox.style.display === 'none' ? 'block' : 'none';
 }
-
-// Function to handle Login and Registration
 async function handleAuth(mode) {
-    const email = mode === 'login' ? document.getElementById('authEmail').value : document.getElementById('regEmail').value;
-    const pass = mode === 'login' ? document.getElementById('authPass').value : document.getElementById('regPass').value;
-    const name = mode === 'login' ? "" : document.getElementById('regName').value;
+    console.log("[AUTH] Mode:", mode);
 
-    if (!email || !pass) return showToast("Please fill all fields");
-
-    showToast("Connecting...");
-
+    
     try {
-        if (mode === 'register') {
-            // Check if user exists
-            const check = await fetch(`${SHEETDB_URL}/search?email=${email}&sheet=Users`);
-            const existing = await check.json();
-            if (existing.length > 0) return showToast("Email already exists!");
+        const email = mode === 'login' ? document.getElementById('authEmail').value : document.getElementById('regEmail').value;
+        const pass = mode === 'login' ? document.getElementById('authPass').value : document.getElementById('regPass').value;
+        const name = mode === 'login' ? "" : document.getElementById('regName').value;
 
-            // Add new user to Google Sheet
-            await fetch(`${SHEETDB_URL}?sheet=Users`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data: [{ email, password: pass, name, points: 0 }] })
-            });
-            showToast("Success! Now Login.");
-            toggleAuthMode();
+        console.log(`[AUTH] Mode: ${mode}, Email: ${email} ? 'yes' : 'no'}`);
+
+        // Validate inputs
+        if (!email || !pass) return showToast("Please fill all fields");
+ 
+    showToast("Connecting...");
+        if (mode === 'login') {
+            if (!email) return showToast("Please enter email");
+            if (!pass) return showToast("Please enter password");
         } else {
-            // Login: Find user by email
-            const res = await fetch(`${SHEETDB_URL}/search?email=${email}&sheet=Users`);
-            const data = await res.json();
+            if (!name) return showToast("Please enter your full name");
+            if (!email) return showToast("Please enter your email");
+            if (!pass) return showToast("Please enter a password");
+        }
+        
 
-            if (data.length > 0 && data[0].password === pass) {
-                // Login Success: Load their points and hide the overlay
-                state.pts = parseInt(data[0].points) || 0;
-                state.userEmail = email; 
-                document.getElementById('authOverlay').style.display = 'none';
-                save(); // Save locally and sync
-                showToast(`Welcome back, ${data[0].name}!`);
+        showToast("Checking...");
+if (mode === 'register') {
+    console.log("[REGISTER] Sending to Apps Script...");
+    
+    // Register via Apps Script
+const response = await fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Change to text/plain
+    body: JSON.stringify({
+        action: 'register',
+        email: email,
+        password: pass,
+        name: name
+    })
+});
+
+            if (!response.ok) {
+                console.error("[REGISTER] Network error:", response.status, response.statusText);
+                return showToast(`Server error: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log("[REGISTER] Response:", result);
+
+            if (result.success) {
+                // Clear form
+                document.getElementById('regName').value = '';
+                document.getElementById('regEmail').value = '';
+                document.getElementById('regPass').value = '';
+
+                
+                showToast("✅ Account created! Please login now.");
+                setTimeout(() => toggleAuthMode(), 1000);
             } else {
-                showToast("Wrong email or password");
+                showToast(result.message || "Registration failed - check console");
+                console.error("[REGISTER] Error:", result);
+            }
+} else {
+    console.log("[LOGIN] Sending to Apps Script...");
+    
+    // Login via Apps Script
+    const response = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+            action: 'login', // ✅ Fixed to 'login'
+            email: email,
+            password: pass
+            // 'name' is not needed for login
+        })
+    });
+            if (!response.ok) {
+                console.error("[LOGIN] Network error:", response.status, response.statusText);
+                return showToast(`Server error: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log("[LOGIN] Response:", result);
+
+            if (result.success && result.user) {
+                // Login Success
+                state.pts = result.user.points || 0;
+                state.userEmail = result.user.email;
+                state.userName = result.user.name;
+                state.profilePic = result.user.profile || "https://i.imgur.com/Bu2aW8n.png";
+                
+                console.log("[LOGIN] User logged in:", state.userName, "Points:", state.pts);
+
+                document.getElementById('authOverlay').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'block';
+                document.getElementById('authEmail').value = '';
+                document.getElementById('authPass').value = '';
+                
+                save();
+                showToast(`Welcome back, ${result.user.name}!`);
+
+                // Initialize the app
+                updateUI();
+                renderShop();
+                loadRandom();
+                syncStatus();
+                setInterval(syncStatus, 10000);
+            } else {
+                console.error("[LOGIN] Login failed:", result.message);
+                showToast(result.message || "Email or password incorrect");
             }
         }
     } catch (e) {
-        showToast("Error connecting to server");
+        console.error("[AUTH] Error:", e);
+        showToast("Error: " + e.message);
     }
-}
-
-// Function to sync current points back to Google Sheets
+}// Function to sync current points back to Google Sheets
 async function syncPointsToCloud() {
-    if (!state.userEmail) return;
+    if (!state.userEmail || state.userEmail === 'guest') {
+        console.log("[SYNC] Skipping sync: not logged in or guest user");
+        return;
+    }
+
     try {
-        await fetch(`${SHEETDB_URL}/email/${state.userEmail}?sheet=Users`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ data: { points: state.pts } })
-        });
-    } catch (e) { console.log("Cloud sync failed"); }
-}
-        (function() { emailjs.init("sNrp_awwUxXi4RU6O"); })();
-        lucide.createIcons();
-
-        // Using your specific API and pointing to "Verse - API" tab
-        const SHEETDB_URL = "https://sheetdb.io/api/v1/ccvlogbwdhz5i";
-
-        let state = JSON.parse(localStorage.getItem('bq_final_v18')) || { pts: 0, logs: [], firstClaim: true, userEmail: null };
-        let activeReward = null;
-        let currentChars = 0;
-        let tInt = null;
-        const POOL = ["John 3:16", "Psalm 23:1", "Proverbs 3:5", "Philippians 4:13", "Romans 8:28"];
-
-        function init() { updateUI(); renderShop(); loadRandom(); syncStatus(); }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        console.log(`[SYNC] Syncing points to cloud: ${state.userEmail} = ${state.pts}pts`);
+        
+        // Update points via Apps Script
+       const response = await fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Change to text/plain
+body: JSON.stringify({
+    action: 'updatePoints', // ✅ Fixed to 'updatePoints'
+    email: state.userEmail,
+    points: state.pts
+})
+});
+        if (!response.ok) {
+            console.warn("[SYNC] Network error:", response.status);
+            return;
         }
 
+        const result = await response.json();
+        if (result.success) {
+            console.log("[SYNC] ✅ Points synced successfully:", result.newPoints);
+        } else {
+            console.warn("[SYNC] Server error:", result.message);
+        }
+    } catch (e) {
+        console.warn("[SYNC] Sync failed (will retry):", e.message);
+    }
+}
+function init() {
+    const authOverlay = document.getElementById('authOverlay');
+    
+    // Check if user is logged in (checking against your default image URL)
+    if (!state.userEmail || state.userEmail === 'https://i.imgur.com/Bu2aW8n.png') {
+        authOverlay.style.display = 'flex';
+        // Keep everything else hidden
+        return;
+    }
+
+    // If logged in, hide login and SHOW the app
+    authOverlay.style.display = 'none';
+    
+    // Use a helper function or manual lines to show elements
+    document.querySelector('header').style.display = 'flex';
+    document.querySelector('.search-area').style.display = 'block';
+    document.querySelector('nav').style.display = 'flex';
+    document.querySelector('.container').style.display = 'block';
+
+    updateUI();
+    renderShop();
+    loadRandom();
+    syncStatus();
+    setInterval(syncStatus, 10000);
+}
+        // Initialize when DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("[INIT] Page loaded, initializing Bible Quest...");
+            
+            // Initialize EmailJS
+            emailjs.init("sNrp_awwUxXi4RU6O");
+            
+            // Initialize Lucide icons
+            lucide.createIcons();
+            
+                       
+            // Call main initialization
+            init();
+            
+            console.log("[INIT] ✅ Bible Quest initialized");
+               });
+
+        // showToast is declared globally above and reused here.
+
         async function syncStatus() {
-            try {
-                const res = await fetch(SHEETDB_URL);
-                const data = await res.json();
-                state.logs = state.logs.map(log => {
-                    const match = data.find(row => log.includes(row.gcash_number) && row.status === "Success");
-                    if (match) {
-                        return log.replace("PENDING...", "SUCCESS ✅").replace("color: #ffa500", "color: #4CAF50");
-                    }
-                    return log;
-                });
-                save();
-            } catch (e) { console.log("Sync delayed"); }
+            // Redemption status updates handled via Apps Script
+            console.log("[SYNC] Status check");
         }
 
         async function loadVerse(ref) {
@@ -302,24 +1224,16 @@ async function syncPointsToCloud() {
             btn.disabled = true;
 
             try {
-                const sheetResponse = await fetch(`${SHEETDB_URL}/search?Reference=${encodeURIComponent(ref)}&sheet=Verse - API`);
-                const sheetData = await sheetResponse.json();
-
+                const publicRes = await fetch(`https://bible-api.com/${encodeURIComponent(ref)}`);
+                const publicData = await publicRes.json();
+                
                 let verseText = "";
-                if (sheetData && sheetData.length > 0) {
-                    const verse = sheetData[0];
-                    vRefElem.innerText = verse.Reference;
-                    verseText = verse.Text;
+                if(publicData.text) {
+                    vRefElem.innerText = publicData.reference;
+                    verseText = publicData.text.trim();
                 } else {
-                    const publicRes = await fetch(`https://bible-api.com/${encodeURIComponent(ref)}`);
-                    const publicData = await publicRes.json();
-                    if(publicData.text) {
-                        vRefElem.innerText = publicData.reference;
-                        verseText = publicData.text.trim();
-                    } else {
-                        showToast("Verse not found.");
-                        return;
-                    }
+                    showToast("Verse not found.");
+                    return;
                 }
 
                 vTextElem.innerText = `"${verseText}"`;
@@ -363,7 +1277,7 @@ function claimAndNext() {
             // Updated log text to say "words" instead of "pts" for clarity
             state.logs.unshift(`${new Date().toLocaleTimeString()}: ${document.getElementById('vRef').innerText} +${currentChars} words`);
             save();
-            document.getElementById('claimBtn').innerText = "Saved!";
+            document.getElementById('claimBtn').innerText = "Claimed!";
             setTimeout(loadRandom, 1000);
         }
 
@@ -377,7 +1291,7 @@ function claimAndNext() {
                     ${isFree ? '<span class="free-badge">NEWBIE GIFT</span>' : ''}
                     <b>
                         <img src="bg-gcash-icn.png" width="32" height="32" style="transform: translate(1px, 4px); margin-right: 10px;">
-                        <span style="display: inline-block; transform: translate(0px, -6px);">₱${i.v} GCash</span>
+                        <span style="display: inline-block; transform: translate(0px, -6px);font-size: 0.8rem;">₱${i.v} GCash</span>
                     </b>
                     <button onclick="openModal(${i.v}, ${cost})" style="background:var(--gold-gradient); border:none; padding:10px 15px; border-radius:10px; font-weight:900; cursor:pointer; color:#3a2a00;">
                         ${isFree ? 'FREE' : cost.toLocaleString() + ' PTS'}
@@ -394,32 +1308,46 @@ function claimAndNext() {
 
         function closeModal() { document.getElementById('redeemModal').classList.remove('active'); }
 
-        async function processRedeem() {
-            const name = document.getElementById('gName').value;
-            const mobile = document.getElementById('gNum').value;
-            const email = document.getElementById('gEmail').value;
-            if(!name || !mobile || !email) return showToast("Fill all fields!");
+function processRedeem() {
+            const gName = document.getElementById('gName').value.trim();
+            const gNum = document.getElementById('gNum').value.trim();
+            const gEmail = document.getElementById('gEmail').value.trim();
 
-            emailjs.send("service_rc5eqhl", "template_ha5fvkh", {
-                method: "GCASH", mobile: mobile, extra_data: name, user_email: email, peso_value: "₱" + activeReward.val
-            });
+            // Validate form inputs
+            if (!gName) return showToast('Please enter GCash name');
+            if (!gNum) return showToast('Please enter GCash number');
+            if (!gEmail) return showToast('Please enter email for receipt');
+            if (!activeReward) return showToast('No reward selected');
 
             try {
-                await fetch(SHEETDB_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        data: [{ "gcash_number": mobile, "name": name, "amount": activeReward.val, "status": "Pending" }]
-                    })
+                // EmailJS notification
+                emailjs.send("service_rc5eqhl", "template_ha5fvkh", {
+                    method: "GCASH",
+                    mobile: gNum,
+                    extra_data: gName,
+                    user_email: gEmail,
+                    peso_value: "₱" + activeReward.val
                 });
-            } catch (e) { console.error("Sheet Sync Error"); }
 
-            state.pts -= activeReward.cost;
-            if(activeReward.val === 1) state.firstClaim = false;
-            state.logs.unshift(`${new Date().toLocaleTimeString()}: Redeemed ₱${activeReward.val} (${mobile}) <span class="status-badge" style="color:#ffa500">PENDING...</span>`);
-            
-            save(); renderShop(); closeModal();
-            showToast("Redemption Recorded!");
+                // Update local state
+                state.pts -= activeReward.cost;
+                if(activeReward.val === 1) state.firstClaim = false;
+                state.logs.unshift(`${new Date().toLocaleTimeString()}: Redeemed ₱${activeReward.val} to ${gNum} <span class="status-badge" style="color:#ffa500">PENDING...</span>`);
+                
+                save(); 
+                renderShop(); 
+                closeModal();
+                
+                // Clear form inputs
+                document.getElementById('gName').value = '';
+                document.getElementById('gNum').value = '';
+                document.getElementById('gEmail').value = '';
+                
+                showToast("✅ Redemption sent! Check email for receipt.");
+            } catch (e) {
+                console.error("Redemption error:", e);
+                showToast("Error processing redemption: " + e.message);
+            }
         }
 
         function showTab(id, el) {
@@ -450,7 +1378,11 @@ function manualSearch() {
         input.value = ""; 
         input.blur();
     } 
+
 }
+
+let tempImageData = ""; // Holds the image before user clicks Apply
+
         function loadRandom() { loadVerse(POOL[Math.floor(Math.random() * POOL.length)]); }
 function save() { 
     // This saves the data locally on the phone/browser
@@ -462,8 +1394,24 @@ function save() {
     // NEW: This sends the points to your Google Sheet "Users" tab
     syncPointsToCloud(); 
 }
-        function updateUI() { document.getElementById('pts').innerText = state.pts.toLocaleString(); }
+        function updateUI() {
+            document.getElementById('pts').innerText = state.pts.toLocaleString();
+            const avatar = document.getElementById('userAvatar');
+            if (avatar) {
+                avatar.src = state.profilePic || 'https://i.imgur.com/Bu2aW8n.png';
+            }
+        }
         
+        // Updated logout function to remove the browser alert
+function logout() {
+    // We remove the if(confirm(...)) block to prevent the popup
+    state.userEmail = null;
+    save();
+    
+    // Hide the logout button and refresh to show the login screen
+    document.getElementById('logoutBtn').style.display = 'none';
+    location.reload(); 
+}        
         init();
     </script>
 </body>
