@@ -928,7 +928,12 @@
             document.getElementById('totalUsers').textContent = data.length;
             document.getElementById('totalPoints').textContent = data.reduce((s, u) => s + (parseInt(u.points) || 0), 0).toLocaleString();
             document.getElementById('activeUsers').textContent = data.filter(u => u.status === 'Active').length;
-            document.getElementById('pendingRedemptions').textContent = data.filter(u => u.amounts && u.amounts !== '' && parseFloat(u.amounts) > 0).length;
+            
+            // Count users with "Pending" in their status (case-insensitive)
+            document.getElementById('pendingRedemptions').textContent = data.filter(u => {
+                if (!u.status) return false;
+                return String(u.status).toLowerCase().includes('pending');
+            }).length;
             
             // Hide loading
             document.getElementById('tableLoading').style.display = 'none';
@@ -1070,4 +1075,4 @@
         lucide.createIcons();
     </script>
 </body>
-</html>
+</html>s
