@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#03070e">
+    <title>Bible Quest - Admin Dashboard</title>
+       <link rel="shortcut icon" href="dashboard.png" type="image/x-icon">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { 
+            --gold: #FFD700; 
+            --gold-gradient: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            --glass: rgba(0, 0, 0, 0.85);
+            --glass-border: rgba(255, 215, 0, 0.3);
+            --bg-dark: #03070e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        html { font-size: 16px; }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: var(--bg-dark); 
+            color: white; 
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ============================================
+           LOCK SCREEN
+        ============================================ */
+        #lockScreen {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            padding: 20px;
+        }
+
+        #lockScreen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .lock-container {
+            background: linear-gradient(135deg, #16213e, #0f0f23);
+            border: 3px solid var(--gold);
+            border-radius: 20px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 215, 0, 0.3);
+        }
+
+        .lock-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gold-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: #3a2a00;
+        }
+
+        .lock-container h2 {
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            margin-bottom: 10px;
+            font-size: 1.6rem;
+        }
+
+        .lock-container p {
+            color: rgba(255,255,255,0.6); 
+            margin-bottom: 20px; 
+            font-size: 0.9rem;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid var(--gold);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 1.1rem;
+            text-align: center;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .password-input:focus {
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .unlock-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            background: var(--gold-gradient);
+            color: #3a2a00;
+            font-weight: 900;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            min-height: 52px;
+        }
+
+        .unlock-btn:hover, .unlock-btn:active {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .unlock-btn:disabled {
+            opacity: 0.5;
+            cursor: wait;
+            transform: none;
+        }
+
+        .error-msg {
+            color: #ff4444;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            display: none;
+            padding: 12px;
+            background: rgba(255, 68, 68, 0.1);
+            border-radius: 8px;
+            line-height: 1.4;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        /* ============================================
+           DASHBOARD
+        ============================================ */
+        #dashboard {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            padding: 15px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        #dashboard.visible {
+            opacity: 1;
+        }
+
+        /* ============================================
+           HEADER
+        ============================================ */
+        header {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(3, 7, 14, 0.98) 0%, rgba(3, 7, 14, 0.85) 100%);
+            border-bottom: 2px solid var(--glass-border);
+            margin: -15px -15px 20px -15px;
+            padding: 15px;
+        }
+
+        .logo { 
+            font-family: 'Cinzel', serif; 
+            color: var(--gold); 
+            font-size: 1.1rem; 
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .logo i {
+            width: 24px !important;
+            height: 24px !important;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .refresh-btn, .logout-btn {
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border: 2px solid;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .refresh-btn {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: var(--gold);
+            color: var(--gold);
+            flex: 1;
+            justify-content: center;
+        }
+
+        .refresh-btn:hover, .refresh-btn:active {
+            background: var(--gold);
+            color: #3a2a00;
+        }
+
+        .logout-btn {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+
+        .logout-btn:hover, .logout-btn:active {
+            background: #ff4444;
+            color: white;
+        }
+
+        .connection-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .connection-status.connected {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .connection-status.error {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+        }
+
+        .connection-status i {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* ============================================
+           STATS GRID
+        ============================================ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.6), rgba(15, 15, 35, 0.6));
+            border: 2px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:active {
+            transform: scale(0.98);
+        }
+
+        .stat-card h3 {
+            color: var(--gold);
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* ============================================
+           DATA TABLE CONTAINER
+        ============================================ */
+        .data-table-container {
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.4), rgba(15, 15, 35, 0.4));
+            border: 2px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 15px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .data-table-container h2 {
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+        }
+
+        /* ============================================
+           DESKTOP TABLE
+        ============================================ */
+        .desktop-table {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 700px;
+        }
+
+        th {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--gold);
+            padding: 12px 10px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--gold);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .status-active { color: #4CAF50; font-weight: 600; }
+        .status-pending { color: #ffa500; font-weight: 600; }
+
+        /* ============================================
+           MOBILE CARDS
+        ============================================ */
+        .mobile-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .user-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 15px;
+            transition: all 0.2s;
+        }
+
+        .user-card:active {
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .user-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-card-name {
+            font-weight: 600;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .user-card-status {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .user-card-status.active {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .user-card-status.pending {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+        }
+
+        .user-card-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .user-card-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .user-card-detail.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .user-card-label {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .user-card-value {
+            font-size: 0.85rem;
+            color: white;
+            word-break: break-word;
+        }
+
+        .user-card-value.points {
+            color: var(--gold);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .user-card-value.password {
+            font-family: monospace;
+            color: #666;
+        }
+
+        /* ============================================
+           LOADING & EMPTY STATES
+        ============================================ */
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gold);
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .no-data i {
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.75rem;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* ============================================
+           TABLET (481px - 768px)
+        ============================================ */
+        @media (min-width: 481px) {
+            html { font-size: 15px; }
+            
+            .lock-container {
+                padding: 45px 40px;
+            }
+            
+            .lock-icon {
+                width: 75px;
+                height: 75px;
+            }
+            
+            .lock-container h2 {
+                font-size: 1.8rem;
+            }
+            
+            #dashboard {
+                padding: 20px;
+            }
+            
+            header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                margin: -20px -20px 25px -20px;
+                padding: 20px;
+            }
+            
+            .logo {
+                font-size: 1.2rem;
+                justify-content: flex-start;
+            }
+            
+            .logo i {
+                width: 28px !important;
+                height: 28px !important;
+            }
+            
+            .header-buttons {
+                width: auto;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .stat-card h3 {
+                font-size: 2.2rem;
+            }
+            
+            .data-table-container {
+                padding: 20px;
+            }
+            
+            .data-table-container h2 {
+                font-size: 1.2rem;
+            }
+            
+            .user-card-details {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* ============================================
+           LAPTOP (769px - 1024px)
+        ============================================ */
+        @media (min-width: 769px) {
+            html { font-size: 16px; }
+            
+            .lock-container {
+                padding: 50px 45px;
+            }
+            
+            .lock-icon {
+                width: 80px;
+                height: 80px;
+            }
+            
+            header {
+                padding: 20px 30px;
+            }
+            
+            .logo {
+                font-size: 1.4rem;
+                gap: 12px;
+            }
+            
+            .logo i {
+                width: 32px !important;
+                height: 32px !important;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 18px;
+            }
+            
+            .stat-card {
+                padding: 25px;
+            }
+            
+            .stat-card h3 {
+                font-size: 2.5rem;
+            }
+            
+            .stat-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1);
+            }
+            
+            .data-table-container {
+                padding: 25px;
+            }
+            
+            table {
+                font-size: 0.9rem;
+            }
+            
+            th, td {
+                padding: 12px 15px;
+            }
+            
+            .last-updated {
+                text-align: right;
+            }
+        }
+
+        /* ============================================
+           DESKTOP (1025px+)
+        ============================================ */
+        @media (min-width: 1025px) {
+            header {
+                padding: 20px 40px;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+                letter-spacing: 3px;
+            }
+            
+            .refresh-btn, .logout-btn {
+                padding: 10px 20px;
+            }
+            
+            .stats-grid {
+                gap: 20px;
+            }
+            
+            .connection-status {
+                font-size: 0.8rem;
+                padding: 5px 12px;
+            }
+        }
+
+        /* ============================================
+           SHOW/HIDE TABLE/CARDS BASED ON SCREEN SIZE
+        ============================================ */
+        @media (min-width: 769px) {
+            .mobile-cards {
+                display: none;
+            }
+            
+            .desktop-table {
+                display: block;
+            }
+        }
+
+        /* ============================================
+           LANDSCAPE MOBILE OPTIMIZATIONS
+        ============================================ */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .lock-container {
+                padding: 25px;
+            }
+            
+            .lock-icon {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 10px;
+            }
+            
+            .lock-container h2 {
+                font-size: 1.3rem;
+                margin-bottom: 5px;
+            }
+            
+            .lock-container p {
+                margin-bottom: 10px;
+            }
+        }
+
+        /* ============================================
+           DARK MODE SUPPORT
+        ============================================ */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: var(--bg-dark);
+            }
+        }
+
+        /* ============================================
+           REDUCED MOTION
+        ============================================ */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOCK SCREEN -->
+    <div id="lockScreen">
+        <div class="lock-container">
+            <div class="lock-icon">
+                <i data-lucide="lock" style="width: 35px; height: 35px;"></i>
+            </div>
+            <h2>Admin Dashboard</h2>
+            <p>Enter password to access</p>
+            <input type="password" id="adminPassword" class="password-input" placeholder="••••••" maxlength="20" autocomplete="off">
+            <button class="unlock-btn" id="unlockBtn" onclick="unlockDashboard()">Unlock</button>
+            <div id="errorMsg" class="error-msg"></div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard">
+        <header>
+            <div class="logo">
+                <i data-lucide="shield"></i>
+                BIBLE QUEST ADMIN
+                <span id="connectionStatus" class="connection-status" style="display: none;">
+                    <i></i> <span>Connected</span>
+                </span>
+            </div>
+            <div class="header-buttons">
+                <button class="refresh-btn" onclick="refreshData()">
+                    <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
+                    <span>Refresh</span>
+                </button>
+                <button class="logout-btn" onclick="lockDashboard()">Lock</button>
+            </div>
+        </header>
+
+        <!-- STATS CARDS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3 id="totalUsers">0</h3>
+                <p>Total Users</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="totalPoints">0</h3>
+                <p>Total Points</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="activeUsers">0</h3>
+                <p>Active Users</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="pendingRedemptions">0</h3>
+                <p>Pending Redemptions</p>
+            </div>
+        </div>
+
+        <!-- DATA TABLE -->
+        <div class="data-table-container">
+            <h2><i data-lucide="database" style="width: 22px; height: 22px;"></i> User Database</h2>
+            
+            <!-- Loading State -->
+            <div id="tableLoading" class="loading">
+                <i data-lucide="loader" style="width: 36px; height: 36px;"></i>
+                <p>Loading data from Google Sheets...</p>
+            </div>
+            
+            <!-- No Data State -->
+            <div id="noData" class="no-data" style="display: none;">
+                <i data-lucide="inbox" style="width: 48px; height: 48px;"></i>
+                <p>No users found in database</p>
+            </div>
+            
+            <!-- Desktop Table -->
+            <div class="desktop-table" id="desktopTableContainer">
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>Time Stamp</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Password</th>
+                            <th>Amounts</th>
+                            <th>Points</th>
+                            <th>Status</th>
+                            <th>GCash Number</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+            
+            <!-- Mobile Cards -->
+            <div class="mobile-cards" id="mobileCardsContainer"></div>
+            
+            <div id="lastUpdated" class="last-updated"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        const ADMIN_PASSWORD = "CrispBa1";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyi6VUXPa8-n65TNkd8Aac2cZ-09fCNBp9PrnmcovuR5VHd4qJtIYR6e4pUUbyhVc7ZUg/exec";
+        
+        // ============================================
+        // DATA FETCHING - JSONP Approach
+        // ============================================
+        function loadDataJSONP() {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                const callbackName = 'jsonpCallback_' + Date.now();
+                
+                window[callbackName] = function(data) {
+                    delete window[callbackName];
+                    if (script.parentNode) document.head.removeChild(script);
+                    resolve(data);
+                };
+                
+                script.onerror = function() {
+                    delete window[callbackName];
+                    if (script.parentNode) document.head.removeChild(script);
+                    reject(new Error('Failed to connect to Google Sheets. Please check your Apps Script URL.'));
+                };
+                
+                const timeout = setTimeout(() => {
+                    delete window[callbackName];
+                    if (script.parentNode) document.head.removeChild(script);
+                    reject(new Error('Connection timeout. Please check your internet connection.'));
+                }, 15000);
+                
+                const originalCallback = window[callbackName];
+                window[callbackName] = function(data) {
+                    clearTimeout(timeout);
+                    originalCallback(data);
+                };
+                
+                script.src = APPS_SCRIPT_URL + '?action=getAllData&callback=' + callbackName;
+                document.head.appendChild(script);
+            });
+        }
+
+        // ============================================
+        // UNLOCK DASHBOARD
+        // ============================================
+        async function unlockDashboard() {
+            const input = document.getElementById('adminPassword');
+            const errorDiv = document.getElementById('errorMsg');
+            const btn = document.getElementById('unlockBtn');
+            
+            if (APPS_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
+                errorDiv.innerHTML = '<strong>Setup Required!</strong><br>Please update APPS_SCRIPT_URL in the code.';
+                errorDiv.classList.add('show');
+                return;
+            }
+            
+            if (input.value.trim() !== ADMIN_PASSWORD) {
+                errorDiv.textContent = 'Incorrect password!';
+                errorDiv.classList.add('show');
+                setTimeout(() => errorDiv.classList.remove('show'), 2000);
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.textContent = 'Connecting...';
+            
+            try {
+                const result = await loadDataJSONP();
+                
+                if (!result.success) {
+                    throw new Error(result.message || 'Server error');
+                }
+                
+                document.getElementById('lockScreen').classList.add('hidden');
+                document.getElementById('dashboard').classList.add('visible');
+                
+                updateConnectionStatus(true);
+                displayData(result.data || []);
+                
+            } catch (err) {
+                errorDiv.innerHTML = '<strong>Connection Failed</strong><br>' + err.message;
+                errorDiv.classList.add('show');
+                btn.disabled = false;
+                btn.textContent = 'Unlock';
+                updateConnectionStatus(false);
+            }
+        }
+
+        // ============================================
+        // REFRESH DATA
+        // ============================================
+        async function refreshData() {
+            const loading = document.getElementById('tableLoading');
+            const desktopTable = document.getElementById('desktopTableContainer');
+            const mobileCards = document.getElementById('mobileCardsContainer');
+            
+            loading.style.display = 'block';
+            desktopTable.style.display = 'none';
+            mobileCards.style.display = 'none';
+            
+            try {
+                const result = await loadDataJSONP();
+                if (result.success) {
+                    displayData(result.data || []);
+                    updateConnectionStatus(true);
+                }
+            } catch (err) {
+                updateConnectionStatus(false);
+                alert('Failed to refresh: ' + err.message);
+            }
+        }
+
+        // ============================================
+        // DISPLAY DATA
+        // ============================================
+        function displayData(data) {
+            // Update stats
+            document.getElementById('totalUsers').textContent = data.length;
+            document.getElementById('totalPoints').textContent = data.reduce((s, u) => s + (parseInt(u.points) || 0), 0).toLocaleString();
+            document.getElementById('activeUsers').textContent = data.filter(u => u.status === 'Active').length;
+            document.getElementById('pendingRedemptions').textContent = data.filter(u => u.amounts && u.amounts !== '' && parseFloat(u.amounts) > 0).length;
+            
+            // Hide loading
+            document.getElementById('tableLoading').style.display = 'none';
+            
+            if (data.length === 0) {
+                document.getElementById('noData').style.display = 'block';
+                document.getElementById('desktopTableContainer').style.display = 'none';
+                document.getElementById('mobileCardsContainer').style.display = 'none';
+            } else {
+                document.getElementById('noData').style.display = 'none';
+                
+                // Render desktop table
+                renderDesktopTable(data);
+                
+                // Render mobile cards
+                renderMobileCards(data);
+            }
+            
+            document.getElementById('lastUpdated').textContent = 'Last updated: ' + new Date().toLocaleString();
+            lucide.createIcons();
+        }
+
+        // ============================================
+        // RENDER DESKTOP TABLE
+        // ============================================
+        function renderDesktopTable(data) {
+            const container = document.getElementById('desktopTableContainer');
+            const tbody = document.getElementById('tableBody');
+            
+            container.style.display = 'block';
+            
+            tbody.innerHTML = data.map(u => `
+                <tr>
+                    <td>${formatDate(u.timeStamp) || '-'}</td>
+                    <td>${u.name || '-'}</td>
+                    <td>${u.email || '-'}</td>
+                    <td style="font-family: monospace; color: #666;">${maskPassword(u.password)}</td>
+                    <td>${u.amounts ? '₱' + parseFloat(u.amounts).toLocaleString() : '-'}</td>
+                    <td style="color: var(--gold); font-weight: 600;">${(parseInt(u.points) || 0).toLocaleString()}</td>
+                    <td class="${u.status === 'Active' ? 'status-active' : 'status-pending'}">${u.status || '-'}</td>
+                    <td>${u.gcashNumber || '-'}</td>
+                </tr>
+            `).join('');
+        }
+
+        // ============================================
+        // RENDER MOBILE CARDS
+        // ============================================
+        function renderMobileCards(data) {
+            const container = document.getElementById('mobileCardsContainer');
+            
+            container.style.display = 'flex';
+            
+            container.innerHTML = data.map(u => `
+                <div class="user-card">
+                    <div class="user-card-header">
+                        <span class="user-card-name">${u.name || 'Unknown'}</span>
+                        <span class="user-card-status ${u.status === 'Active' ? 'active' : 'pending'}">${u.status || 'Unknown'}</span>
+                    </div>
+                    <div class="user-card-details">
+                        <div class="user-card-detail">
+                            <span class="user-card-label">Email</span>
+                            <span class="user-card-value">${u.email || '-'}</span>
+                        </div>
+                        <div class="user-card-detail">
+                            <span class="user-card-label">Points</span>
+                            <span class="user-card-value points">${(parseInt(u.points) || 0).toLocaleString()}</span>
+                        </div>
+                        <div class="user-card-detail">
+                            <span class="user-card-label">Amount</span>
+                            <span class="user-card-value">${u.amounts ? '₱' + parseFloat(u.amounts).toLocaleString() : '-'}</span>
+                        </div>
+                        <div class="user-card-detail">
+                            <span class="user-card-label">GCash</span>
+                            <span class="user-card-value">${u.gcashNumber || '-'}</span>
+                        </div>
+                        <div class="user-card-detail full-width">
+                            <span class="user-card-label">Password</span>
+                            <span class="user-card-value password">${maskPassword(u.password)}</span>
+                        </div>
+                        <div class="user-card-detail full-width">
+                            <span class="user-card-label">Registered</span>
+                            <span class="user-card-value">${formatDate(u.timeStamp) || '-'}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ============================================
+        // HELPER FUNCTIONS
+        // ============================================
+        function maskPassword(pass) {
+            if (!pass) return '-';
+            const str = String(pass);
+            if (str.length <= 2) return '•'.repeat(str.length);
+            return str.substring(0, 2) + '•'.repeat(str.length - 2);
+        }
+
+        function formatDate(dateValue) {
+            if (!dateValue) return '-';
+            if (typeof dateValue === 'object' && dateValue.toLocaleString) {
+                return dateValue.toLocaleString();
+            }
+            return dateValue;
+        }
+
+        function updateConnectionStatus(connected) {
+            const status = document.getElementById('connectionStatus');
+            status.style.display = 'inline-flex';
+            if (connected) {
+                status.className = 'connection-status connected';
+                status.innerHTML = '<i></i> <span>Connected</span>';
+            } else {
+                status.className = 'connection-status error';
+                status.innerHTML = '<i></i> <span>Disconnected</span>';
+            }
+        }
+
+        function lockDashboard() {
+            document.getElementById('lockScreen').classList.remove('hidden');
+            document.getElementById('dashboard').classList.remove('visible');
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('unlockBtn').disabled = false;
+            document.getElementById('unlockBtn').textContent = 'Unlock';
+            document.getElementById('tableLoading').style.display = 'block';
+            document.getElementById('noData').style.display = 'none';
+            document.getElementById('desktopTableContainer').style.display = 'none';
+            document.getElementById('mobileCardsContainer').style.display = 'none';
+            document.getElementById('connectionStatus').style.display = 'none';
+        }
+
+        // Enter key to submit
+        document.getElementById('adminPassword').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') unlockDashboard();
+        });
+
+        // Initialize icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
