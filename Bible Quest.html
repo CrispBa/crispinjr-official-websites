@@ -1354,11 +1354,13 @@ div#loginBox.modal-box {
 </div>
 
     <script>
+// ============================================
+// PASSWORD RESET FUNCTIONS
+// ============================================
 function openResetModal() {
     document.getElementById('resetModal').classList.add('active');
 }
 
-// Function to close the popup and clear fields
 function closeResetModal() {
     document.getElementById('resetModal').classList.remove('active');
     document.getElementById('currentPass').value = "";
@@ -1366,13 +1368,11 @@ function closeResetModal() {
     document.getElementById('retypePass').value = "";
 }
 
-// The actual logic that sends data to your Google Sheet
 async function handlePasswordReset() {
     const currentPass = document.getElementById('currentPass').value;
     const newPass = document.getElementById('newPass').value;
     const retypePass = document.getElementById('retypePass').value;
 
-    // 1. Basic Validation
     if (!currentPass || !newPass || !retypePass) return showToast("Please fill all fields");
     if (newPass !== retypePass) return showToast("New passwords do not match!");
     if (newPass.length < 6) return showToast("Password must be at least 6 characters");
@@ -1380,10 +1380,9 @@ async function handlePasswordReset() {
     showToast("Updating security...");
 
     try {
-        // 2. Send request to your Database.gs
         const response = await fetch(APPS_SCRIPT_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Use text/plain to avoid CORS errors
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify({
                 action: 'changePassword', 
                 email: state.userEmail,
@@ -1394,7 +1393,6 @@ async function handlePasswordReset() {
 
         const result = await response.json();
 
-        // 3. Handle the result from the server
         if (result.success) {
             showToast("✅ Password updated successfully!");
             closeResetModal();
@@ -1406,37 +1404,41 @@ async function handlePasswordReset() {
         showToast("Server error. Check your connection.");
     }
 }
- function togglePassword(inputId, iconEl) {
+
+function togglePassword(inputId, iconEl) {
     const input = document.getElementById(inputId);
-    
-    // If the input is currently hidden (password), show it (text)
     if (input.type === "password") {
         input.type = "text";
-        iconEl.setAttribute('data-lucide', 'eye'); // Change icon to 'closed eye'
+        iconEl.setAttribute('data-lucide', 'eye-off');
     } else {
-        // If it is currently visible (text), hide it (password)
         input.type = "password";
-        iconEl.setAttribute('data-lucide', 'eye-off'); // Change icon back to 'open eye'
+        iconEl.setAttribute('data-lucide', 'eye');
     }
-    
-    // Refresh the Lucide icons to show the change
     lucide.createIcons();
 }
-// ============================================
-// CONFIGURATION - DEFINE FIRST
-// ============================================
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxPNhdRXpI0NsUGUexgj47RQrOrjlQ-s0cS22Uu0atLoJVXzfIea8OS3TFbFVnI1KNk-Q/exec";
 
-let state = JSON.parse(localStorage.getItem('bq_final_v18')) || { pts: 0, logs: [], firstClaim: true, userEmail: 'https://i.imgur.com/Bu2aW8n.png' };
+// ============================================
+// CONFIGURATION
+// ============================================
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby33EfZyUMLDizeCv_6a2MB70AQCJU6YnjmExQCN29RveYU7JwPVN8S6Z_VZ8XAL2Zbzg/exec";
+
+let state = JSON.parse(localStorage.getItem('bq_final_v18')) || { 
+    pts: 0, 
+    logs: [], 
+    firstClaim: true, 
+    userEmail: null,
+    userName: null,
+    profilePic: "https://i.imgur.com/Bu2aW8n.png"
+};
+
+let allVerses = [];
+let currentVerse = null;
 let activeReward = null;
 let currentChars = 0;
 let tInt = null;
-const POOL = ["John 3:16", "Psalm 23:1", "Proverbs 3:5", "Philippians 4:13", "Romans 8:28"];
-
-
 
 // ============================================
-// TOAST NOTIFICATION FUNCTION
+// TOAST NOTIFICATION
 // ============================================
 function showToast(msg) {
     const toast = document.getElementById('toast');
@@ -1450,44 +1452,50 @@ function showToast(msg) {
 }
 
 // ============================================
-// MODAL HELPER FUNCTIONS
+// LOAD VERSES FROM GOOGLE SHEET
 // ============================================
-function openModal(val, cost) {
-    if(state.pts < cost) return showToast("Not enough points!");
-    activeReward = { val, cost };
-    document.getElementById('redeemModal').classList.add('active');
-}
+async function loadVersesFromSheet() {
+    try {
 
-function closeModal() { 
-    document.getElementById('redeemModal').classList.remove('active'); 
-}
-
-// ============================================
-// REGISTRATION PROGRESS TRACKER
-// ============================================
-function updateRegProgress() {
-    const name = document.getElementById('regName').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const pass = document.getElementById('regPass').value.trim();
-
-    let completed = 0;
-    let total = 5;
-
-    if (name.length > 0) completed++;
-    if (email.includes('@')) completed++;
-    if (pass.length >= 6) completed++;
-
-    const progress = (completed / total) * 100;
-    const progressBar = document.getElementById('regProgress');
-    if (progressBar) {
-        progressBar.style.width = progress + '%';
-        progressBar.style.opacity = progress > 0 ? '1' : '0.3';
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'getVerses' })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success && result.verses && result.verses.length > 0) {
+            allVerses = result.verses;
+            console.log(`[VERSES] Loaded ${allVerses.length} verses from sheet`);
+            
+            return true;
+        } else {
+            console.warn("[VERSES] Failed to load from sheet, using fallback");
+            allVerses = [
+                { reference: "John 3:16", text: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life." },
+                { reference: "Psalm 23:1", text: "The Lord is my shepherd, I lack nothing." },
+                { reference: "Proverbs 3:5", text: "Trust in the Lord with all your heart and lean not on your own understanding." },
+                { reference: "Philippians 4:13", text: "I can do all this through him who gives me strength." },
+                { reference: "Romans 8:28", text: "And we know that in all things God works for the good of those who love him, who have been called according to his purpose." }
+            ];
+            return false;
+        }
+    } catch (e) {
+        console.error("[VERSES] Error loading:", e);
+        allVerses = [{ reference: "John 3:16", text: "For God so loved the world..." }];
+        return false;
     }
-
-    console.log(`[PROGRESS] Registration ${Math.round(progress)}% - File: ${hasFile ? '✓' : '✗'}, Cropped: ${hasCropped ? '✓' : '✗'}, Name: ${name.length > 0 ? '✓' : '✗'}, Email: ${email.includes('@') ? '✓' : '✗'}, Pass: ${pass.length >= 6 ? '✓' : '✗'}`);
 }
 
+function getRandomVerse() {
+    if (allVerses.length === 0) return null;
+    return allVerses[Math.floor(Math.random() * allVerses.length)];
+}
 
+// ============================================
+// AUTHENTICATION
+// ============================================
 function toggleAuthMode() {
     const lBox = document.getElementById('loginBox');
     const rBox = document.getElementById('registerBox');
@@ -1612,7 +1620,87 @@ document.getElementById('resetBtn').style.display = 'block';
         console.error("[AUTH] Error:", e);
         showToast("Error: " + e.message);
     }
-}// Function to sync current points back to Google Sheets
+}
+// ============================================
+// SYNC STATUS & HISTORY FROM SERVER
+// ============================================
+async function syncStatus() {
+    if (!state.userEmail) {
+        console.log("[SYNC] Not logged in, skipping");
+        return;
+    }
+    
+    console.log("[SYNC] Checking status from Google Sheets...");
+    
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+                action: 'getUserData',
+                email: state.userEmail
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success && result.user) {
+            const serverStatus = result.user.status;
+            const serverPoints = parseInt(result.user.points) || 0;
+            const serverAmounts = parseFloat(result.user.amounts) || 0;
+            
+            console.log(`[SYNC] Server status: ${serverStatus}, Points: ${serverPoints}, Amounts: ${serverAmounts}`);
+            
+            // Update local state
+            state.pts = serverPoints;
+            state.amounts = serverAmounts;
+            state.status = serverStatus;
+            state.gcashNumber = result.user.gcashNumber;
+            
+            // UPDATE REDEMPTION HISTORY FROM SERVER
+            if (result.redemptionHistory) {
+                updateRedemptionHistoryFromServer(result.redemptionHistory);
+            }
+            
+            save();
+            updateUI();
+            
+            // Refresh logs if viewing
+            const logsSection = document.getElementById('logs');
+            if (logsSection && logsSection.classList.contains('active')) {
+                renderLogs();
+            }
+        }
+    } catch (e) {
+        console.warn("[SYNC] Failed to sync:", e.message);
+    }
+}
+
+function updateRedemptionHistoryFromServer(serverHistory) {
+    // Remove old redemption logs from local
+    const nonRedemptionLogs = state.logs.filter(log => !log.includes("Redeemed"));
+    
+    // Add server redemption history (newest first)
+    state.logs = [...serverHistory, ...nonRedemptionLogs];
+    
+    console.log(`[SYNC] Updated ${serverHistory.length} redemptions from server`);
+}
+// ============================================
+// FIXED SAVE FUNCTION - Don't sync points on every save!
+// ============================================
+function save() { 
+    // This saves the data locally on the phone/browser
+    localStorage.setItem('bq_final_v18', JSON.stringify(state)); 
+    
+    // This updates the number you see on the screen
+    updateUI(); 
+    
+    // NEW: This sends the points to your Google Sheet "Users" tab
+    syncPointsToCloud(); 
+}
+// ============================================
+// FIXED SYNC - Only sync when explicitly needed
+// ============================================
 async function syncPointsToCloud() {
     if (!state.userEmail || state.userEmail === 'guest') {
         console.log("[SYNC] Skipping sync: not logged in or guest user");
@@ -1648,255 +1736,530 @@ body: JSON.stringify({
     }
 }
 
+// ============================================
+// NEW: Periodic sync only (not on every claim)
+// ============================================
+let syncTimeout = null;
+function schedulePointSync() {
+    // Clear existing timeout
+    if (syncTimeout) clearTimeout(syncTimeout);
+    
+    // Sync to server after 5 seconds of no activity
+    syncTimeout = setTimeout(() => {
+        syncPointsToCloud();
+    }, 5000);
+}
 
-        function init() { 
-            // Check if user is logged in
-            if (!state.userEmail) {
-                // Show auth overlay if not logged in
-                document.getElementById('authOverlay').style.display = 'flex';
-                return;
+// ============================================
+// FIXED CLAIM FUNCTION
+// ============================================
+function claimAndNext() {
+    if (!currentVerse) return;
+    
+    // CRITICAL: Parse current points as number before adding
+    const currentPoints = parseInt(state.pts) || 0;
+    const earnedPoints = parseInt(currentChars) || 0;
+    
+    // Calculate new points
+    const newPoints = currentPoints + earnedPoints;
+    
+    console.log(`[CLAIM] ${currentPoints} + ${earnedPoints} = ${newPoints}`);
+    
+    // Update state with NUMBER
+    state.pts = newPoints;
+    
+    // Add to logs
+    const timeStr = new Date().toLocaleTimeString();
+    state.logs.unshift(`${timeStr}: ${currentVerse.reference} +${earnedPoints} words`);
+    
+    // Save locally (don't sync to cloud yet)
+    save();
+    
+    // Schedule cloud sync for later
+    schedulePointSync();
+    
+    // Update button
+    document.getElementById('claimBtn').innerText = `+${earnedPoints} Claimed!`;
+    
+    setTimeout(loadRandom, 1000);
+}
+
+// ============================================
+// FIXED SYNC STATUS - Don't overwrite local points with old server data!
+// ============================================
+async function syncStatus() {
+    if (!state.userEmail) {
+        console.log("[SYNC] Not logged in, skipping");
+        return;
+    }
+    
+    console.log("[SYNC] Checking status from server...");
+    console.log("[SYNC] Current local points before sync:", state.pts);
+    
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+                action: 'getUserData',
+                email: state.userEmail
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success && result.user) {
+            const serverStatus = result.user.status;
+            const serverPoints = parseInt(result.user.points) || 0;
+            const serverAmounts = parseFloat(result.user.amounts) || 0;
+            
+            console.log("[SYNC] Server reports points:", serverPoints);
+            console.log("[SYNC] Local points:", state.pts);
+            
+            // CRITICAL FIX: Only update from server if server has MORE points
+            // This prevents server from overwriting our newly claimed points
+            const localPoints = parseInt(state.pts) || 0;
+            
+            if (serverPoints > localPoints) {
+                console.log("[SYNC] Server has more points, updating local");
+                state.pts = serverPoints;
+            } else if (serverPoints < localPoints) {
+                console.log("[SYNC] Local has more points, keeping local");
+                // Don't overwrite - local is newer
+                // Optionally sync local to server:
+                // schedulePointSync();
+            } else {
+                console.log("[SYNC] Points match");
             }
             
-            // User is logged in, proceed with normal initialization
-            updateUI(); 
-            renderShop(); 
-            loadRandom(); 
-            syncStatus();
-            // Start periodic sync every 10 seconds to check for status updates
-            setInterval(syncStatus, 10000);
-            // Show logout button
-            document.getElementById('logoutBtn').style.display = 'block';
+            // Update other fields that don't conflict
+            state.amounts = serverAmounts;
+            state.status = serverStatus;
+            state.gcashNumber = result.user.gcashNumber;
+            
+            // Update redemption history
+            if (result.redemptionHistory) {
+                updateRedemptionHistoryFromServer(result.redemptionHistory);
+            }
+            
+            save();
+            
+            // Refresh UI if viewing logs
+            const logsSection = document.getElementById('logs');
+            if (logsSection && logsSection.classList.contains('active')) {
+                renderLogs();
+            }
         }
+    } catch (e) {
+        console.warn("[SYNC] Failed:", e.message);
+    }
+}
+// ============================================
+// VERSE FUNCTIONS - UPDATED FOR MULTI-VERSE SEARCH
+// ============================================
 
-        // Initialize when DOM is fully loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log("[INIT] Page loaded, initializing Bible Quest...");
-            
-            // Initialize EmailJS
-            emailjs.init("sNrp_awwUxXi4RU6O");
-            
-            // Initialize Lucide icons
-            lucide.createIcons();
-            
-                       
-            // Call main initialization
-            init();
-            
-            console.log("[INIT] ✅ Bible Quest initialized");
-               });
+async function loadVerse(ref) {
+    const vRefElem = document.getElementById('vRef');
+    const vTextElem = document.getElementById('vText');
+    const btn = document.getElementById('claimBtn');
+    
+    vTextElem.innerText = "Consulting the scriptures...";
+    btn.disabled = true;
 
-        // showToast is declared globally above and reused here.
-
-        async function syncStatus() {
-            // Redemption status updates handled via Apps Script
-            console.log("[SYNC] Status check");
+    // Try server-side search first (supports ranges like "Genesis 1:1-6")
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+                action: 'searchVerses',
+                query: ref
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Server found verse(s)
+            vRefElem.innerText = result.verse.reference;
+            vTextElem.innerText = `"${result.verse.text}"`;
+            currentVerse = result.verse;
+            
+            // Count words in combined text
+            currentChars = result.verse.text.split(/\s+/).filter(word => word.length > 0).length;
+            
+            // Use reference as image seed
+            const seed = result.verse.reference.replace(/[^a-zA-Z0-9]/g, '');
+            document.getElementById('verseImg').src = `https://picsum.photos/seed/${seed}/600/400`;
+            
+            startTimer();
+            return;
         }
+    } catch (e) {
+        console.log("[VERSE] Server search failed, trying local:", e);
+    }
 
-        async function loadVerse(ref) {
-            const vRefElem = document.getElementById('vRef');
-            const vTextElem = document.getElementById('vText');
-            const btn = document.getElementById('claimBtn');
-            vTextElem.innerText = "Consulting the scriptures...";
-            btn.disabled = true;
+    // Fallback: Try local data
+    const foundVerse = allVerses.find(v => 
+        v.reference.toLowerCase() === ref.toLowerCase()
+    );
 
-            try {
-                const publicRes = await fetch(`https://bible-api.com/${encodeURIComponent(ref)}`);
-                const publicData = await publicRes.json();
+    if (foundVerse) {
+        vRefElem.innerText = foundVerse.reference;
+        vTextElem.innerText = `"${foundVerse.text}"`;
+        currentVerse = foundVerse;
+        currentChars = foundVerse.text.split(/\s+/).filter(word => word.length > 0).length;
+        
+        document.getElementById('verseImg').src = `https://picsum.photos/seed/${foundVerse.reference.replace(/\s/g, '')}/600/400`;
+        startTimer();
+    } else {
+        // Final fallback: External API
+        try {
+            const publicRes = await fetch(`https://bible-api.com/${encodeURIComponent(ref)}`);
+            const publicData = await publicRes.json();
+            
+            if (publicData.text) {
+                vRefElem.innerText = publicData.reference;
+                vTextElem.innerText = `"${publicData.text.trim()}"`;
+                currentChars = publicData.text.trim().split(/\s+/).filter(word => word.length > 0).length;
+                currentVerse = { reference: publicData.reference, text: publicData.text.trim() };
                 
-                let verseText = "";
-                if(publicData.text) {
-                    vRefElem.innerText = publicData.reference;
-                    verseText = publicData.text.trim();
-                } else {
-                    showToast("Verse not found.");
-                    return;
-                }
-
-                vTextElem.innerText = `"${verseText}"`;
-                
-                // ADD THIS LINE: Counts words by splitting by spaces and filtering out empties
-                currentChars = verseText.split(/\s+/).filter(word => word.length > 0).length;
-
                 document.getElementById('verseImg').src = `https://picsum.photos/seed/${Math.random()}/600/400`;
                 startTimer();
-            } catch(error) {
-                const fallback = POOL[Math.floor(Math.random() * POOL.length)];
-                vRefElem.innerText = fallback + " (Offline)";
-                vTextElem.innerText = "The Lord is my shepherd; I shall not want.";
-                // REPLACE THIS: Fallback count for the sentence above (9 words)
-                currentChars = 9; 
-                startTimer();
+            } else {
+                showToast("Verse not found.");
+                loadRandom();
             }
+        } catch (error) {
+            showToast("Verse not found. Loading random...");
+            loadRandom();
         }
+    }
+}
 
-        function startTimer() {
-            let tLeft = 60;
-            const circle = document.getElementById('pCircle');
-            const btn = document.getElementById('claimBtn');
-            const txt = document.getElementById('timerTxt');
-            btn.disabled = true; btn.innerText = "Meditating...";
-            if(tInt) clearInterval(tInt);
-            tInt = setInterval(() => {
-                tLeft--; txt.innerText = tLeft + "s";
-                circle.style.strokeDashoffset = 283 - ((60 - tLeft) / 60 * 283);
-                if(tLeft <= 0) { 
-                    clearInterval(tInt);
-                    txt.innerText = "AMEN";
-                    btn.disabled = false;
-                    btn.innerText = `Claim +${currentChars} Pts`;
-                }
-            }, 1000);
+function loadRandom() {
+    const verse = getRandomVerse();
+    if (verse) {
+        document.getElementById('vRef').innerText = verse.reference;
+        document.getElementById('vText').innerText = `"${verse.text}"`;
+        currentVerse = verse;
+        currentChars = verse.text.split(/\s+/).filter(word => word.length > 0).length;
+        
+        document.getElementById('verseImg').src = `https://picsum.photos/seed/${verse.reference.replace(/\s/g, '')}/600/400`;
+        startTimer();
+    } else {
+        document.getElementById('vRef').innerText = "John 3:16";
+        document.getElementById('vText').innerText = "For God so loved the world...";
+        currentChars = 10;
+        startTimer();
+    }
+}
+
+function startTimer() {
+    let tLeft = 60;
+    const circle = document.getElementById('pCircle');
+    const btn = document.getElementById('claimBtn');
+    const txt = document.getElementById('timerTxt');
+    
+    btn.disabled = true; 
+    btn.innerText = "Meditating...";
+    
+    if(tInt) clearInterval(tInt);
+    
+    tInt = setInterval(() => {
+        tLeft--; 
+        txt.innerText = tLeft + "s";
+        circle.style.strokeDashoffset = 283 - ((60 - tLeft) / 60 * 283);
+        
+        if(tLeft <= 0) { 
+            clearInterval(tInt);
+            txt.innerText = "AMEN";
+            btn.disabled = false;
+            btn.innerText = `Claim +${currentChars} Pts`;
         }
+    }, 1000);
+}
 
 function claimAndNext() {
-            state.pts += currentChars;
-            // Updated log text to say "words" instead of "pts" for clarity
-            state.logs.unshift(`${new Date().toLocaleTimeString()}: ${document.getElementById('vRef').innerText} +${currentChars} words`);
-            save();
-            document.getElementById('claimBtn').innerText = "Claimed!";
-            setTimeout(loadRandom, 1000);
+    if (!currentVerse) return;
+    
+    state.pts += currentChars;
+    state.logs.unshift(`${new Date().toLocaleTimeString()}: ${currentVerse.reference} +${currentChars} words`);
+    
+    save();
+    document.getElementById('claimBtn').innerText = "Claimed!";
+    
+    setTimeout(loadRandom, 1000);
+}
+
+// ============================================
+// SHOP & REDEMPTION
+// ============================================
+function renderShop() {
+    const rewards = [{v:1, c:500}, {v:50, c:25000}, {v:100, c:50000}, {v:500, c:250000}];
+    document.getElementById('shopList').innerHTML = rewards.map(i => {
+        const isFree = (i.v === 1 && state.firstClaim);
+        const cost = isFree ? 0 : i.c;
+        return `
+        <div class="shop-card">
+            ${isFree ? '<span class="free-badge">NEWBIE GIFT</span>' : ''}
+            <b>
+                <img src="bg-gcash-icn.png" width="32" height="32" style="transform: translate(1px, 4px); margin-right: 10px;">
+                <span style="display: inline-block; transform: translate(0px, -6px);font-size: 0.8rem;">₱${i.v} GCash</span>
+            </b>
+            <button onclick="openModal(${i.v}, ${cost})" style="background:var(--gold-gradient); border:none; padding:10px 15px; border-radius:10px; font-weight:900; cursor:pointer; color:#3a2a00;">
+                ${isFree ? 'FREE' : cost.toLocaleString() + ' PTS'}
+            </button>
+        </div>`;
+    }).join('');
+}
+
+function openModal(val, cost) {
+    if(state.pts < cost) return showToast("Not enough points!");
+    activeReward = { val, cost };
+    document.getElementById('redeemModal').classList.add('active');
+}
+
+function closeModal() { 
+    document.getElementById('redeemModal').classList.remove('active'); 
+}
+
+async function processRedeem() {
+    const gName = document.getElementById('gName').value.trim();
+    const gNum = document.getElementById('gNum').value.trim();
+    const gEmail = document.getElementById('gEmail').value.trim();
+
+    if (!gName) return showToast('Please enter GCash name');
+    if (!gNum) return showToast('Please enter GCash number');
+    if (!gEmail) return showToast('Please enter email for receipt');
+    if (!activeReward) return showToast('No reward selected');
+    
+    if (!gNum.match(/^09\d{9}$/)) {
+        return showToast('Invalid GCash number format (should be 09XXXXXXXXX)');
+    }
+
+    showToast("Processing redemption...");
+
+    try {
+        // Send EmailJS notification
+        await emailjs.send("service_rc5eqhl", "template_ha5fvkh", {
+            method: "GCASH",
+            mobile: gNum,
+            extra_data: gName,
+            user_email: gEmail,
+            peso_value: "₱" + activeReward.val,
+            user_name: state.userName || "Unknown",
+            user_email_account: state.userEmail
+        });
+
+        // Process redemption in Google Sheets
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+                action: 'processRedemption',
+                email: state.userEmail,
+                userName: state.userName,
+                redeemAmount: activeReward.val,
+                cost: activeReward.cost,
+                gcashNumber: gNum,
+                gcashName: gName,
+                receiptEmail: gEmail
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Update local state
+            state.pts = result.newPoints;
+            state.amounts = result.newAmounts;
+            if(activeReward.val === 1) state.firstClaim = false;
+            
+            // Add to local logs (will be synced to server)
+            const timeStr = new Date().toLocaleTimeString();
+            const logEntry = `${timeStr}: Redeemed ₱${activeReward.val} to ${gNum} <span class="status-badge" style="color:#ffa500">⏳ Pending...</span>`;
+            state.logs.unshift(logEntry);
+            
+            save(); 
+            renderShop(); 
+            closeModal();
+            
+            // Clear form
+            document.getElementById('gName').value = '';
+            document.getElementById('gNum').value = '';
+            document.getElementById('gEmail').value = '';
+            
+            showToast("✅ Redemption sent! Status: Pending...");
+            
+            // Refresh from server to confirm
+            setTimeout(() => syncStatus(), 2000);
+        } else {
+            showToast("Error: " + result.message);
         }
+        
+    } catch (e) {
+        console.error("Redemption error:", e);
+        showToast("Error processing redemption: " + e.message);
+    }
+}
 
-        function renderShop() {
-            const rewards = [{v:1, c:500}, {v:50, c:25000}, {v:100, c:50000}, {v:500, c:250000}];
-            document.getElementById('shopList').innerHTML = rewards.map(i => {
-                const isFree = (i.v === 1 && state.firstClaim);
-                const cost = isFree ? 0 : i.c;
-                return `
-                <div class="shop-card">
-                    ${isFree ? '<span class="free-badge">NEWBIE GIFT</span>' : ''}
-                    <b>
-                        <img src="bg-gcash-icn.png" width="32" height="32" style="transform: translate(1px, 4px); margin-right: 10px;">
-                        <span style="display: inline-block; transform: translate(0px, -6px);font-size: 0.8rem;">₱${i.v} GCash</span>
-                    </b>
-                    <button onclick="openModal(${i.v}, ${cost})" style="background:var(--gold-gradient); border:none; padding:10px 15px; border-radius:10px; font-weight:900; cursor:pointer; color:#3a2a00;">
-                        ${isFree ? 'FREE' : cost.toLocaleString() + ' PTS'}
-                    </button>
-                </div>`;
-            }).join('');
+// ============================================
+// UI & LOGS
+// ============================================
+function showTab(id, el) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+    
+    if(id === 'logs') {
+        syncStatus();
+        renderLogs();
+    }
+}
+
+function renderLogs() {
+    const logContent = document.getElementById('logContent');
+    if (!logContent) return;
+    
+    if (state.logs.length === 0) {
+        logContent.innerHTML = '<div style="text-align:center; color:#666; padding:20px;">No history yet. Start meditating!</div>';
+        return;
+    }
+    
+    // Separate redemption logs and meditation logs
+    const redemptionLogs = state.logs.filter(log => log.includes("Redeemed"));
+    const meditationLogs = state.logs.filter(log => !log.includes("Redeemed") && log.includes("words"));
+    
+    let html = '';
+    
+    // Redemptions section
+    if (redemptionLogs.length > 0) {
+        html += `<div style="margin-bottom:20px;"><h4 style="color:var(--gold); font-size:0.9rem; margin-bottom:10px; font-family:'Cinzel';">🎁 Redemptions</h4>`;
+        html += redemptionLogs.map(log => formatLogEntry(log, 'redemption')).join('');
+        html += `</div>`;
+    }
+    
+    // Meditation section
+    if (meditationLogs.length > 0) {
+        html += `<div><h4 style="color:var(--gold); font-size:0.9rem; margin-bottom:10px; font-family:'Cinzel';">📖 Meditation History</h4>`;
+        html += meditationLogs.slice(0, 20).map(log => formatLogEntry(log, 'meditation')).join('');
+        html += `</div>`;
+    }
+    
+    logContent.innerHTML = html;
+}
+
+function formatLogEntry(log, type) {
+    let styledLog = log;
+    
+    if (type === 'redemption') {
+        // Style redemptions
+        if (log.includes("✅ Success")) {
+            styledLog = log.replace('✅ Success', '<span style="color:#4CAF50; font-weight:800;">✅ Success</span>');
+        } else if (log.includes("⏳ Pending...") || log.includes("Pending...")) {
+            styledLog = log.replace(/[⏳\s]*Pending\.\.\./, '<span style="color:#ffa500; font-weight:800;">⏳ Pending...</span>');
         }
+        // Highlight amount
+        styledLog = styledLog.replace(/(₱\d+)/, '<span style="color:var(--gold); font-weight:bold;">$1</span>');
+        
+        return `<div class="history-item" style="border-left: 3px solid ${log.includes('Success') ? '#4CAF50' : '#ffa500'}; background:rgba(255,215,0,0.05);">${styledLog}</div>`;
+    } else {
+        // Style meditation logs
+        styledLog = log.replace(/(\+\d+ words)/, '<span style="color:#4CAF50; font-weight:bold;">$1</span>');
+        return `<div class="history-item" style="border-left: 3px solid #4CAF50;">${styledLog}</div>`;
+    }
+}
 
-        function openModal(val, cost) {
-            if(state.pts < cost) return showToast("Not enough points!");
-            activeReward = { val, cost };
-            document.getElementById('redeemModal').classList.add('active');
-        }
-
-        function closeModal() { document.getElementById('redeemModal').classList.remove('active'); }
-
-function processRedeem() {
-            const gName = document.getElementById('gName').value.trim();
-            const gNum = document.getElementById('gNum').value.trim();
-            const gEmail = document.getElementById('gEmail').value.trim();
-
-            // Validate form inputs
-            if (!gName) return showToast('Please enter GCash name');
-            if (!gNum) return showToast('Please enter GCash number');
-            if (!gEmail) return showToast('Please enter email for receipt');
-            if (!activeReward) return showToast('No reward selected');
-
-            try {
-                // EmailJS notification
-                emailjs.send("service_rc5eqhl", "template_ha5fvkh", {
-                    method: "GCASH",
-                    mobile: gNum,
-                    extra_data: gName,
-                    user_email: gEmail,
-                    peso_value: "₱" + activeReward.val
-                });
-
-                // Update local state
-                state.pts -= activeReward.cost;
-                if(activeReward.val === 1) state.firstClaim = false;
-                state.logs.unshift(`${new Date().toLocaleTimeString()}: Redeemed ₱${activeReward.val} to ${gNum} <span class="status-badge" style="color:#ffa500">PENDING...</span>`);
-                
-                save(); 
-                renderShop(); 
-                closeModal();
-                
-                // Clear form inputs
-                document.getElementById('gName').value = '';
-                document.getElementById('gNum').value = '';
-                document.getElementById('gEmail').value = '';
-                
-                showToast("✅ Redemption sent! Check email for receipt.");
-            } catch (e) {
-                console.error("Redemption error:", e);
-                showToast("Error processing redemption: " + e.message);
-            }
-        }
-
-        function showTab(id, el) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            el.classList.add('active');
-            if(id === 'logs') {
-                syncStatus();
-                document.getElementById('logContent').innerHTML = state.logs.map(l => `<div class="history-item">${l}</div>`).join('') || "No logs.";
-            }
-        }
+// ============================================
+// SEARCH - UPDATED FOR RANGES
+// ============================================
 function manualSearch() { 
     const input = document.getElementById('vSearch');
     let q = input.value.trim();
     
-    if(q) { 
-        // NEW: Check if the user typed "Help"
-        if(q.toLowerCase() === "help") {
-            window.open("https://crispba.github.io/crispinjr-official-websites/Help%20-%20Suggest%20-%20Error.html", "_blank");
-            input.value = "";
-            return; 
-        }
+    if(!q) return;
+    
+    if(q.toLowerCase() === "help") {
+        window.open("https://crispba.github.io/crispinjr-official-websites/Help%20-%20Suggest%20-%20Error.html", "_blank");
+        input.value = "";
+        return; 
+    }
 
-        // Existing Verse Search Logic
-        q = q.charAt(0).toUpperCase() + q.slice(1);
-        loadVerse(q); 
-        input.value = ""; 
-        input.blur();
-    } 
-
+    // Normalize: capitalize first letter of each word
+    q = q.replace(/\b\w/g, l => l.toUpperCase());
+    
+    loadVerse(q); 
+    input.value = ""; 
+    input.blur();
 }
 
-let tempImageData = ""; // Holds the image before user clicks Apply
+// ============================================
+// DATA MANAGEMENT
+// ============================================
 
-        function loadRandom() { loadVerse(POOL[Math.floor(Math.random() * POOL.length)]); }
-function save() { 
-    // This saves the data locally on the phone/browser
-    localStorage.setItem('bq_final_v18', JSON.stringify(state)); 
-    
-    // This updates the number you see on the screen
-    updateUI(); 
-    
-    // NEW: This sends the points to your Google Sheet "Users" tab
-    syncPointsToCloud(); 
+
+function updateUI() {
+    document.getElementById('pts').innerText = state.pts.toLocaleString();
+    const avatar = document.getElementById('userAvatar');
+    if (avatar) {
+        avatar.src = state.profilePic || 'https://i.imgur.com/Bu2aW8n.png';
+    }
 }
-        function updateUI() {
-            document.getElementById('pts').innerText = state.pts.toLocaleString();
-            const avatar = document.getElementById('userAvatar');
-            if (avatar) {
-                avatar.src = state.profilePic || 'https://i.imgur.com/Bu2aW8n.png';
-            }
-        }
-        
-        // Updated logout function to remove the browser alert
+
 function logout() {
-    // We remove the if(confirm(...)) block to prevent the popup
     state.userEmail = null;
+    state.userName = null;
     save();
     
-    // Hide the logout button and refresh to show the login screen
-    document.getElementById('logoutBtn').style.display = 'block';
+    document.getElementById('logoutBtn').style.display = 'none';
+    document.getElementById('resetBtn').style.display = 'none';
+    document.getElementById('authOverlay').style.display = 'flex';
     location.reload(); 
-}        
-        init();
+}
+
+// ============================================
+// INITIALIZATION
+// ============================================
+async function init() { 
+    await loadVersesFromSheet();
+    
+    if (!state.userEmail) {
+        document.getElementById('authOverlay').style.display = 'flex';
+        return;
+    }
+    
+    updateUI(); 
+    renderShop(); 
+    loadRandom(); 
+    syncStatus();
+    
+    setInterval(syncStatus, 10000);
+    
+    document.getElementById('logoutBtn').style.display = 'block';
+    document.getElementById('resetBtn').style.display = 'block';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("[INIT] Page loaded, initializing Bible Quest...");
+    
+    emailjs.init("sNrp_awwUxXi4RU6O");
+    lucide.createIcons();
+    
+    init();
+    
+    console.log("[INIT] ✅ Bible Quest initialized");
+});
+
 window.addEventListener('load', () => {
     const loader = document.getElementById('loader');
     setTimeout(() => {
         loader.style.opacity = '0';
         setTimeout(() => {
             loader.style.display = 'none';
-        }, 5000);
-    }, 3000); 
+        }, 500);
+    }, 4000); 
 });
     </script>
 </body>
