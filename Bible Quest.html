@@ -9,10 +9,159 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+<body>
+<style>
+/* --- COMPLETE LOADER FIX --- */
+#loader {
+        
+  width: 200px;
+  height: 200px;
+  perspective: 200px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #fffffffc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+    /* transition: opacity 0.5s cubic-bezier(0, -0.34, 0, 1.38), visibility 0.5s; */
+    transition: opacity 0.5s cubic-bezier(0, -0.34, 0, 1.38), visibility 0.5s;
+    visibility: visible;
+    opacity: 1;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
+    background: linear-gradient(346deg, #ffffff, rgb(255 255 255 / 26%));
+}
+.loader-3d {
+    height: 200px; 
+    perspective: 1000px;
+    position: relative;
+}
+.loader-text {
+    font-family: 'Cinzel', serif;
+    color: #BF953F;
+    letter-spacing: 5px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    -webkit-text-stroke: 0.4px rgb(0 0 0 / 12%);
+    text-shadow: -1px -1px 0 #00000029, 1px -1px 0 #00000040, -1px 1px 0 #00000033, 1px 1px 0 #0000001c;
+}
+.loader-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+transform: scale(0.6);
+}
 
+
+
+.dot { 
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  margin-top: -60px;
+  margin-left: -60px;
+  border-radius: 100px;
+  border: 40px outset #1e3f57;
+  transform-origin: 50% 50%;
+  transform: rotateX(24deg) rotateY(20deg) rotateZ(0deg) translateZ(-25px);
+  background-color: transparent;
+  animation: dot1 1000ms cubic-bezier(.49,.06,.43,.85) infinite;
+}
+
+.dot:nth-child(2) {
+
+  width: 140px;
+  height: 140px;
+  margin-top: -70px;
+  margin-left: -70px;
+  border-width: 30px;
+  border-color: #447891;
+  animation-name: dot2;
+  animation-delay: 75ms;
+  box-shadow: inset 0 0 15px 0 rgba(0, 0, 0, 0.1);
+  transform: rotateX(24deg) rotateY(20deg) rotateZ(0deg) translateZ(-25px);
+}
+
+.dot:nth-child(3) {
+
+  width: 160px;
+  height: 160px;
+  margin-top: -80px;
+  margin-left: -80px;
+  border-width: 20px;
+  border-color: #6bb2cd;
+  animation-name: dot3;
+  animation-delay: 150ms;
+  box-shadow: inset 0 0 15px 0 rgba(0, 0, 0, 0.1);
+  transform: rotateX(24deg) rotateY(20deg) rotateZ(0deg) translateZ(-25px);
+}
+
+
+
+@keyframes dot1 {
+  0% {
+    border-color: #1e3f57;
+    transform: rotateX(24deg) rotateY(20deg) rotateZ(0deg) translateZ(-25px);
+  }
+
+  50% {
+    border-color: #1e574f;
+    transform: rotateX(20deg) rotateY(20deg) rotateZ(50deg) translateZ(0px);
+  }
+
+  100% {
+    border-color: #1e3f57;
+    transform: rotateX(24deg) rotateY(20deg) rotateZ(0deg) translateZ(-25px);
+  }
+}
+
+@keyframes dot2 {
+  0% {
+    border-color: #447891;
+    box-shadow: inset 0 0 15px 0 rgba(255, 255, 255, 0.2);
+    transform: rotateX(24deg) rotateY(20deg) rotateZ(0deg) translateZ(-25px);
+  }
+
+  50% {
+    border-color: #449180;
+    box-shadow: inset 0 0 15px 0 rgba(0, 0, 0, 0.8);
+    transform: rotateX(20deg) rotateY(20deg) rotateZ(50deg) translateZ(0px);
+  }
+
+  100% {
+    border-color: #447891;
+    box-shadow: inset 0 0 15px 0 rgba(255, 255, 255, 0.2);
+    transform: rotateX(24deg) rotateY(20deg) rotateZ(0deg) translateZ(-25px);
+  }
+}
+
+@keyframes dot3 {
+  0% {
+    border-color: #6bb2cd;
+    box-shadow: inset 0 0 15px 0 rgba(0, 0, 0, 0.1);
+    transform: rotateX(24deg) rotateY(20deg) rotateZ(0deg) translateZ(-25px);
+  }
+
+  50% {
+    border-color: #6bcdb2;
+    box-shadow: inset 0 0 15px 0 rgba(0, 0, 0, 0.8);
+    transform: rotateX(20deg) rotateY(20deg) rotateZ(50deg) translateZ(0px);
+  }
+
+  100% {
+    border-color: #6bb2cd;
+    box-shadow: inset 0 0 15px 0 rgba(0, 0, 0, 0.1);
+    transform: rotateX(24deg) rotateY(20deg) rotateZ(0deg) translateZ(-25px);
+  }
+}</style>
+</body>
     <style>
-
-
 
         :root {
             --gold: #FFD700;
@@ -27,8 +176,17 @@
     position: relative;
     width: 100%;
 }
-
-/* Hide the eye icon by default */
+.reset-input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--gold) !important;
+    border-radius: 10px;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+}
 .password-wrapper i, .password-wrapper .lucide {
     position: absolute;
     right: 15px;
@@ -515,8 +673,7 @@ span {}
             top:0; 
             left:0; 
             width:100%; 
-            height:100%; 
-            background: rgba(0,0,0,0.92);
+            height:100%;
             z-index: 2000; 
             align-items: center; 
             justify-content: center; 
@@ -540,15 +697,14 @@ span {}
     border: 2px solid #ffffff52;    
     }
         .modal-box input{
-    width: 100%;
+width: 100%;
     padding: 12px;
     margin: 8px 0;
     border-radius: 8px;
-    border: 1px solid var(--gold);
-    background: rgba(0, 0, 0, 0.3);
+    background: rgb(0 0 0 / 36%);
     color: white;
     outline: none;
-    font-size:15px;
+    font-size: 15px;
 }
         .modal-box input:focus {
             background: rgba(0,0,0,0.5);
@@ -1044,13 +1200,22 @@ div#loginBox.modal-box {
     </style>
 </head>
 <body>
+<div id="loader">
+    <div class="loader-inner">
+         <div class="loader-3d">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <div class="loader-text">Seeking Truth...</div>
+    </div>
+</div>
     <header>
         <div class="logo">
             <img src="favicon(BQ).png" width="32" height="32" style="align-items: flex-start;">
             BIBLE QUEST
         </div>
-      
-<div class="user-controls">
+     <div class="user-controls">
         <div class="points-display">
             <i data-lucide="zap"></i> 
             <span id="pts">0</span>
@@ -1059,10 +1224,10 @@ div#loginBox.modal-box {
         <button onclick="logout()" class="logout-btn" id="logoutBtn" style="display: none;"><img src="logout_4836207.png" alt="Logout" class="logout-icon">
 <span class="logout-tooltip">LOGOUT</span></button>
 
-<button onclick="logout()" class="resetpass-btn" id="resetBtn" style="display: none;">
-        <img src="reset-password_4992475.png" alt="Reset" class="resetpass-icon">
-        <span class="resetpass-tooltip">RESET</span>
-    </button>
+<button onclick="openResetModal()" class="resetpass-btn" id="resetBtn" style="display: none;">
+    <img src="reset-password_4992475.png" alt="Reset" class="resetpass-icon">
+    <span class="resetpass-tooltip">RESET</span>
+</button>
 
     </div>
     </header>
@@ -1131,7 +1296,31 @@ div#loginBox.modal-box {
             <button onclick="closeModal()" style="background:none; border:none; color:white; width:100%; margin-top:15px; opacity:0.5; cursor:pointer;">Cancel</button>
         </div>
     </div>
+<div class="modal" id="resetModal">
+    <div class="modal-box" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://media.istockphoto.com/id/1415506121/video/shield-icon-cyber-security-digital-data-network-protection-future-technology-digital-data.avif?s=640x640&k=20&c=iytlwDasjYyhPIYojeshSVlBUzln6Cws7HIIzairW6M=');">
+<h3 style="color: gainsboro;font-family:'Cinzel';margin-bottom:20px;font-size: 1.5rem;">CHANGE PASSWORD</h3>
+        
+        <div class="password-wrapper">
+            <input type="password" id="currentPass" placeholder="Current Password">
+            <i data-lucide="eye" onclick="togglePassword('currentPass', this)"></i>
+        </div>
 
+        <div class="password-wrapper">
+            <input type="password" id="newPass" placeholder="New Password">
+            <i data-lucide="eye" onclick="togglePassword('newPass', this)"></i>
+        </div>
+
+        <div class="password-wrapper">
+            <input type="password" id="retypePass" placeholder="Re-type Password">
+            <i data-lucide="eye" onclick="togglePassword('retypePass', this)"></i>
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="btn-submit" onclick="handlePasswordReset()" style="margin-top:0; flex: 1;">Submit</button>
+            <button onclick="closeResetModal()" style="background: var(--gold-gradient); color: #3a2a00; border: none; padding: 14px; border-radius: 12px; width: 100%; font-weight: 700; cursor: pointer; flex: 1;">Close</button>
+        </div>
+    </div>
+</div>
 <div id="authOverlay">
     <div class="modal-box" id="loginBox">
 <h2 style="color: #ffd700b8; font-family:'Cinzel'; margin-bottom:20px;">Bible Quest Login</h2>
@@ -1165,6 +1354,58 @@ div#loginBox.modal-box {
 </div>
 
     <script>
+function openResetModal() {
+    document.getElementById('resetModal').classList.add('active');
+}
+
+// Function to close the popup and clear fields
+function closeResetModal() {
+    document.getElementById('resetModal').classList.remove('active');
+    document.getElementById('currentPass').value = "";
+    document.getElementById('newPass').value = "";
+    document.getElementById('retypePass').value = "";
+}
+
+// The actual logic that sends data to your Google Sheet
+async function handlePasswordReset() {
+    const currentPass = document.getElementById('currentPass').value;
+    const newPass = document.getElementById('newPass').value;
+    const retypePass = document.getElementById('retypePass').value;
+
+    // 1. Basic Validation
+    if (!currentPass || !newPass || !retypePass) return showToast("Please fill all fields");
+    if (newPass !== retypePass) return showToast("New passwords do not match!");
+    if (newPass.length < 6) return showToast("Password must be at least 6 characters");
+
+    showToast("Updating security...");
+
+    try {
+        // 2. Send request to your Database.gs
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Use text/plain to avoid CORS errors
+            body: JSON.stringify({
+                action: 'changePassword', 
+                email: state.userEmail,
+                oldPassword: currentPass,
+                newPassword: newPass
+            })
+        });
+
+        const result = await response.json();
+
+        // 3. Handle the result from the server
+        if (result.success) {
+            showToast("✅ Password updated successfully!");
+            closeResetModal();
+        } else {
+            showToast(result.message || "Failed to update password");
+        }
+    } catch (e) {
+        console.error("Reset Error:", e);
+        showToast("Server error. Check your connection.");
+    }
+}
  function togglePassword(inputId, iconEl) {
     const input = document.getElementById(inputId);
     
@@ -1184,7 +1425,7 @@ div#loginBox.modal-box {
 // ============================================
 // CONFIGURATION - DEFINE FIRST
 // ============================================
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybG812WHGcFbiqrpZTthPpeLtYcu7rkHVYpHdGkwWQszru0tS_4eOWxa1Dy0C4kQh5Ow/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxPNhdRXpI0NsUGUexgj47RQrOrjlQ-s0cS22Uu0atLoJVXzfIea8OS3TFbFVnI1KNk-Q/exec";
 
 let state = JSON.parse(localStorage.getItem('bq_final_v18')) || { pts: 0, logs: [], firstClaim: true, userEmail: 'https://i.imgur.com/Bu2aW8n.png' };
 let activeReward = null;
@@ -1648,6 +1889,15 @@ function logout() {
     location.reload(); 
 }        
         init();
+window.addEventListener('load', () => {
+    const loader = document.getElementById('loader');
+    setTimeout(() => {
+        loader.style.opacity = '0';
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 5000);
+    }, 3000); 
+});
     </script>
 </body>
 </html>
