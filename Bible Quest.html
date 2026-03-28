@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 <body>
 <style>
-/* --- COMPLETE LOADER FIX --- */
+
 #loader {
         
   width: 200px;
@@ -27,7 +27,6 @@
     justify-content: center;
     align-items: center;
     z-index: 999999;
-    /* transition: opacity 0.5s cubic-bezier(0, -0.34, 0, 1.38), visibility 0.5s; */
     transition: opacity 0.5s cubic-bezier(0, -0.34, 0, 1.38), visibility 0.5s;
     visibility: visible;
     opacity: 1;
@@ -197,16 +196,15 @@ transform: scale(0.6);
     width: 20px !important;
     height: 20px !important;
     opacity: 0.8;
-    display: none; /* Hidden */
+    display: none; 
     z-index: 10;
 }
-/* This targets both the login and registration containers */
+
 #loginBox, #registerBox {
     border: 1px solid red;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8); /* Helps the box pop against the background */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8); 
 }
-/* Show the icon ONLY when the user starts typing 
-   (i.e., when the placeholder is NOT shown) */
+
 .password-wrapper input:not(:placeholder-shown) + i,
 .password-wrapper input:not(:placeholder-shown) + .lucide {
     display: block;
@@ -228,8 +226,7 @@ transform: scale(0.6);
     font-size: 0.85rem;
     box-shadow: 0 8px 25px rgba(0,0,0,0.5);
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-    /* This must be higher than the authOverlay z-index */
-    z-index: 100001 !important; 
+       z-index: 100001 !important; 
     white-space: nowrap;
     pointer-events: none;
 }
@@ -1453,9 +1450,7 @@ function togglePassword(inputId, iconEl) {
     lucide.createIcons();
 }
 
-// ============================================
-// CONFIGURATION
-// ============================================
+
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby33EfZyUMLDizeCv_6a2MB70AQCJU6YnjmExQCN29RveYU7JwPVN8S6Z_VZ8XAL2Zbzg/exec";
 
 let state = JSON.parse(localStorage.getItem('bq_final_v18')) || { 
@@ -1473,9 +1468,7 @@ let activeReward = null;
 let currentChars = 0;
 let tInt = null;
 
-// ============================================
-// TOAST NOTIFICATION
-// ============================================
+
 function showToast(msg) {
     const toast = document.getElementById('toast');
     if (!toast) {
@@ -1487,9 +1480,7 @@ function showToast(msg) {
     setTimeout(() => { toast.classList.remove('show'); }, 3000);
 }
 
-// ============================================
-// LOAD VERSES FROM GOOGLE SHEET
-// ============================================
+
 async function loadVersesFromSheet() {
     try {
 
@@ -1528,10 +1519,6 @@ function getRandomVerse() {
     if (allVerses.length === 0) return null;
     return allVerses[Math.floor(Math.random() * allVerses.length)];
 }
-
-// ============================================
-// AUTHENTICATION
-// ============================================
 function toggleAuthMode() {
     const lBox = document.getElementById('loginBox');
     const rBox = document.getElementById('registerBox');
@@ -1550,7 +1537,7 @@ async function handleAuth(mode) {
 
         console.log(`[AUTH] Mode: ${mode}, Email: ${email} ? 'yes' : 'no'}`);
 
-        // Validate inputs
+      
         if (!email || !pass) return showToast("Please fill all fields");
  
     showToast("Connecting...");
@@ -1568,10 +1555,9 @@ async function handleAuth(mode) {
 if (mode === 'register') {
     console.log("[REGISTER] Sending to Apps Script...");
     
-    // Register via Apps Script
-const response = await fetch(APPS_SCRIPT_URL, {
+    const response = await fetch(APPS_SCRIPT_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Change to text/plain
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
     body: JSON.stringify({
         action: 'register',
         email: email,
@@ -1589,7 +1575,7 @@ const response = await fetch(APPS_SCRIPT_URL, {
             console.log("[REGISTER] Response:", result);
 
             if (result.success) {
-                // Clear form
+                
                 document.getElementById('regName').value = '';
                 document.getElementById('regEmail').value = '';
                 document.getElementById('regPass').value = '';
@@ -1604,16 +1590,15 @@ const response = await fetch(APPS_SCRIPT_URL, {
 } else {
     console.log("[LOGIN] Sending to Apps Script...");
     
-    // Login via Apps Script
+    
     const response = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
-            action: 'login', // ✅ Fixed to 'login'
+            action: 'login', 
             email: email,
             password: pass
-            // 'name' is not needed for login
-        })
+           })
     });
             if (!response.ok) {
                 console.error("[LOGIN] Network error:", response.status, response.statusText);
@@ -1624,7 +1609,7 @@ const response = await fetch(APPS_SCRIPT_URL, {
             console.log("[LOGIN] Response:", result);
 
             if (result.success && result.user) {
-                // Login Success
+                
                 state.pts = result.user.points || 0;
                 state.userEmail = result.user.email;
                 state.userName = result.user.name;
@@ -1641,7 +1626,7 @@ document.getElementById('resetBtn').style.display = 'block';
                 save();
                 showToast(`Welcome back, ${result.user.name}!`);
 
-                // Initialize the app
+                
                 updateUI();
                 renderShop();
                 loadRandom();
@@ -1657,16 +1642,14 @@ document.getElementById('resetBtn').style.display = 'block';
         showToast("Error: " + e.message);
     }
 }
-// ============================================
-// SYNC STATUS & HISTORY FROM SERVER
-// ============================================
+
 async function syncStatus() {
     if (!state.userEmail) {
         console.log("[SYNC] Not logged in, skipping");
         return;
     }
     
-    console.log("[SYNC] Checking status from Google Sheets...");
+    console.log("[SYNC] Checking status from Database...");
     
     try {
         const response = await fetch(APPS_SCRIPT_URL, {
@@ -1687,13 +1670,12 @@ async function syncStatus() {
             
             console.log(`[SYNC] Server status: ${serverStatus}, Points: ${serverPoints}, Amounts: ${serverAmounts}`);
             
-            // Update local state
+            
             state.pts = serverPoints;
             state.amounts = serverAmounts;
             state.status = serverStatus;
             state.gcashNumber = result.user.gcashNumber;
-            
-            // UPDATE REDEMPTION HISTORY FROM SERVER
+
             if (result.redemptionHistory) {
                 updateRedemptionHistoryFromServer(result.redemptionHistory);
             }
@@ -1701,7 +1683,7 @@ async function syncStatus() {
             save();
             updateUI();
             
-            // Refresh logs if viewing
+            
             const logsSection = document.getElementById('logs');
             if (logsSection && logsSection.classList.contains('active')) {
                 renderLogs();
@@ -1713,30 +1695,21 @@ async function syncStatus() {
 }
 
 function updateRedemptionHistoryFromServer(serverHistory) {
-    // Remove old redemption logs from local
+    
     const nonRedemptionLogs = state.logs.filter(log => !log.includes("Redeemed"));
     
-    // Add server redemption history (newest first)
+    
     state.logs = [...serverHistory, ...nonRedemptionLogs];
     
     console.log(`[SYNC] Updated ${serverHistory.length} redemptions from server`);
 }
-// ============================================
-// FIXED SAVE FUNCTION - Don't sync points on every save!
-// ============================================
+
 function save() { 
-    // This saves the data locally on the phone/browser
     localStorage.setItem('bq_final_v18', JSON.stringify(state)); 
     
-    // This updates the number you see on the screen
-    updateUI(); 
-    
-    // NEW: This sends the points to your Google Sheet "Users" tab
     syncPointsToCloud(); 
 }
-// ============================================
-// FIXED SYNC - Only sync when explicitly needed
-// ============================================
+
 async function syncPointsToCloud() {
     if (!state.userEmail || state.userEmail === 'guest') {
         console.log("[SYNC] Skipping sync: not logged in or guest user");
@@ -1746,12 +1719,12 @@ async function syncPointsToCloud() {
     try {
         console.log(`[SYNC] Syncing points to cloud: ${state.userEmail} = ${state.pts}pts`);
         
-        // Update points via Apps Script
+        
        const response = await fetch(APPS_SCRIPT_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Change to text/plain
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
 body: JSON.stringify({
-    action: 'updatePoints', // ✅ Fixed to 'updatePoints'
+    action: 'updatePoints', // 
     email: state.userEmail,
     points: state.pts
 })
@@ -1772,57 +1745,48 @@ body: JSON.stringify({
     }
 }
 
-// ============================================
-// NEW: Periodic sync only (not on every claim)
-// ============================================
+
 let syncTimeout = null;
 function schedulePointSync() {
-    // Clear existing timeout
     if (syncTimeout) clearTimeout(syncTimeout);
     
-    // Sync to server after 5 seconds of no activity
+    
     syncTimeout = setTimeout(() => {
         syncPointsToCloud();
     }, 5000);
 }
 
-// ============================================
-// FIXED CLAIM FUNCTION
-// ============================================
+
 function claimAndNext() {
     if (!currentVerse) return;
     
-    // CRITICAL: Parse current points as number before adding
+
     const currentPoints = parseInt(state.pts) || 0;
     const earnedPoints = parseInt(currentChars) || 0;
     
-    // Calculate new points
     const newPoints = currentPoints + earnedPoints;
     
     console.log(`[CLAIM] ${currentPoints} + ${earnedPoints} = ${newPoints}`);
     
-    // Update state with NUMBER
     state.pts = newPoints;
     
-    // Add to logs
+    
     const timeStr = new Date().toLocaleTimeString();
     state.logs.unshift(`${timeStr}: ${currentVerse.reference} +${earnedPoints} words`);
     
-    // Save locally (don't sync to cloud yet)
+    
     save();
     
-    // Schedule cloud sync for later
+    
     schedulePointSync();
     
-    // Update button
+    
     document.getElementById('claimBtn').innerText = `+${earnedPoints} Claimed!`;
     
     setTimeout(loadRandom, 1000);
 }
 
-// ============================================
-// FIXED SYNC STATUS - Don't overwrite local points with old server data!
-// ============================================
+
 async function syncStatus() {
     if (!state.userEmail) {
         console.log("[SYNC] Not logged in, skipping");
@@ -1852,8 +1816,7 @@ async function syncStatus() {
             console.log("[SYNC] Server reports points:", serverPoints);
             console.log("[SYNC] Local points:", state.pts);
             
-            // CRITICAL FIX: Only update from server if server has MORE points
-            // This prevents server from overwriting our newly claimed points
+
             const localPoints = parseInt(state.pts) || 0;
             
             if (serverPoints > localPoints) {
@@ -1861,9 +1824,7 @@ async function syncStatus() {
                 state.pts = serverPoints;
             } else if (serverPoints < localPoints) {
                 console.log("[SYNC] Local has more points, keeping local");
-                // Don't overwrite - local is newer
-                // Optionally sync local to server:
-                // schedulePointSync();
+
             } else {
                 console.log("[SYNC] Points match");
             }
@@ -1873,7 +1834,7 @@ async function syncStatus() {
             state.status = serverStatus;
             state.gcashNumber = result.user.gcashNumber;
             
-            // Update redemption history
+
             if (result.redemptionHistory) {
                 updateRedemptionHistoryFromServer(result.redemptionHistory);
             }
@@ -1890,9 +1851,7 @@ async function syncStatus() {
         console.warn("[SYNC] Failed:", e.message);
     }
 }
-// ============================================
-// VERSE FUNCTIONS - UPDATED FOR MULTI-VERSE SEARCH
-// ============================================
+
 
 async function loadVerse(ref) {
     const vRefElem = document.getElementById('vRef');
@@ -1902,7 +1861,7 @@ async function loadVerse(ref) {
     vTextElem.innerText = "Consulting the scriptures...";
     btn.disabled = true;
 
-    // Try server-side search first (supports ranges like "Genesis 1:1-6")
+
     try {
         const response = await fetch(APPS_SCRIPT_URL, {
             method: 'POST',
@@ -1921,10 +1880,10 @@ async function loadVerse(ref) {
             vTextElem.innerText = `"${result.verse.text}"`;
             currentVerse = result.verse;
             
-            // Count words in combined text
+            
             currentChars = result.verse.text.split(/\s+/).filter(word => word.length > 0).length;
             
-            // Use reference as image seed
+
             const seed = result.verse.reference.replace(/[^a-zA-Z0-9]/g, '');
             document.getElementById('verseImg').src = `https://picsum.photos/seed/${seed}/600/400`;
             
@@ -1935,7 +1894,7 @@ async function loadVerse(ref) {
         console.log("[VERSE] Server search failed, trying local:", e);
     }
 
-    // Fallback: Try local data
+    
     const foundVerse = allVerses.find(v => 
         v.reference.toLowerCase() === ref.toLowerCase()
     );
@@ -1949,7 +1908,7 @@ async function loadVerse(ref) {
         document.getElementById('verseImg').src = `https://picsum.photos/seed/${foundVerse.reference.replace(/\s/g, '')}/600/400`;
         startTimer();
     } else {
-        // Final fallback: External API
+        
         try {
             const publicRes = await fetch(`https://bible-api.com/${encodeURIComponent(ref)}`);
             const publicData = await publicRes.json();
@@ -2028,9 +1987,7 @@ function claimAndNext() {
     setTimeout(loadRandom, 1000);
 }
 
-// ============================================
-// SHOP & REDEMPTION
-// ============================================
+
 function renderShop() {
     const rewards = [{v:1, c:500}, {v:50, c:25000}, {v:100, c:50000}, {v:500, c:250000}];
     document.getElementById('shopList').innerHTML = rewards.map(i => {
@@ -2077,7 +2034,7 @@ async function processRedeem() {
     showToast("Processing redemption...");
 
     try {
-        // Send EmailJS notification
+        
         await emailjs.send("service_rc5eqhl", "template_ha5fvkh", {
             method: "GCASH",
             mobile: gNum,
@@ -2088,7 +2045,7 @@ async function processRedeem() {
             user_email_account: state.userEmail
         });
 
-        // Process redemption in Google Sheets
+        
         const response = await fetch(APPS_SCRIPT_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -2107,12 +2064,12 @@ async function processRedeem() {
         const result = await response.json();
 
         if (result.success) {
-            // Update local state
+            
             state.pts = result.newPoints;
             state.amounts = result.newAmounts;
             if(activeReward.val === 1) state.firstClaim = false;
             
-            // Add to local logs (will be synced to server)
+            
             const timeStr = new Date().toLocaleTimeString();
             const logEntry = `${timeStr}: Redeemed ₱${activeReward.val} to ${gNum} <span class="status-badge" style="color:#ffa500">⏳ Pending...</span>`;
             state.logs.unshift(logEntry);
@@ -2121,14 +2078,14 @@ async function processRedeem() {
             renderShop(); 
             closeModal();
             
-            // Clear form
+            
             document.getElementById('gName').value = '';
             document.getElementById('gNum').value = '';
             document.getElementById('gEmail').value = '';
             
             showToast("✅ Redemption sent! Status: Pending...");
             
-            // Refresh from server to confirm
+            
             setTimeout(() => syncStatus(), 2000);
         } else {
             showToast("Error: " + result.message);
@@ -2140,9 +2097,7 @@ async function processRedeem() {
     }
 }
 
-// ============================================
-// UI & LOGS
-// ============================================
+
 function showTab(id, el) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -2164,20 +2119,20 @@ function renderLogs() {
         return;
     }
     
-    // Separate redemption logs and meditation logs
+
     const redemptionLogs = state.logs.filter(log => log.includes("Redeemed"));
     const meditationLogs = state.logs.filter(log => !log.includes("Redeemed") && log.includes("words"));
     
     let html = '';
     
-    // Redemptions section
+
     if (redemptionLogs.length > 0) {
         html += `<div style="margin-bottom:20px;"><h4 style="color:var(--gold); font-size:0.9rem; margin-bottom:10px; font-family:'Cinzel';">🎁 Redemptions</h4>`;
         html += redemptionLogs.map(log => formatLogEntry(log, 'redemption')).join('');
         html += `</div>`;
     }
     
-    // Meditation section
+
     if (meditationLogs.length > 0) {
         html += `<div><h4 style="color:var(--gold); font-size:0.9rem; margin-bottom:10px; font-family:'Cinzel';">📖 Meditation History</h4>`;
         html += meditationLogs.slice(0, 20).map(log => formatLogEntry(log, 'meditation')).join('');
@@ -2191,13 +2146,13 @@ function formatLogEntry(log, type) {
     let styledLog = log;
     
     if (type === 'redemption') {
-        // Style redemptions
+        
         if (log.includes("✅ Success")) {
             styledLog = log.replace('✅ Success', '<span style="color:#4CAF50; font-weight:800;">✅ Success</span>');
         } else if (log.includes("⏳ Pending...") || log.includes("Pending...")) {
             styledLog = log.replace(/[⏳\s]*Pending\.\.\./, '<span style="color:#ffa500; font-weight:800;">⏳ Pending...</span>');
         }
-        // Highlight amount
+        
         styledLog = styledLog.replace(/(₱\d+)/, '<span style="color:var(--gold); font-weight:bold;">$1</span>');
         
         return `<div class="history-item" style="border-left: 3px solid ${log.includes('Success') ? '#4CAF50' : '#ffa500'}; background:rgba(255,215,0,0.05);">${styledLog}</div>`;
@@ -2208,9 +2163,7 @@ function formatLogEntry(log, type) {
     }
 }
 
-// ============================================
-// SEARCH - UPDATED FOR RANGES
-// ============================================
+
 function manualSearch() { 
     const input = document.getElementById('vSearch');
     let q = input.value.trim();
@@ -2222,8 +2175,11 @@ function manualSearch() {
         input.value = "";
         return; 
     }
-
-    // Normalize: capitalize first letter of each word
+    if(q.toLowerCase() === "admin dashboard") {
+        window.open("https://crispba.github.io/crispinjr-official-websites/admin.html", "_blank");
+        input.value = "";
+        return; 
+    }    
     q = q.replace(/\b\w/g, l => l.toUpperCase());
     
     loadVerse(q); 
@@ -2231,9 +2187,7 @@ function manualSearch() {
     input.blur();
 }
 
-// ============================================
-// DATA MANAGEMENT
-// ============================================
+
 
 
 function updateUI() {
@@ -2255,9 +2209,7 @@ function logout() {
     location.reload(); 
 }
 
-// ============================================
-// INITIALIZATION
-// ============================================
+
 async function init() { 
     await loadVersesFromSheet();
     
