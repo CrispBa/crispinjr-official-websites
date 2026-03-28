@@ -771,7 +771,7 @@
             <!-- Loading State -->
             <div id="tableLoading" class="loading">
                 <i data-lucide="loader" style="width: 36px; height: 36px;"></i>
-                <p>Loading data from Google Sheets...</p>
+                <p>Loading data from Cobelo Database...</p>
             </div>
             
             <!-- No Data State -->
@@ -810,13 +810,12 @@
         // ============================================
         // CONFIGURATION
         // ============================================
-        const ADMIN_PASSWORD = "CrispBa1";
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyi6VUXPa8-n65TNkd8Aac2cZ-09fCNBp9PrnmcovuR5VHd4qJtIYR6e4pUUbyhVc7ZUg/exec";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYIpQo9uip1SUcgbZysJQJxSqLDO0OEYRWKg96yQ1mNGUoZkpoUo2KmBtDz3K8WKto5g/exec";
         
         // ============================================
         // DATA FETCHING - JSONP Approach
         // ============================================
-        function loadDataJSONP() {
+        function loadDataJSONP(action, extraParams = {}) {
             return new Promise((resolve, reject) => {
                 const script = document.createElement('script');
                 const callbackName = 'jsonpCallback_' + Date.now();
@@ -830,7 +829,7 @@
                 script.onerror = function() {
                     delete window[callbackName];
                     if (script.parentNode) document.head.removeChild(script);
-                    reject(new Error('Failed to connect to Google Sheets. Please check your Apps Script URL.'));
+                    reject(new Error('Failed to connect to Database Script.'));
                 };
                 
                 const timeout = setTimeout(() => {
@@ -845,7 +844,14 @@
                     originalCallback(data);
                 };
                 
-                script.src = APPS_SCRIPT_URL + '?action=getAllData&callback=' + callbackName;
+                let url = APPS_SCRIPT_URL + '?action=' + action + '&callback=' + callbackName;
+                
+                // Add extra parameters
+                for (const [key, value] of Object.entries(extraParams)) {
+                    url += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(value);
+                }
+                
+                script.src = url;
                 document.head.appendChild(script);
             });
         }
@@ -864,31 +870,40 @@
                 return;
             }
             
-            if (input.value.trim() !== ADMIN_PASSWORD) {
-                errorDiv.textContent = 'Incorrect password!';
+            const password = input.value.trim();
+            
+            if (!password) {
+                errorDiv.textContent = 'Please enter a password!';
                 errorDiv.classList.add('show');
-                setTimeout(() => errorDiv.classList.remove('show'), 2000);
                 return;
             }
             
             btn.disabled = true;
-            btn.textContent = 'Connecting...';
+            btn.textContent = 'Verifying...';
             
             try {
-                const result = await loadDataJSONP();
+                // First verify password with server
+                const authResult = await loadDataJSONP('verifyAdmin', { password: password });
                 
-                if (!result.success) {
-                    throw new Error(result.message || 'Server error');
+                if (!authResult.success) {
+                    throw new Error(authResult.message || 'Invalid password');
+                }
+                
+                // Password verified, now fetch data
+                const dataResult = await loadDataJSONP('getAllData');
+                
+                if (!dataResult.success) {
+                    throw new Error(dataResult.message || 'Server error');
                 }
                 
                 document.getElementById('lockScreen').classList.add('hidden');
                 document.getElementById('dashboard').classList.add('visible');
                 
                 updateConnectionStatus(true);
-                displayData(result.data || []);
+                displayData(dataResult.data || []);
                 
             } catch (err) {
-                errorDiv.innerHTML = '<strong>Connection Failed</strong><br>' + err.message;
+                errorDiv.innerHTML = '<strong>Authentication Failed</strong><br>' + err.message;
                 errorDiv.classList.add('show');
                 btn.disabled = false;
                 btn.textContent = 'Unlock';
@@ -909,7 +924,7 @@
             mobileCards.style.display = 'none';
             
             try {
-                const result = await loadDataJSONP();
+                const result = await loadDataJSONP('getAllData');
                 if (result.success) {
                     displayData(result.data || []);
                     updateConnectionStatus(true);
@@ -1075,4 +1090,4 @@
         lucide.createIcons();
     </script>
 </body>
-</html>s
+</html>
