@@ -1706,10 +1706,9 @@ function updateRedemptionHistoryFromServer(serverHistory) {
 
 function save() { 
     localStorage.setItem('bq_final_v18', JSON.stringify(state)); 
-    
+    updateUI();  
     syncPointsToCloud(); 
 }
-
 async function syncPointsToCloud() {
     if (!state.userEmail || state.userEmail === 'guest') {
         console.log("[SYNC] Skipping sync: not logged in or guest user");
@@ -1758,33 +1757,12 @@ function schedulePointSync() {
 
 
 function claimAndNext() {
-    if (!currentVerse) return;
-    
-
-    const currentPoints = parseInt(state.pts) || 0;
-    const earnedPoints = parseInt(currentChars) || 0;
-    
-    const newPoints = currentPoints + earnedPoints;
-    
-    console.log(`[CLAIM] ${currentPoints} + ${earnedPoints} = ${newPoints}`);
-    
-    state.pts = newPoints;
-    
-    
-    const timeStr = new Date().toLocaleTimeString();
-    state.logs.unshift(`${timeStr}: ${currentVerse.reference} +${earnedPoints} words`);
-    
-    
-    save();
-    
-    
-    schedulePointSync();
-    
-    
-    document.getElementById('claimBtn').innerText = `+${earnedPoints} Claimed!`;
-    
-    setTimeout(loadRandom, 1000);
-}
+            state.pts += currentChars;
+            state.logs.unshift(`${new Date().toLocaleTimeString()}: ${document.getElementById('vRef').innerText} +${currentChars} words`);
+            save();
+            document.getElementById('claimBtn').innerText = "Claimed!";
+            setTimeout(loadRandom, 1000);
+        }
 
 
 async function syncStatus() {
@@ -1986,7 +1964,6 @@ function claimAndNext() {
     
     setTimeout(loadRandom, 1000);
 }
-
 
 function renderShop() {
     const rewards = [{v:1, c:500}, {v:50, c:25000}, {v:100, c:50000}, {v:500, c:250000}];
@@ -2191,12 +2168,13 @@ function manualSearch() {
 
 
 function updateUI() {
-    document.getElementById('pts').innerText = state.pts.toLocaleString();
-    const avatar = document.getElementById('userAvatar');
-    if (avatar) {
-        avatar.src = state.profilePic || 'https://i.imgur.com/Bu2aW8n.png';
-    }
-}
+            document.getElementById('pts').innerText = state.pts.toLocaleString();
+            const avatar = document.getElementById('userAvatar');
+            if (avatar) {
+                avatar.src = state.profilePic || 'https://i.imgur.com/Bu2aW8n.png';
+            }
+        }
+
 
 function logout() {
     state.userEmail = null;
