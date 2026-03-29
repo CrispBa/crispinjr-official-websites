@@ -1392,7 +1392,7 @@ div#loginBox.modal-box {
 </div>
 <div id="authOverlay">
     <div class="modal-box" id="loginBox">
-<h2 style="color: #ffd700b8; font-family:'Cinzel'; margin-bottom:20px;">Login</h2>
+<h2 style="color: #ffd700b8; font-family:'Cinzel'; margin-bottom:20px;">LOG IN</h2>
         <input type="email" id="authEmail" placeholder="Email Address">
         <div class="password-wrapper">
     <input type="password" id="authPass" placeholder="Password">
@@ -1423,6 +1423,36 @@ div#loginBox.modal-box {
 </div>
 
     <script>
+// Hide scrollbars on ALL devices (mobile + desktop)
+(function() {
+    const style = document.createElement('style');
+    style.id = 'hide-scrollbar-style';
+    style.innerHTML = `
+        * {
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+        }
+        *::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            background: transparent !important;
+        }
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar,
+        .container::-webkit-scrollbar,
+        #authOverlay::-webkit-scrollbar,
+        .modal::-webkit-scrollbar,
+        .modal-box::-webkit-scrollbar,
+        section::-webkit-scrollbar,
+        div::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+    `;
+    document.head.appendChild(style);
+})();
 // Disable zoom via keyboard (Ctrl/Cmd + +/-, Ctrl/Cmd + 0)
 
 
