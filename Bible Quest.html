@@ -23,7 +23,41 @@ body {
     -webkit-overflow-scrolling: touch;
 }
 
+/* Hide scrollbar background/track color */
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* Make scrollbar background invisible */
+}
 
+/* Optional: If you want to keep a thin scrollbar without background */
+::-webkit-scrollbar-track {
+    background: transparent; /* Hide track background */
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 215, 0, 0.3); /* Gold color with transparency */
+    border-radius: 10px;
+        width:0px;
+    height: 0px;
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 215, 0, 0.3) transparent; 
+    /* thumb color, track color */
+}
+/* Hide scrollbar completely but keep scroll functionality */
+::-webkit-scrollbar {
+    display: none;
+    width:0px;
+    height: 0px;
+}
+
+* {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
 #loader {
         
   width: 200px;
@@ -1048,7 +1082,6 @@ position: relative;
         }
 /* Login Overlay Styling from Example */
 #authOverlay {
-    
     position: fixed;
     inset: 0;
     width: 100%;
@@ -1390,25 +1423,18 @@ div#loginBox.modal-box {
 </div>
 
     <script>
+// Disable zoom via keyboard (Ctrl/Cmd + +/-, Ctrl/Cmd + 0)
 
-// Only prevent pinch zoom and horizontal scroll on login page
+
+
+
+// Disable pinch zoom on touch devices (backup)
+// ONLY prevent pinch zoom (2+ fingers), allow scroll (1 finger)
 document.addEventListener('touchmove', function(e) {
-    // Check if we're in the auth overlay
-    const isAuthOverlay = e.target.closest('#authOverlay');
-    
-    if (isAuthOverlay) {
-        // In login page: prevent horizontal scrolling
-        // Allow only vertical scrolling
-        if (e.touches.length > 1) {
-            e.preventDefault(); // Block pinch zoom
-        }
-        // Single finger horizontal scroll is blocked by CSS touch-action: pan-y
-    } else {
-        // Outside login page: normal behavior, just block pinch zoom
-        if (e.touches.length > 1) {
-            e.preventDefault();
-        }
+    if (e.touches.length > 1) {
+        e.preventDefault(); // Only block multi-finger pinch
     }
+    // Single finger scrolling works normally!
 }, { passive: false });
 
 // Prevent double-tap zoom
@@ -1421,19 +1447,6 @@ document.addEventListener('touchend', function(e) {
     lastTouchEnd = now;
 }, false);
 
-// Keyboard zoom prevention
-document.addEventListener('keydown', function(e) {
-    if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '0' || e.key === '=')) {
-        e.preventDefault();
-    }
-});
-
-// Mouse wheel zoom prevention
-document.addEventListener('wheel', function(e) {
-    if (e.ctrlKey || e.metaKey) {
-        e.preventDefault();
-    }
-}, { passive: false });
 
 
 function openResetModal() {
