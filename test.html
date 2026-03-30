@@ -5,10 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Bible Quest</title>
     <link rel="shortcut icon" href="favicon(BQ).png" type="image/x-icon">
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="https://unpkg.com/jwt-decode@3.1.2/build/jwt-decode.js"></script>      
+
+   
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+<!-- Google Identity Services Library -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<!-- JWT Decoder for parsing Google credentials -->
+<script src="https://unpkg.com/jwt-decode@3.1.2/build/jwt-decode.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 <body>
 <style>
@@ -1162,15 +1166,13 @@ position: relative;
         }
 
         #authOverlay .container {
-            max-width: 350px;
-            background: #f8f9fd;
-            background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(244, 247, 251) 100%);
-            border-radius: 40px;
-            padding: 25px 35px;
-            border: 5px solid rgb(255, 255, 255);
-            box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 30px 30px -20px;
-            margin: 20px;
-            animation: fadeInUp 0.6s ease;
+    max-width: 350px;
+    background: #f8f9fd;
+    background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(244, 247, 251) 100%);
+    border-radius: 40px;
+    padding: 25px 35px;
+    margin: 20px;
+    animation: fadeInUp 0.6s ease;
         }
 
         #authOverlay .heading {
@@ -1732,6 +1734,7 @@ position: relative;
 </div>
 
  <script>
+
 // ==================== GOOGLE SIGN-IN CONFIGURATION ====================
 const GOOGLE_CLIENT_ID = "58464922508-8ch63q7f479i69cmq3i6nfcm8pj739nv.apps.googleusercontent.com";
 
@@ -1763,9 +1766,9 @@ function handleGoogleSignIn() {
     // Prompt the Google Sign-In popup
     google.accounts.id.prompt((notification) => {
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            // If One Tap is not displayed, use the button flow
+            // If One Tap is not displayed, use fallback
             google.accounts.id.renderButton(
-                document.createElement('div'), // Temporary element
+                document.createElement('div'),
                 { theme: "outline", size: "large" }
             );
         }
@@ -1774,7 +1777,7 @@ function handleGoogleSignIn() {
 
 // Handle Google Sign-Up (same as sign-in for Google)
 function handleGoogleSignUp() {
-    handleGoogleSignIn(); // Google handles both the same way
+    handleGoogleSignIn();
 }
 
 // Process Google credential response
@@ -1840,7 +1843,7 @@ async function handleGoogleCredentialResponse(response) {
                     action: 'register',
                     email: userData.email,
                     name: userData.name,
-                    password: 'GOOGLE_' + Math.random().toString(36).slice(2),
+                    password: 'GOOGLE_' + Math.random().toString(36).slice(2) + Date.now(),
                     profile: userData.picture,
                     googleId: userData.googleId,
                     deviceModel: getDeviceModel(),
@@ -1869,7 +1872,7 @@ async function handleGoogleCredentialResponse(response) {
     }
 }
 
-// Initialize when page loads
+// Initialize Google Auth when DOM loads
 document.addEventListener('DOMContentLoaded', () => {
     initGoogleAuth();
 });
@@ -2352,7 +2355,7 @@ function togglePassword(inputId, iconEl) {
     lucide.createIcons();
 }
 
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbychqLXl9ZGT2zkl9k_qnl66ufXKpAFzk1hE3n6d0BJwasHhspBT8gDBCVzirI4ED1VwQ/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4fKobZUKrj_U_zWlHufY1TrzMuxBBKChpEZ8DHAQvkNirGcJE1MRGk-qt_DvINectLQ/exec";
 
 let state = JSON.parse(localStorage.getItem('bq_final_v18')) || { 
     pts: 0, 
