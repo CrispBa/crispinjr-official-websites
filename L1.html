@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Login</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        h2 { color: #333; margin-bottom: 30px; }
+        
+        .fb-btn {
+            background: #1877f2;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .fb-btn:hover { background: #166fe5; }
+        
+        .user-info {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            text-align: left;
+            display: none;
+        }
+        
+        .user-info.show { display: block; }
+        
+        .user-info p { margin: 10px 0; color: #333; }
+        
+        .logout-btn {
+            margin-top: 15px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .error { color: red; margin-top: 10px; }
+    </style>
+    
+    <!-- Facebook SDK -->
+    <script async defer crossorigin="anonymous" 
+        src="https://connect.facebook.net/en_US/sdk.js"></script>
+</head>
+<body>
+    <div class="box">
+        <h2>🔵 Facebook Login</h2>
+        
+        <button class="fb-btn" onclick="login()">Continue with Facebook</button>
+        
+        <div class="error" id="error"></div>
+        
+        <div class="user-info" id="userInfo">
+            <p><strong>👤 Name:</strong> <span id="name"></span></p>
+            <p><strong>📧 Email:</strong> <span id="email"></span></p>
+            <p><strong>🆔 ID:</strong> <span id="id"></span></p>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        // ✅ YOUR FACEBOOK APP ID
+        const APP_ID = '1376409244291463';
+        
+        // Initialize Facebook SDK
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: APP_ID,
+                cookie: true,
+                xfbml: true,
+                version: 'v18.0'
+            });
+            
+            // Check if already logged in
+            FB.getLoginStatus(function(response) {
+                if (response.status === 'connected') {
+                    getUserInfo();
+                }
+            });
+        };
+        
+        function login() {
+            FB.login(function(response) {
+                if (response.authResponse) {
+                    getUserInfo();
+                } else {
+                    showError('Login cancelled or failed');
+                }
+            }, {scope: 'public_profile,email'});
+        }
+        
+        function getUserInfo() {
+            FB.api('/me', {fields: 'id,name,email,picture'}, function(response) {
+                if (response.error) {
+                    showError('Error: ' + response.error.message);
+                    return;
+                }
+                
+                document.getElementById('name').textContent = response.name;
+                document.getElementById('email').textContent = response.email || 'Not provided';
+                document.getElementById('id').textContent = response.id;
+                document.getElementById('userInfo').classList.add('show');
+            });
+        }
+        
+        function logout() {
+            FB.logout(function(response) {
+                document.getElementById('userInfo').classList.remove('show');
+                document.getElementById('error').textContent = '';
+            });
+        }
+        
+        function showError(msg) {
+            document.getElementById('error').textContent = msg;
+        }
+    </script>
+</body>
+</html>
