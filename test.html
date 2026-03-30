@@ -1398,7 +1398,68 @@ position: relative;
             Cancel
         </button>
     </div>
-</div><div id="loader">
+</div>
+
+<!-- Google License Agreement Modal - For Google Sign In/Sign Up -->
+<div class="modal" id="googleLicenseModal" style="backdrop-filter: blur(20px); background: rgba(0, 0, 0, 0.85); z-index: 100000;">
+    <div class="container" style="max-width: 400px; max-height: 95vh; overflow-y: auto; animation: fadeInUp 0.6s ease; position: relative;">
+        <div class="heading" style="font-size: 24px; margin-bottom: 20px;">
+            <svg viewBox="0 0 488 512" height="24" style="vertical-align: middle; margin-right: 10px;" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#4285F4" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/>
+            </svg>
+            Google Account Agreement
+        </div>
+
+        <div style="text-align: left; max-height: 50vh; overflow-y: auto; padding: 0 10px; margin-bottom: 20px; font-size: 0.8rem; line-height: 1.6; color: #555;">
+
+            <p style="margin-bottom: 12px; color: rgb(16, 137, 211); font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 5px;">
+                <i data-lucide="shield-check" style="width: 18px; height: 18px;"></i>
+                Terms of Use for Google Users
+            </p>
+
+            <p style="margin-bottom: 10px; padding-left: 10px; border-left: 2px solid rgb(16, 137, 211);">
+                <strong>1. Google Account Linking</strong><br>
+                By using Google Sign-In, you authorize Bible Quest to access your Google email and basic profile information.
+            </p>
+
+            <p style="margin-bottom: 10px; padding-left: 10px; border-left: 2px solid rgb(16, 137, 211);">
+                <strong>2. Acceptance</strong><br>
+                By proceeding, you agree to use Bible Quest for spiritual growth and abide by all platform rules.
+            </p>
+
+            <p style="margin-bottom: 10px; padding-left: 10px; border-left: 2px solid rgb(16, 137, 211);">
+                <strong>3. Points & Rewards</strong><br>
+                Points are earned through meditation. Rewards are subject to verification. Fraudulent activity results in ban.
+            </p>
+
+            <p style="margin-bottom: 10px; padding-left: 10px; border-left: 2px solid rgb(16, 137, 211);">
+                <strong>4. Account Security</strong><br>
+                Your Google account security is your responsibility. Report unauthorized access immediately.
+            </p>
+
+            <p style="margin-bottom: 10px; padding-left: 10px; border-left: 2px solid rgb(16, 137, 211);">
+                <strong>5. Privacy</strong><br>
+                We collect email and usage data to improve service. GCash info is used solely for reward distribution.
+            </p>
+
+            <p style="padding-left: 10px; border-left: 2px solid rgb(16, 137, 211);">
+                <strong>6. Conduct</strong><br>
+                No bots, exploits, or abuse. Violations will result in account termination and forfeiture of points.
+            </p>
+        </div>
+
+        <button onclick="acceptGoogleLicense()" style="display: block; width: 100%; font-weight: bold; background: linear-gradient(45deg, rgb(16, 137, 211) 0%, rgb(18, 177, 209) 100%); color: white; padding-block: 15px; border-radius: 20px; box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 20px 10px -15px; border: none; transition: all 0.2s ease-in-out; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 16px; margin-bottom: 10px;">
+            <i data-lucide="check-circle" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;"></i>
+            I Agree & Continue
+        </button>
+
+        <button onclick="closeGoogleLicenseModal()" style="background: transparent; color: #666; border: 2px solid #ddd; padding: 12px; border-radius: 20px; width: 100%; font-weight: 600; cursor: pointer; font-size: 14px;">
+            Cancel
+        </button>
+    </div>
+</div>
+
+<div id="loader">
     <div class="loader-inner">
          <div class="loader-3d">
             <div class="dot"></div>
@@ -1738,6 +1799,10 @@ position: relative;
 // ==================== GOOGLE SIGN-IN CONFIGURATION ====================
 const GOOGLE_CLIENT_ID = "58464922508-8ch63q7f479i69cmq3i6nfcm8pj739nv.apps.googleusercontent.com";
 
+// Temporary storage for pending Google auth data
+let pendingGoogleUser = null;
+let isGoogleSignUp = false;
+
 // Initialize Google Identity Services
 function initGoogleAuth() {
     if (typeof google === 'undefined') {
@@ -1745,127 +1810,186 @@ function initGoogleAuth() {
         setTimeout(initGoogleAuth, 500);
         return;
     }
-    
+
     google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: handleGoogleCredentialResponse,
         auto_select: false,
         cancel_on_tap_outside: true
     });
-    
+
     console.log("[GOOGLE] Identity Services initialized");
 }
 
-// Handle Google Sign-In button click
+// Handle Google Sign-In button click (LOGIN ONLY)
 function handleGoogleSignIn() {
     if (typeof google === 'undefined') {
         showToast("Google Sign-In loading...");
         return;
     }
-    
+
+    isGoogleSignUp = false;
+
     // Prompt the Google Sign-In popup
     google.accounts.id.prompt((notification) => {
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            // If One Tap is not displayed, use fallback
-            google.accounts.id.renderButton(
-                document.createElement('div'),
-                { theme: "outline", size: "large" }
-            );
+            // Fallback: render button and trigger click
+            const buttonContainer = document.createElement('div');
+            buttonContainer.style.display = 'none';
+            document.body.appendChild(buttonContainer);
+            google.accounts.id.renderButton(buttonContainer, {
+                theme: "outline",
+                size: "large",
+                type: "standard"
+            });
+            // Trigger the sign-in flow
+            google.accounts.id.prompt();
         }
     });
 }
 
-// Handle Google Sign-Up (same as sign-in for Google)
+// Handle Google Sign-Up button click (REGISTRATION ONLY)
 function handleGoogleSignUp() {
-    handleGoogleSignIn();
+    if (typeof google === 'undefined') {
+        showToast("Google Sign-Up loading...");
+        return;
+    }
+
+    isGoogleSignUp = true;
+
+    // Prompt the Google Sign-In popup for registration
+    google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            google.accounts.id.prompt();
+        }
+    });
+}
+
+// Show Google License Agreement Modal
+function showGoogleLicenseModal() {
+    document.getElementById('googleLicenseModal').classList.add('active');
+}
+
+// Close Google License Agreement Modal
+function closeGoogleLicenseModal() {
+    document.getElementById('googleLicenseModal').classList.remove('active');
+    pendingGoogleUser = null;
+}
+
+// Accept Google License Agreement
+function acceptGoogleLicense() {
+    document.getElementById('googleLicenseModal').classList.remove('active');
+
+    if (pendingGoogleUser) {
+        // Complete the login/signup process
+        completeGoogleAuth(pendingGoogleUser);
+        pendingGoogleUser = null;
+    }
+}
+
+// Complete Google Authentication after license agreement
+function completeGoogleAuth(userData) {
+    state.pts = userData.points || 0;
+    state.userEmail = userData.email;
+    state.userName = userData.name;
+    state.profilePic = userData.profile || userData.picture || "https://i.imgur.com/Bu2aW8n.png";
+    state.isGoogleUser = true;
+
+    document.getElementById('authOverlay').style.display = 'none';
+    document.getElementById('logoutBtn').style.display = 'block';
+    document.getElementById('resetBtn').style.display = 'block';
+
+    save();
+    showToast(`Welcome, ${userData.name}!`);
+
+    updateUI();
+    renderShop();
+    loadRandom();
+    syncStatus();
+    setInterval(syncStatus, 10000);
 }
 
 // Process Google credential response
 async function handleGoogleCredentialResponse(response) {
-    console.log("[GOOGLE] Credential received");
-    
+    console.log("[GOOGLE] Credential received, isSignUp:", isGoogleSignUp);
+
     const credential = response.credential;
     const payload = jwt_decode(credential);
-    
+
     const userData = {
         email: payload.email,
         name: payload.name,
         googleId: payload.sub,
         picture: payload.picture
     };
-    
+
     showToast("Authenticating...");
-    
+
     try {
-        // Try to login first
-        const loginResponse = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({
-                action: 'googleAuth',
-                email: userData.email,
-                name: userData.name,
-                googleId: userData.googleId,
-                picture: userData.picture,
-                deviceModel: getDeviceModel()
-            })
-        });
-        
-        const result = await loginResponse.json();
-        
-        if (result.success) {
-            // Existing user - login successful
-            state.pts = result.user.points || 0;
-            state.userEmail = result.user.email;
-            state.userName = result.user.name;
-            state.profilePic = result.user.profile || userData.picture;
-            
-            document.getElementById('authOverlay').style.display = 'none';
-            document.getElementById('logoutBtn').style.display = 'block';
-            document.getElementById('resetBtn').style.display = 'block';
-            
-            save();
-            showToast(`Welcome, ${result.user.name}!`);
-            updateUI();
-            renderShop();
-            loadRandom();
-            syncStatus();
-            setInterval(syncStatus, 10000);
-            
-        } else if (result.message && result.message.includes("not found")) {
-            // New user - auto register
-            showToast("Creating account...");
-            
+        if (isGoogleSignUp) {
+            // GOOGLE SIGN-UP FLOW
             const regResponse = await fetch(APPS_SCRIPT_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({
-                    action: 'register',
+                    action: 'googleRegister',
                     email: userData.email,
                     name: userData.name,
-                    password: 'GOOGLE_' + Math.random().toString(36).slice(2) + Date.now(),
-                    profile: userData.picture,
                     googleId: userData.googleId,
-                    deviceModel: getDeviceModel(),
-                    isGoogleAuth: true
+                    picture: userData.picture,
+                    deviceModel: getDeviceModel()
                 })
             });
-            
+
             const regResult = await regResponse.json();
-            
+
             if (regResult.success) {
-                showToast("✅ Account created! Logging in...");
-                // Auto login after registration
-                setTimeout(() => {
-                    handleGoogleCredentialResponse({credential: credential});
-                }, 500);
+                // Registration successful - show license agreement before completing
+                pendingGoogleUser = { ...userData, ...regResult.user };
+                showGoogleLicenseModal();
+                showToast("✅ Account created! Please accept the agreement.");
             } else {
-                showToast(regResult.message || "Registration failed");
+                if (regResult.message && regResult.message.includes("already")) {
+                    showToast("You already have an account. Please sign in instead.");
+                    setTimeout(() => showLogin(), 1500);
+                } else {
+                    showToast(regResult.message || "Registration failed");
+                }
             }
         } else {
-            showToast(result.message || "Authentication failed");
+            // GOOGLE SIGN-IN FLOW
+            const loginResponse = await fetch(APPS_SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    action: 'googleAuth',
+                    email: userData.email,
+                    name: userData.name,
+                    googleId: userData.googleId,
+                    picture: userData.picture,
+                    deviceModel: getDeviceModel()
+                })
+            });
+
+            const result = await loginResponse.json();
+
+            if (result.success) {
+                // Existing Google user - show license agreement before completing
+                pendingGoogleUser = { ...userData, ...result.user };
+                showGoogleLicenseModal();
+            } else if (result.needSignup || (result.message && result.message === "NOT_REGISTERED")) {
+                // User not registered with Google - they need to sign up first
+                showToast("⚠️ Please sign up with Google first!");
+                setTimeout(() => showRegister(), 1500);
+            } else if (result.message && result.message.includes("password")) {
+                // User exists but with regular password
+                showToast("This email uses password login. Please use regular sign in.");
+                setTimeout(() => showLogin(), 1500);
+            } else {
+                showToast(result.message || "Authentication failed");
+            }
         }
-        
+
     } catch (e) {
         console.error("[GOOGLE AUTH] Error:", e);
         showToast("Error: " + e.message);
@@ -2355,7 +2479,7 @@ function togglePassword(inputId, iconEl) {
     lucide.createIcons();
 }
 
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4fKobZUKrj_U_zWlHufY1TrzMuxBBKChpEZ8DHAQvkNirGcJE1MRGk-qt_DvINectLQ/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwnkVdZ39Y2IQDq3tAIbHqDI0riReWsmNx5BeTvnpsb6vP-7SqrJJNNn0L82h0EHxT6TQ/exec";
 
 let state = JSON.parse(localStorage.getItem('bq_final_v18')) || { 
     pts: 0, 
