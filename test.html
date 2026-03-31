@@ -375,7 +375,7 @@ spans {
 
         i, .lucide {width: 18px !important;height: 18px !important;display: inline-block;}
 
-header {
+	header {
     padding: 10px 15px 10px 10px;
     display: flex;
     justify-content: space-between;
@@ -479,7 +479,7 @@ div.search-box {
     /* justify-content: space-evenly; */
     /* align-items: center; */
 }
-.search-go 
+.search-go {
     background: var(--gold-gradient);
     border: none;
     width: 60px; /* Narrower width for a circular/pill look inside the box */
@@ -491,21 +491,6 @@ div.search-box {
     justify-content: center;
     color: #3a2a00;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
     box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
     padding-right: 5;
 }
@@ -807,7 +792,7 @@ span {}
     border: 2px solid #ffffff52;    
     }
         .modal-box input{
-width: 100%;
+	width: 100%;
     padding: 12px;
     margin: 8px 0;
     border-radius: 8px;
@@ -992,6 +977,13 @@ position: relative;
     background: rgba(0, 0, 0, 0.8);
     padding: 2px 6px;
     border-radius: 4px;
+}
+
+/* Show tooltips on hover */
+.logout-btn:hover .logout-tooltip,
+.resetpass-btn:hover .resetpass-tooltip {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* Show tooltips on hover */
@@ -1345,6 +1337,7 @@ position: relative;
         }
     </style>
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 <!-- License Agreement Modal - Styled to match login page -->
@@ -1617,7 +1610,8 @@ position: relative;
         <path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path>
     </svg>
 </button>
-<button class="social-button github" onclick="handleGitHubSignIn()">
+<!-- GITHUB BUTTON DISABLED - See instructions below -->
+<button class="social-button github" onclick="showGitHubError()" style="opacity: 0.5; cursor: not-allowed;">
     <svg viewBox="0 0 24 24" fill="white" height="20" width="20">
         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
     </svg>
@@ -1781,7 +1775,8 @@ position: relative;
         <path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path>
     </svg>
 </button>
-           <button class="social-button github" onclick="handleGitHubSignIn()">
+           <!-- GITHUB BUTTON DISABLED - See instructions below -->
+           <button class="social-button github" onclick="showGitHubError()" style="opacity: 0.5; cursor: not-allowed;">
     <svg viewBox="0 0 24 24" fill="white" height="20" width="20">
         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
     </svg>
@@ -1796,72 +1791,67 @@ position: relative;
 
  <script>
 
-function handleGitHubSignIn() {
-  const clientId = "Ov23cthQcb2Hf7EczTMc";
-  const redirectUri = encodeURIComponent(window.location.href.split('?')[0]);
-  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=read:user user:email`;
-  
-  const popup = window.open(githubAuthUrl, 'githubLogin', 'width=500,height=600');
-  window.addEventListener('message', handleGitHubCallback, { once: true });
+// ==================== GITHUB OAUTH - DISABLED ====================
+// The GitHub OAuth implementation requires a proper callback page
+// and correct redirect URI configuration in GitHub OAuth app settings.
+// 
+// TO FIX THE ERROR:
+// 1. Go to https://github.com/settings/developers
+// 2. Click on your "Bible Quest" OAuth app
+// 3. Add your EXACT URL to "Authorization callback URL":
+//    Example: https://yourdomain.com/Bible%20Quest.html
+//
+// 4. You also need a separate callback HTML file that handles the OAuth response
+//    and sends the code back to the parent window.
+//
+// For now, GitHub login is disabled. Use Google Sign-In instead.
+
+function showGitHubError() {
+    showToast("GitHub login temporarily unavailable. Please use Google Sign-In or email login.");
 }
 
-function handleGitHubCallback(event) {
-  if (event.data.type === 'github-auth-success') {
-    completeGitHubLogin(event.data.code);
-  }
+// Original GitHub functions (kept for reference, not used):
+/*
+const GITHUB_CLIENT_ID = "Ov23cthQcb2Hf7EczTMc";
+
+function handleGitHubSignIn() {
+    // This requires a callback page to handle the OAuth response
+    const redirectUri = encodeURIComponent(window.location.origin + '/github-callback.html');
+    const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${redirectUri}&scope=read:user user:email`;
+    
+    // Open popup for OAuth
+    const popup = window.open(githubAuthUrl, 'githubLogin', 'width=500,height=600');
+    
+    // Listen for message from callback page
+    window.addEventListener('message', function(event) {
+        if (event.data.type === 'github-auth-success') {
+            completeGitHubLogin(event.data.code);
+        }
+    });
 }
 
 async function completeGitHubLogin(code) {
-  const response = await fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ action: 'githubAuth', code: code, deviceModel: getDeviceModel() })
-  });
-  const result = await response.json();
-  
-  if (result.success) {
-    // Login success - set state and update UI
-    state.pts = result.user.points;
-    state.userEmail = result.user.email;
-    state.userName = result.user.name;
-    state.profilePic = result.user.profile;
-    state.isGitHubUser = true;
-    document.getElementById('authOverlay').style.display = 'none';
-    save(); updateUI(); renderShop(); loadRandom();
-  } else if (result.needSignup) {
-    // Show registration modal
-    pendingGitHubUser = result.githubData;
-    showGitHubLicenseModal();
-  }
+    const response = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'githubAuth', code: code, deviceModel: getDeviceModel() })
+    });
+    const result = await response.json();
+    
+    if (result.success) {
+        state.pts = result.user.points;
+        state.userEmail = result.user.email;
+        state.userName = result.user.name;
+        state.profilePic = result.user.profile;
+        state.isGitHubUser = true;
+        document.getElementById('authOverlay').style.display = 'none';
+        save(); updateUI(); renderShop(); loadRandom();
+    } else if (result.needSignup) {
+        pendingGitHubUser = result.githubData;
+        showGitHubLicenseModal();
+    }
 }
-
-async function completeGitHubRegister() {
-  const response = await fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({
-      action: 'githubRegister',
-      email: pendingGitHubUser.email,
-      name: pendingGitHubUser.name,
-      login: pendingGitHubUser.login,
-      avatar_url: pendingGitHubUser.avatar_url,
-      deviceModel: getDeviceModel()
-    })
-  });
-  const result = await response.json();
-  if (result.success) {
-    document.getElementById('githubLicenseModal').classList.remove('active');
-    // Auto login
-    state.pts = 0; state.userEmail = result.user.email;
-    state.userName = result.user.name; state.profilePic = result.user.profile;
-    document.getElementById('authOverlay').style.display = 'none';
-    save(); updateUI(); renderShop(); loadRandom();
-  }
-}
-
-function handleGitHubSignUp() {
-  handleGitHubSignIn(); // Same flow
-}
+*/
 
 // ==================== GOOGLE SIGN-IN CONFIGURATION ====================
 const GOOGLE_CLIENT_ID = "58464922508-8ch63q7f479i69cmq3i6nfcm8pj739nv.apps.googleusercontent.com";
@@ -2007,21 +1997,21 @@ async function handleGoogleCredentialResponse(response) {
                     deviceModel: getDeviceModel()
                 })
             });
+            const result = await regResponse.json();
+            console.log("[GOOGLE] Registration response:", result);
 
-            const regResult = await regResponse.json();
-
-            if (regResult.success) {
-                // Registration successful - show license agreement before completing
-                pendingGoogleUser = { ...userData, ...regResult.user };
-                showGoogleLicenseModal();
-                showToast("✅ Account created! Please accept the agreement.");
+            if (result.success) {
+                // Registration successful - auto login
+                state.pts = 0;
+                state.userEmail = result.user.email;
+                state.userName = result.user.name;
+                state.profilePic = result.user.profile;
+                state.isGoogleUser = true;
+                document.getElementById('authOverlay').style.display = 'none';
+                save(); updateUI(); renderShop(); loadRandom();
+                showToast(`Welcome, ${result.user.name}! Account created.`);
             } else {
-                if (regResult.message && regResult.message.includes("already")) {
-                    showToast("You already have an account. Please sign in instead.");
-                    setTimeout(() => showLogin(), 1500);
-                } else {
-                    showToast(regResult.message || "Registration failed");
-                }
+                showToast(result.message);
             }
         } else {
             // GOOGLE SIGN-IN FLOW
@@ -2031,411 +2021,143 @@ async function handleGoogleCredentialResponse(response) {
                 body: JSON.stringify({
                     action: 'googleAuth',
                     email: userData.email,
-                    name: userData.name,
                     googleId: userData.googleId,
                     picture: userData.picture,
                     deviceModel: getDeviceModel()
                 })
             });
-
             const result = await loginResponse.json();
+            console.log("[GOOGLE] Login response:", result);
 
             if (result.success) {
-                // Existing Google user - show license agreement before completing
-                pendingGoogleUser = { ...userData, ...result.user };
+                // Login successful
+                state.pts = result.user.points;
+                state.userEmail = result.user.email;
+                state.userName = result.user.name;
+                state.profilePic = result.user.profile;
+                state.isGoogleUser = true;
+                document.getElementById('authOverlay').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'block';
+                document.getElementById('resetBtn').style.display = 'block';
+                save(); updateUI(); renderShop(); loadRandom();
+                showToast(`Welcome back, ${result.user.name}!`);
+            } else if (result.message === 'NOT_REGISTERED') {
+                // User not registered - show license modal for registration
+                pendingGoogleUser = userData;
                 showGoogleLicenseModal();
-            } else if (result.needSignup || (result.message && result.message === "NOT_REGISTERED")) {
-                // User not registered with Google - they need to sign up first
-                showToast("⚠️ Please sign up with Google first!");
-                setTimeout(() => showRegister(), 1500);
-            } else if (result.message && result.message.includes("password")) {
-                // User exists but with regular password
-                showToast("This email uses password login. Please use regular sign in.");
-                setTimeout(() => showLogin(), 1500);
             } else {
-                showToast(result.message || "Authentication failed");
+                showToast(result.message);
             }
         }
-
-    } catch (e) {
-        console.error("[GOOGLE AUTH] Error:", e);
-        showToast("Error: " + e.message);
-    }
-}
-
-// Initialize Google Auth when DOM loads
-document.addEventListener('DOMContentLoaded', () => {
-    initGoogleAuth();
-});
-
-const EMAILJS_OLD = {
-    publicKey: "sNrp_awwUxXi4RU6O",
-    service: "service_rc5eqhl",
-    template: "template_ha5fvkh"
-};
-
-// NEW account - for forgot password
-const EMAILJS_NEW = {
-    publicKey: "DBIAD6AqpQ2kwDqSn",
-    service: "service_2ma1ygh",  // ⚠️ VERIFY: Get this from NEW account dashboard
-    template: "template_imrtu7e" // ⚠️ VERIFY: Get this from NEW account dashboard
-};
-
-// Initialize OLD account by default
-emailjs.init(EMAILJS_OLD.publicKey);
-
-// ==================== EMAIL SEND FUNCTION (ONLY ONE DEFINITION) ====================
-async function sendForgotPasswordEmail(params) {
-    console.log("[EMAILJS] Sending to:", params.to_email);
-    console.log("[EMAILJS] Code:", params.verification_code);
-    
-    try {
-        const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                service_id: EMAILJS_NEW.service,
-                template_id: EMAILJS_NEW.template,
-                user_id: EMAILJS_NEW.publicKey,
-                template_params: {
-                    user_name: params.user_name,
-                    to_email: params.to_email,
-                    verification_code: params.verification_code,
-                    expiration_time: params.expiration_time
-                }
-            })
-        });
-        
-        console.log("[EMAILJS] Response status:", response.status);
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error("[EMAILJS] Server error:", response.status, errorText);
-            throw new Error(`EmailJS ${response.status}: ${errorText}`);
-        }
-        
-        const result = await response.text();
-        console.log("[EMAILJS] Success:", result);
-        return result;
-        
     } catch (error) {
-        console.error("[EMAILJS] Send failed:", error);
-        throw error;
+        console.error("[GOOGLE] Auth error:", error);
+        showToast("Authentication failed. Please try again.");
     }
 }
 
-// ==================== TEST FUNCTION (OPTIONAL - for debugging) ====================
-async function testEmailJSConnection() {
-    console.log("Testing EmailJS with:", EMAILJS_NEW);
-    try {
-        const testResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                service_id: EMAILJS_NEW.service,
-                template_id: EMAILJS_NEW.template,
-                user_id: EMAILJS_NEW.publicKey,
-                template_params: {
-                    user_name: "Test User",
-                    to_email: "test@example.com",
-                    verification_code: "123456",
-                    expiration_time: "Mar 29, 2026 at 7:30 PM"
-                }
-            })
-        });
-        
-        console.log("Test Status:", testResponse.status);
-        const text = await testResponse.text();
-        console.log("Test Response:", text);
-        return testResponse.ok;
-        
-    } catch (e) {
-        console.error("Test Failed:", e);
-        return false;
-    }
+// Initialize Google Auth when page loads
+document.addEventListener('DOMContentLoaded', initGoogleAuth);
+
+// ==================== APPS SCRIPT URL ====================
+const APPS_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
+// ==================== UTILITY FUNCTIONS ====================
+function getDeviceModel() {
+    const ua = navigator.userAgent;
+    if (ua.match(/Android/i)) return 'Android Device';
+    if (ua.match(/iPhone|iPad|iPod/i)) return 'iOS Device';
+    if (ua.match(/Windows/i)) return 'Windows PC';
+    if (ua.match(/Mac/i)) return 'Mac';
+    return 'Unknown Device';
 }
 
-// ==================== FORGOT PASSWORD SYSTEM ====================
-let resetState = {
-    email: '',
-    verificationCode: '',
-    canResend: true
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ==================== STATE MANAGEMENT ====================
+let state = {
+    pts: 0,
+    userEmail: null,
+    userName: null,
+    profilePic: null,
+    isGoogleUser: false
 };
 
-function showForgotPassword() {
-    hideAllAuthContainers();
-    document.getElementById('forgotPasswordContainer').style.display = 'block';
+function save() {
+    localStorage.setItem('bibleQuestState', JSON.stringify(state));
+}
+
+function load() {
+    const saved = localStorage.getItem('bibleQuestState');
+    if (saved) {
+        state = JSON.parse(saved);
+    }
+}
+
+function updateUI() {
+    document.getElementById('pts').textContent = state.pts;
+}
+
+function renderShop() {
+    // Implement shop rendering
+}
+
+function loadRandom() {
+    // Implement random verse loading
+}
+
+function syncStatus() {
+    // Implement status sync
+}
+
+function logout() {
+    state = { pts: 0, userEmail: null, userName: null, profilePic: null, isGoogleUser: false };
+    localStorage.removeItem('bibleQuestState');
+    document.getElementById('authOverlay').style.display = 'flex';
+    showToast('Logged out successfully');
+}
+
+function openResetModal() {
+    document.getElementById('resetModal').classList.add('active');
+}
+
+function closeResetModal() {
+    document.getElementById('resetModal').classList.remove('active');
+}
+
+function togglePassword(inputId, icon) {
+    const input = document.getElementById(inputId);
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+    } else {
+        input.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+    }
     lucide.createIcons();
 }
 
-function showVerifyCode() {
-    hideAllAuthContainers();
-    document.getElementById('verifyCodeContainer').style.display = 'block';
-    document.getElementById('verifyEmailDisplay').textContent = maskEmail(resetState.email);
-    lucide.createIcons();
-    setTimeout(() => document.getElementById('code1').focus(), 100);
-}
-
-function showResetPassword() {
-    hideAllAuthContainers();
-    document.getElementById('resetPasswordContainer').style.display = 'block';
-    lucide.createIcons();
-}
-
-function showResetSuccess() {
-    hideAllAuthContainers();
-    document.getElementById('resetSuccessContainer').style.display = 'block';
-    lucide.createIcons();
-}
-
-function hideAllAuthContainers() {
+function showRegister() {
     document.getElementById('loginContainer').style.display = 'none';
+    document.getElementById('registerContainer').style.display = 'block';
+}
+
+function showLogin() {
     document.getElementById('registerContainer').style.display = 'none';
+    document.getElementById('loginContainer').style.display = 'block';
     document.getElementById('forgotPasswordContainer').style.display = 'none';
     document.getElementById('verifyCodeContainer').style.display = 'none';
     document.getElementById('resetPasswordContainer').style.display = 'none';
     document.getElementById('resetSuccessContainer').style.display = 'none';
 }
 
-function maskEmail(email) {
-    const [name, domain] = email.split('@');
-    const masked = name.charAt(0) + '*'.repeat(name.length - 2) + name.charAt(name.length - 1);
-    return masked + '@' + domain;
-}
-
-async function handleForgotPassword() {
-    const email = document.getElementById('forgotEmail').value.trim();
-    
-    if (!email) {
-        showToast("Please enter your email");
-        return;
-    }
-    
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        showToast("Please enter a valid email address");
-        return;
-    }
-    
-    showToast("Generating verification code...");
-    
-    try {
-        // Step 1: Generate code via Google Sheets
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({
-                action: 'forgotPassword',
-                email: email,
-                deviceModel: getDeviceModel()
-            })
-        });
-        
-        const result = await response.json();
-        console.log("[APPS SCRIPT] Response:", result);
-        
-        if (!result.success || !result.verificationCode) {
-            showToast(result.message || "Failed to generate code");
-            return;
-        }
-        
-        // Step 2: Prepare email data
-        const now = new Date();
-        const expiration = new Date(now.getTime() + 30 * 60000);
-        const formattedTime = expiration.toLocaleString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true
-        });
-        
-        showToast("Sending email...");
-        
-        // Step 3: Send email via EmailJS
-        try {
-            await sendForgotPasswordEmail({
-                to_email: email,
-                user_name: result.name || "Seeker",
-                verification_code: result.verificationCode,
-                expiration_time: formattedTime
-            });
-            
-            resetState.email = email;
-            showToast("✅ Check your email for the code!");
-            showVerifyCode();
-            
-        } catch (emailError) {
-            console.error("[EMAIL ERROR]", emailError);
-            showToast("⚠️ Code generated but email failed. Check console.");
-            console.log("VERIFICATION CODE FOR TESTING:", result.verificationCode);
-        }
-        
-    } catch (e) {
-        console.error("[FORGOT PASSWORD] Error:", e);
-        showToast("Error: " + e.message);
-    }
-}
-
-function validateNumber(input) {
-    input.value = input.value.replace(/[^0-9]/g, '');
-}
-
-function moveToNext(current, nextId) {
-    if (current.value.length === 1) {
-        document.getElementById(nextId).focus();
-    }
-}
-
-function getEnteredCode() {
-    let code = '';
-    for (let i = 1; i <= 6; i++) {
-        code += document.getElementById('code' + i).value;
-    }
-    return code;
-}
-
-function submitCode() {
-    const code = getEnteredCode();
-    if (code.length === 6) {
-        verifyCode();
-    }
-}
-
-async function verifyCode() {
-    const enteredCode = getEnteredCode();
-    
-    if (enteredCode.length !== 6) {
-        showToast("Please enter all 6 digits");
-        return;
-    }
-    
-    showToast("Verifying...");
-    
-    // DEBUG: Log what we're sending
-    console.log("Verifying code for email:", resetState.email);
-    console.log("Entered code:", enteredCode);
-    
-    try {
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({
-                action: 'verifyCode',
-                email: resetState.email,
-                code: enteredCode
-            })
-        });
-        
-        const result = await response.json();
-        console.log("Server response:", result); // DEBUG
-        
-        if (result.success) {
-            showToast("✅ Code verified!");
-            showResetPassword();
-        } else {
-            showToast(result.message || "Invalid or expired code");
-            // DEBUG: Show what was expected vs entered
-            console.log("Error:", result.message);
-        }
-        
-    } catch (e) {
-        console.error("[VERIFY CODE] Error:", e);
-        showToast("Error verifying code");
-    }
-}
-async function resendCode() {
-    if (!resetState.canResend) {
-        showToast("Please wait before resending");
-        return;
-    }
-    
-    resetState.canResend = false;
-    showToast("Resending code...");
-    
-    for (let i = 1; i <= 6; i++) {
-        document.getElementById('code' + i).value = '';
-    }
-    
-    await handleForgotPassword();
-    
-    setTimeout(() => {
-        resetState.canResend = true;
-    }, 30000);
-}
-
-function backToForgot() {
-    document.getElementById('forgotEmail').value = resetState.email;
-    showForgotPassword();
-}
-
-async function handlePasswordResetFinal() {
-    const newPass = document.getElementById('newResetPass').value;
-    const confirmPass = document.getElementById('confirmResetPass').value;
-    
-    if (!newPass || !confirmPass) {
-        showToast("Please fill all fields");
-        return;
-    }
-    
-    if (newPass.length < 6) {
-        showToast("Password must be at least 6 characters");
-        return;
-    }
-    
-    if (newPass !== confirmPass) {
-        showToast("Passwords do not match");
-        return;
-    }
-    
-    showToast("Resetting password...");
-    
-    try {
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({
-                action: 'resetPassword',
-                email: resetState.email,
-                newPassword: newPass
-            })
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            resetState = { email: '', verificationCode: '', canResend: true };
-            document.getElementById('forgotEmail').value = '';
-            document.getElementById('newResetPass').value = '';
-            document.getElementById('confirmResetPass').value = '';
-            for (let i = 1; i <= 6; i++) {
-                document.getElementById('code' + i).value = '';
-            }
-            
-            showResetSuccess();
-        } else {
-            showToast(result.message || "Failed to reset password");
-        }
-        
-    } catch (e) {
-        console.error("[RESET PASSWORD] Error:", e);
-        showToast("Error resetting password");
-    }
-}
-
-function showLogin() {
-    hideAllAuthContainers();
-    document.getElementById('loginContainer').style.display = 'block';
-    lucide.createIcons();
-}
-
-function showRegister() {
-    hideAllAuthContainers();
-    document.getElementById('registerContainer').style.display = 'block';
-    lucide.createIcons();
+function showForgotPassword() {
+    document.getElementById('loginContainer').style.display = 'none';
+    document.getElementById('forgotPasswordContainer').style.display = 'block';
 }
 
 function showLicenseModal() {
@@ -2452,747 +2174,244 @@ function acceptLicense() {
     document.getElementById('licenseAgreeLogin').checked = true;
 }
 
-// Hide scrollbars
-(function() {
-    const style = document.createElement('style');
-    style.id = 'hide-scrollbar-style';
-    style.innerHTML = `
-        * {
-            scrollbar-width: none !important;
-            -ms-overflow-style: none !important;
-        }
-        *::-webkit-scrollbar {
-            display: none !important;
-            width: 0 !important;
-            height: 0 !important;
-            background: transparent !important;
-        }
-    `;
-    document.head.appendChild(style);
-})();
-
-document.addEventListener('touchmove', function(e) {
-    if (e.touches.length > 1) {
-        e.preventDefault();
+async function handleAuth(mode) {
+    const email = mode === 'login' ? document.getElementById('authEmail').value : document.getElementById('regEmail').value;
+    const password = mode === 'login' ? document.getElementById('authPass').value : document.getElementById('regPass').value;
+    const name = mode === 'register' ? document.getElementById('regName').value : null;
+    
+    if (mode === 'login' && !document.getElementById('licenseAgreeLogin').checked) {
+        showToast('Please agree to the User License Agreement');
+        return;
     }
-}, { passive: false });
-
-let lastTouchEnd = 0;
-document.addEventListener('touchend', function(e) {
-    const now = Date.now();
-    if (now - lastTouchEnd <= 300) {
-        e.preventDefault();
+    
+    showToast(mode === 'login' ? 'Signing in...' : 'Creating account...');
+    
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+                action: mode,
+                email: email,
+                password: password,
+                name: name,
+                deviceModel: getDeviceModel()
+            })
+        });
+        const result = await response.json();
+        
+        if (result.success) {
+            if (mode === 'login') {
+                state.pts = result.user.points;
+                state.userEmail = result.user.email;
+                state.userName = result.user.name;
+                state.profilePic = result.user.profile;
+                state.isGoogleUser = result.user.isGoogleUser;
+                document.getElementById('authOverlay').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'block';
+                document.getElementById('resetBtn').style.display = 'block';
+                save(); updateUI(); renderShop(); loadRandom();
+                showToast(`Welcome, ${result.user.name}!`);
+            } else {
+                showToast('Account created! Please sign in.');
+                showLogin();
+            }
+        } else {
+            showToast(result.message);
+        }
+    } catch (error) {
+        showToast('Error: ' + error.message);
     }
-    lastTouchEnd = now;
-}, false);
-
-function openResetModal() {
-    document.getElementById('resetModal').classList.add('active');
 }
 
-function closeResetModal() {
-    document.getElementById('resetModal').classList.remove('active');
-    document.getElementById('currentPass').value = "";
-    document.getElementById('newPass').value = "";
-    document.getElementById('retypePass').value = "";
+async function handleForgotPassword() {
+    const email = document.getElementById('forgotEmail').value;
+    showToast('Sending verification code...');
+    
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'forgotPassword', email: email })
+        });
+        const result = await response.json();
+        
+        if (result.success) {
+            document.getElementById('forgotPasswordContainer').style.display = 'none';
+            document.getElementById('verifyCodeContainer').style.display = 'block';
+            document.getElementById('verifyEmailDisplay').textContent = email;
+            showToast('Verification code sent!');
+        } else {
+            showToast(result.message);
+        }
+    } catch (error) {
+        showToast('Error: ' + error.message);
+    }
+}
+
+function moveToNext(current, nextId) {
+    if (current.value.length === 1) {
+        document.getElementById(nextId)?.focus();
+    }
+}
+
+function validateNumber(input) {
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
+
+function submitCode() {
+    verifyCode();
+}
+
+async function verifyCode() {
+    const code = Array.from({length: 6}, (_, i) => document.getElementById(`code${i+1}`).value).join('');
+    const email = document.getElementById('forgotEmail').value;
+    
+    showToast('Verifying code...');
+    
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'verifyCode', email: email, code: code })
+        });
+        const result = await response.json();
+        
+        if (result.success) {
+            document.getElementById('verifyCodeContainer').style.display = 'none';
+            document.getElementById('resetPasswordContainer').style.display = 'block';
+            showToast('Code verified!');
+        } else {
+            showToast(result.message);
+        }
+    } catch (error) {
+        showToast('Error: ' + error.message);
+    }
+}
+
+async function handlePasswordResetFinal() {
+    const newPass = document.getElementById('newResetPass').value;
+    const confirmPass = document.getElementById('confirmResetPass').value;
+    const email = document.getElementById('forgotEmail').value;
+    
+    if (newPass !== confirmPass) {
+        showToast('Passwords do not match!');
+        return;
+    }
+    
+    showToast('Resetting password...');
+    
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'resetPassword', email: email, newPassword: newPass })
+        });
+        const result = await response.json();
+        
+        if (result.success) {
+            document.getElementById('resetPasswordContainer').style.display = 'none';
+            document.getElementById('resetSuccessContainer').style.display = 'block';
+            showToast('Password reset successfully!');
+        } else {
+            showToast(result.message);
+        }
+    } catch (error) {
+        showToast('Error: ' + error.message);
+    }
+}
+
+function backToForgot() {
+    document.getElementById('verifyCodeContainer').style.display = 'none';
+    document.getElementById('forgotPasswordContainer').style.display = 'block';
+}
+
+function resendCode() {
+    handleForgotPassword();
+}
+
+function showTab(tab, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+    btn.classList.add('active');
+}
+
+function manualSearch() {
+    // Implement search
+}
+
+function claimAndNext() {
+    // Implement claim
+}
+
+function closeModal() {
+    document.getElementById('redeemModal').classList.remove('active');
+}
+
+function processRedeem() {
+    // Implement redemption
 }
 
 async function handlePasswordReset() {
     const currentPass = document.getElementById('currentPass').value;
     const newPass = document.getElementById('newPass').value;
     const retypePass = document.getElementById('retypePass').value;
-
-    if (!currentPass || !newPass || !retypePass) return showToast("Please fill all fields");
-    if (newPass !== retypePass) return showToast("New passwords do not match!");
-    if (newPass.length < 6) return showToast("Password must be at least 6 characters");
-
-    showToast("Updating security...");
-
+    
+    if (newPass !== retypePass) {
+        showToast('Passwords do not match!');
+        return;
+    }
+    
+    showToast('Updating password...');
+    
     try {
         const response = await fetch(APPS_SCRIPT_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify({
-                action: 'changePassword', 
+                action: 'changePassword',
                 email: state.userEmail,
                 oldPassword: currentPass,
                 newPassword: newPass
             })
         });
-
         const result = await response.json();
-
+        
         if (result.success) {
-            showToast("✅ Password updated successfully!");
+            showToast('Password updated successfully!');
             closeResetModal();
+            document.getElementById('currentPass').value = '';
+            document.getElementById('newPass').value = '';
+            document.getElementById('retypePass').value = '';
         } else {
-            showToast(result.message || "Failed to update password");
+            showToast(result.message);
         }
-    } catch (e) {
-        console.error("Reset Error:", e);
-        showToast("Server error. Check your connection.");
+    } catch (error) {
+        showToast('Error: ' + error.message);
     }
 }
 
-function togglePassword(inputId, iconEl) {
-    const input = document.getElementById(inputId);
-    if (input.type === "password") {
-        input.type = "text";
-        iconEl.setAttribute('data-lucide', 'eye-off');
-    } else {
-        input.type = "password";
-        iconEl.setAttribute('data-lucide', 'eye');
-    }
-    lucide.createIcons();
-}
-
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx-SkdtR1QMVi1tTDVgfhyarmqA6mF4Or-CqZj2dLczYTiR1xfO4kU63_HGuO1uE16Biw/exec";
-
-let state = JSON.parse(localStorage.getItem('bq_final_v18')) || { 
-    pts: 0, 
-    logs: [], 
-    firstClaim: true, 
-    userEmail: null,
-    userName: null,
-    profilePic: "https://i.imgur.com/Bu2aW8n.png"
-};
-
-let allVerses = [];
-let currentVerse = null;
-let activeReward = null;
-let currentChars = 0;
-let tInt = null;
-
-function showToast(msg) {
-    const toast = document.getElementById('toast');
-    if (!toast) {
-        console.log("Toast:", msg);
-        return;
-    }
-    toast.innerText = msg;
-    toast.classList.add('show');
-    setTimeout(() => { toast.classList.remove('show'); }, 3000);
-}
-
-async function loadVersesFromSheet() {
-    try {
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ action: 'getVerses' })
-        });
-        
-        const result = await response.json();
-        
-        if (result.success && result.verses && result.verses.length > 0) {
-            allVerses = result.verses;
-            console.log(`[VERSES] Loaded ${allVerses.length} verses from sheet`);
-            return true;
-        } else {
-            console.warn("[VERSES] Failed to load from sheet, using fallback");
-            allVerses = [
-                { reference: "John 3:16", text: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life." },
-                { reference: "Psalm 23:1", text: "The Lord is my shepherd, I lack nothing." },
-                { reference: "Proverbs 3:5", text: "Trust in the Lord with all your heart and lean not on your own understanding." },
-                { reference: "Philippians 4:13", text: "I can do all this through him who gives me strength." },
-                { reference: "Romans 8:28", text: "And we know that in all things God works for the good of those who love him, who have been called according to his purpose." }
-            ];
-            return false;
-        }
-    } catch (e) {
-        console.error("[VERSES] Error loading:", e);
-        allVerses = [{ reference: "John 3:16", text: "For God so loved the world..." }];
-        return false;
-    }
-}
-
-function getRandomVerse() {
-    if (allVerses.length === 0) return null;
-    return allVerses[Math.floor(Math.random() * allVerses.length)];
-}
-
-function toggleAuthMode() {
-    const lBox = document.getElementById('loginBox');
-    const rBox = document.getElementById('registerBox');
-    lBox.style.display = lBox.style.display === 'none' ? 'block' : 'none';
-    rBox.style.display = rBox.style.display === 'none' ? 'block' : 'none';
-}
-
-function getDeviceModel() {
-  const ua = navigator.userAgent;
-  if (/iPhone/.test(ua)) return 'iPhone';
-  if (/iPad/.test(ua)) return 'iPad';
-  if (/Android/.test(ua)) {
-    const match = ua.match(/Android[^;]*;\s*([^)]*)\)/);
-    return match ? match[1].trim() : 'Android';
-  }
-  if (/Windows/.test(ua)) return 'Windows PC';
-  if (/Mac/.test(ua)) return 'Mac';
-  return 'Unknown';
-}
-async function handleAuth(mode) {
-    console.log("[AUTH] Mode:", mode);
-    
-    try {
-        const email = mode === 'login' ? document.getElementById('authEmail').value : document.getElementById('regEmail').value;
-        const pass = mode === 'login' ? document.getElementById('authPass').value : document.getElementById('regPass').value;
-        const name = mode === 'login' ? "" : document.getElementById('regName').value;
-
-        if (!email || !pass) return showToast("Please fill all fields");
-        
-        // Get device info
-        const deviceModel = getDeviceModel();
-        console.log("[DEVICE] Detected:", deviceModel);
-        
-        showToast("Connecting...");
-        
-        if (mode === 'register') {
-            const response = await fetch(APPS_SCRIPT_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
-                body: JSON.stringify({
-                    action: 'register',
-                    email: email,
-                    password: pass,
-                    name: name,
-                    deviceModel: getDeviceModel()
-                })
-            });
-
-            if (!response.ok) {
-                return showToast(`Server error: ${response.status}`);
-            }
-
-            const result = await response.json();
-            
-            if (result.success) {
-                document.getElementById('regName').value = '';
-                document.getElementById('regEmail').value = '';
-                document.getElementById('regPass').value = '';
-                showToast("✅ Account created! Please login now.");
-                setTimeout(() => showLogin(), 1000);
-            } else {
-                showToast(result.message || "Registration failed");
-            }
-        } else {
-            const licenseChecked = document.getElementById('licenseAgreeLogin').checked;
-            if (!licenseChecked) {
-                showToast("Please agree to the User License Agreement");
-                return;
-            }
-
-            const response = await fetch(APPS_SCRIPT_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({
-                    action: 'login', 
-                    email: email,
-                    password: pass,
-		    deviceModel: getDeviceModel()
-                })
-            });
-            
-            if (!response.ok) {
-                return showToast(`Server error: ${response.status}`);
-            }
-
-            const result = await response.json();
-
-            if (result.success && result.user) {
-                state.pts = result.user.points || 0;
-                state.userEmail = result.user.email;
-                state.userName = result.user.name;
-                state.profilePic = result.user.profile || "https://i.imgur.com/Bu2aW8n.png";
-                
-                document.getElementById('authOverlay').style.display = 'none';
-                document.getElementById('logoutBtn').style.display = 'block';
-                document.getElementById('resetBtn').style.display = 'block';
-                document.getElementById('authEmail').value = '';
-                document.getElementById('authPass').value = '';
-                
-                save();
-                showToast(`Welcome back, ${result.user.name}!`);
-                
-                updateUI();
-                renderShop();
-                loadRandom();
-                syncStatus();
-                setInterval(syncStatus, 10000);
-            } else {
-                showToast(result.message || "Email or password incorrect");
-            }
-        }
-    } catch (e) {
-        console.error("[AUTH] Error:", e);
-        showToast("Error: " + e.message);
-    }
-}
-
-async function syncStatus() {
-    if (!state.userEmail) {
-        console.log("[SYNC] Not logged in, skipping");
-        return;
-    }
-    
-    try {
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({
-                action: 'getUserData',
-                email: state.userEmail
-            })
-        });
-        
-        const result = await response.json();
-        
-        if (result.success && result.user) {
-            const serverStatus = result.user.status;
-            const serverPoints = parseInt(result.user.points) || 0;
-            const serverAmounts = parseFloat(result.user.amounts) || 0;
-            
-            state.pts = serverPoints;
-            state.amounts = serverAmounts;
-            state.status = serverStatus;
-            state.gcashNumber = result.user.gcashNumber;
-
-            if (result.redemptionHistory) {
-                updateRedemptionHistoryFromServer(result.redemptionHistory);
-            }
-            
-            save();
-            updateUI();
-            
-            const logsSection = document.getElementById('logs');
-            if (logsSection && logsSection.classList.contains('active')) {
-                renderLogs();
-            }
-        }
-    } catch (e) {
-        console.warn("[SYNC] Failed to sync:", e.message);
-    }
-}
-
-function updateRedemptionHistoryFromServer(serverHistory) {
-    const nonRedemptionLogs = state.logs.filter(log => !log.includes("Redeemed"));
-    state.logs = [...serverHistory, ...nonRedemptionLogs];
-    console.log(`[SYNC] Updated ${serverHistory.length} redemptions from server`);
-}
-
-function save() { 
-    localStorage.setItem('bq_final_v18', JSON.stringify(state)); 
-    updateUI();  
-    syncPointsToCloud(); 
-}
-
-async function syncPointsToCloud() {
-    if (!state.userEmail || state.userEmail === 'guest') {
-        console.log("[SYNC] Skipping sync: not logged in or guest user");
-        return;
-    }
-
-    try {
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
-            body: JSON.stringify({
-                action: 'updatePoints',
-                email: state.userEmail,
-                points: state.pts
-            })
-        });
-        
-        if (!response.ok) {
-            console.warn("[SYNC] Network error:", response.status);
-            return;
-        }
-
-        const result = await response.json();
-        if (result.success) {
-            console.log("[SYNC] ✅ Points synced successfully:", result.newPoints);
-        } else {
-            console.warn("[SYNC] Server error:", result.message);
-        }
-    } catch (e) {
-        console.warn("[SYNC] Sync failed (will retry):", e.message);
-    }
-}
-
-async function loadVerse(ref) {
-    const vRefElem = document.getElementById('vRef');
-    const vTextElem = document.getElementById('vText');
-    const btn = document.getElementById('claimBtn');
-    
-    vTextElem.innerText = "Consulting the scriptures...";
-    btn.disabled = true;
-
-    try {
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({
-                action: 'searchVerses',
-                query: ref
-            })
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            vRefElem.innerText = result.verse.reference;
-            vTextElem.innerText = `"${result.verse.text}"`;
-            currentVerse = result.verse;
-            currentChars = result.verse.text.split(/\s+/).filter(word => word.length > 0).length;
-            
-            const seed = result.verse.reference.replace(/[^a-zA-Z0-9]/g, '');
-            document.getElementById('verseImg').src = `https://picsum.photos/seed/${seed}/600/400`;
-            
-            startTimer();
-            return;
-        }
-    } catch (e) {
-        console.log("[VERSE] Server search failed, trying local:", e);
-    }
-    
-    const foundVerse = allVerses.find(v => 
-        v.reference.toLowerCase() === ref.toLowerCase()
-    );
-
-    if (foundVerse) {
-        vRefElem.innerText = foundVerse.reference;
-        vTextElem.innerText = `"${foundVerse.text}"`;
-        currentVerse = foundVerse;
-        currentChars = foundVerse.text.split(/\s+/).filter(word => word.length > 0).length;
-        
-        document.getElementById('verseImg').src = `https://picsum.photos/seed/${foundVerse.reference.replace(/\s/g, '')}/600/400`;
-        startTimer();
-    } else {
-        try {
-            const publicRes = await fetch(`https://bible-api.com/${encodeURIComponent(ref)}`);
-            const publicData = await publicRes.json();
-            
-            if (publicData.text) {
-                vRefElem.innerText = publicData.reference;
-                vTextElem.innerText = `"${publicData.text.trim()}"`;
-                currentChars = publicData.text.trim().split(/\s+/).filter(word => word.length > 0).length;
-                currentVerse = { reference: publicData.reference, text: publicData.text.trim() };
-                
-                document.getElementById('verseImg').src = `https://picsum.photos/seed/${Math.random()}/600/400`;
-                startTimer();
-            } else {
-                showToast("Verse not found.");
-                loadRandom();
-            }
-        } catch (error) {
-            showToast("Verse not found. Loading random...");
-            loadRandom();
-        }
-    }
-}
-
-function loadRandom() {
-    const verse = getRandomVerse();
-    if (verse) {
-        document.getElementById('vRef').innerText = verse.reference;
-        document.getElementById('vText').innerText = `"${verse.text}"`;
-        currentVerse = verse;
-        currentChars = verse.text.split(/\s+/).filter(word => word.length > 0).length;
-        
-        document.getElementById('verseImg').src = `https://picsum.photos/seed/${verse.reference.replace(/\s/g, '')}/600/400`;
-        startTimer();
-    } else {
-        document.getElementById('vRef').innerText = "John 3:16";
-        document.getElementById('vText').innerText = "For God so loved the world...";
-        currentChars = 10;
-        startTimer();
-    }
-}
-
-function startTimer() {
-    let tLeft = 60;
-    const circle = document.getElementById('pCircle');
-    const btn = document.getElementById('claimBtn');
-    const txt = document.getElementById('timerTxt');
-    
-    btn.disabled = true; 
-    btn.innerText = "Meditating...";
-    
-    if(tInt) clearInterval(tInt);
-    
-    tInt = setInterval(() => {
-        tLeft--; 
-        txt.innerText = tLeft + "s";
-        circle.style.strokeDashoffset = 283 - ((60 - tLeft) / 60 * 283);
-        
-        if(tLeft <= 0) { 
-            clearInterval(tInt);
-            txt.innerText = "AMEN";
-            btn.disabled = false;
-            btn.innerText = `Claim +${currentChars} Pts`;
-        }
-    }, 1000);
-}
-
-function claimAndNext() {
-    if (!currentVerse) return;
-    
-    state.pts += currentChars;
-    state.logs.unshift(`${new Date().toLocaleTimeString()}: ${currentVerse.reference} +${currentChars} words`);
-    
-    save();
-    document.getElementById('claimBtn').innerText = "Claimed!";
-    
-    setTimeout(loadRandom, 1000);
-}
-
-function renderShop() {
-    const rewards = [{v:1, c:500}, {v:50, c:25000}, {v:100, c:50000}, {v:500, c:250000}];
-    document.getElementById('shopList').innerHTML = rewards.map(i => {
-        const isFree = (i.v === 1 && state.firstClaim);
-        const cost = isFree ? 0 : i.c;
-        return `
-        <div class="shop-card">
-            ${isFree ? '<span class="free-badge">NEWBIE GIFT</span>' : ''}
-            <b>
-                <img src="bg-gcash-icn.png" width="32" height="32" style="transform: translate(1px, 4px); margin-right: 10px;">
-                <span style="display: inline-block; transform: translate(0px, -6px);font-size: 0.8rem;">₱${i.v} GCash</span>
-            </b>
-            <button onclick="openModal(${i.v}, ${cost})" style="background:var(--gold-gradient); border:none; padding:10px 15px; border-radius:10px; font-weight:900; cursor:pointer; color:#3a2a00;">
-                ${isFree ? 'FREE' : cost.toLocaleString() + ' PTS'}
-            </button>
-        </div>`;
-    }).join('');
-}
-
-function openModal(val, cost) {
-    if(state.pts < cost) return showToast("Not enough points!");
-    activeReward = { val, cost };
-    document.getElementById('redeemModal').classList.add('active');
-}
-
-function closeModal() { 
-    document.getElementById('redeemModal').classList.remove('active'); 
-}
-
-async function processRedeem() {
-    const gName = document.getElementById('gName').value.trim();
-    const gNum = document.getElementById('gNum').value.trim();
-    const gEmail = document.getElementById('gEmail').value.trim();
-
-    if (!gName) return showToast('Please enter GCash name');
-    if (!gNum) return showToast('Please enter GCash number');
-    if (!gEmail) return showToast('Please enter email for receipt');
-    if (!activeReward) return showToast('No reward selected');
-    
-    if (!gNum.match(/^09\d{9}$/)) {
-        return showToast('Invalid GCash number format (should be 09XXXXXXXXX)');
-    }
-
-    showToast("Processing redemption...");
-
-    try {
-        await sendRedemptionEmail({
-            method: "GCASH",
-            mobile: gNum,
-            extra_data: gName,
-            user_email: gEmail,
-            peso_value: "₱" + activeReward.val,
-            user_name: state.userName || "Unknown",
-            user_email_account: state.userEmail
-        });
-
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({
-                action: 'processRedemption',
-                email: state.userEmail,
-                userName: state.userName,
-                redeemAmount: activeReward.val,
-                cost: activeReward.cost,
-                gcashNumber: gNum,
-                gcashName: gName,
-                receiptEmail: gEmail
-            })
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-            state.pts = result.newPoints;
-            state.amounts = result.newAmounts;
-            if(activeReward.val === 1) state.firstClaim = false;
-            
-            const timeStr = new Date().toLocaleTimeString();
-            const logEntry = `${timeStr}: Redeemed ₱${activeReward.val} to ${gNum} <span class="status-badge" style="color:#ffa500">⏳ Pending...</span>`;
-            state.logs.unshift(logEntry);
-            
-            save(); 
-            renderShop(); 
-            closeModal();
-            
-            document.getElementById('gName').value = '';
-            document.getElementById('gNum').value = '';
-            document.getElementById('gEmail').value = '';
-            
-            showToast("✅ Redemption sent! Status: Pending...");
-            
-            setTimeout(() => syncStatus(), 2000);
-        } else {
-            showToast("Error: " + result.message);
-        }
-        
-    } catch (e) {
-        console.error("Redemption error:", e);
-        showToast("Error processing redemption: " + e.message);
-    }
-}
-
-function showTab(id, el) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    el.classList.add('active');
-    
-    if(id === 'logs') {
-        syncStatus();
-        renderLogs();
-    }
-}
-
-function renderLogs() {
-    const logContent = document.getElementById('logContent');
-    if (!logContent) return;
-    
-    if (state.logs.length === 0) {
-        logContent.innerHTML = '<div style="text-align:center; color:#666; padding:20px;">No history yet. Start meditating!</div>';
-        return;
-    }
-    
-    const redemptionLogs = state.logs.filter(log => log.includes("Redeemed"));
-    const meditationLogs = state.logs.filter(log => !log.includes("Redeemed") && log.includes("words"));
-    
-    let html = '';
-    
-    if (redemptionLogs.length > 0) {
-        html += `<div style="margin-bottom:20px;"><h4 style="color:var(--gold); font-size:0.9rem; margin-bottom:10px; font-family:'Cinzel'; display: flex; align-items: center; gap: 8px;">
-  <img src="gift-box.png" alt="Gift icon" style="height: 1.2rem;transform: scale(1.3); width: auto;">Redemptions History
-</h4>`;
-        html += redemptionLogs.map(log => formatLogEntry(log, 'redemption')).join('');
-        html += `</div>`;
-    }
-    
-    if (meditationLogs.length > 0) {
-        html += `<div><h4 style="color:var(--gold); font-size:0.9rem; margin-bottom:10px; font-family:'Cinzel'; display: flex; align-items: center; gap: 8px;">
-  <img src="meditation.png" alt="Gift icon" style="height: 1.2rem;transform:scale(1.6); width: auto;">Meditation History
-</h4>`;
-        html += meditationLogs.slice(0, 20).map(log => formatLogEntry(log, 'meditation')).join('');
-        html += `</div>`;
-    }
-    
-    logContent.innerHTML = html;
-}
-
-function formatLogEntry(log, type) {
-    let styledLog = log;
-    
-    if (type === 'redemption') {
-        if (log.includes("✅ Success")) {
-            styledLog = log.replace('✅ Success', '<span style="color:#4CAF50; font-weight:800;">✅ Success</span>');
-        } else if (log.includes("⏳ Pending...") || log.includes("Pending...")) {
-            styledLog = log.replace(/[⏳\s]*Pending\.\.\./, '<span style="color:#ffa500; font-weight:800;">⏳ Pending...</span>');
-        }
-        
-        styledLog = styledLog.replace(/(₱\d+)/, '<span style="color:var(--gold); font-weight:bold;">$1</span>');
-        
-        return `<div class="history-item" style="border-left: 3px solid ${log.includes('Success') ? '#4CAF50' : '#ffa500'}; background:rgba(255,215,0,0.05);">${styledLog}</div>`;
-    } else {
-        styledLog = log.replace(/(\+\d+ words)/, '<span style="color:#4CAF50; font-weight:bold;">$1</span>');
-        return `<div class="history-item" style="border-left: 3px solid #4CAF50;">${styledLog}</div>`;
-    }
-}
-
-function manualSearch() { 
-    const input = document.getElementById('vSearch');
-    let q = input.value.trim();
-    
-    if(!q) return;
-    
-    if(q.toLowerCase() === "help") {
-        window.open("https://crispba.github.io/crispinjr-official-websites/Help%20-%20Suggest%20-%20Error.html", "_blank");
-        input.value = "";
-        return; 
-    }
-    if(q.toLowerCase() === "admin dashboard") {
-        window.open("https://crispba.github.io/crispinjr-official-websites/admin.html", "_blank");
-        input.value = "";
-        return; 
-    }    
-    q = q.replace(/\b\w/g, l => l.toUpperCase());
-    
-    loadVerse(q); 
-    input.value = ""; 
-    input.blur();
-}
-
-function updateUI() {
-    document.getElementById('pts').innerText = state.pts.toLocaleString();
-    const avatar = document.getElementById('userAvatar');
-    if (avatar) {
-        avatar.src = state.profilePic || 'https://i.imgur.com/Bu2aW8n.png';
-    }
-}
-
-function logout() {
-    state.userEmail = null;
-    state.userName = null;
-    save();
-    
-    document.getElementById('logoutBtn').style.display = 'none';
-    document.getElementById('resetBtn').style.display = 'none';
-    document.getElementById('authOverlay').style.display = 'flex';
-    location.reload(); 
-}
-
-async function init() { 
-    await loadVersesFromSheet();
-    
-    if (!state.userEmail) {
-        document.getElementById('authOverlay').style.display = 'flex';
-        return;
-    }
-    
-    updateUI(); 
-    renderShop(); 
-    loadRandom(); 
-    syncStatus();
-    
-    setInterval(syncStatus, 10000);
-    
-    document.getElementById('logoutBtn').style.display = 'block';
-    document.getElementById('resetBtn').style.display = 'block';
-}
-
+// Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("[INIT] Page loaded, initializing Bible Quest...");
-    
-    // Initialize OLD EmailJS account
-    emailjs.init(EMAILJS_OLD.publicKey);
+    load();
     lucide.createIcons();
     
-    init();
+    // Check if user is logged in
+    if (state.userEmail) {
+        document.getElementById('authOverlay').style.display = 'none';
+        document.getElementById('logoutBtn').style.display = 'block';
+        document.getElementById('resetBtn').style.display = 'block';
+        updateUI();
+    }
     
-    console.log("[INIT] ✅ Bible Quest initialized");
-});
-
-window.addEventListener('load', () => {
-    const loader = document.getElementById('loader');
+    // Hide loader after page loads
     setTimeout(() => {
-        loader.style.opacity = '0';
+        document.getElementById('loader').style.opacity = '0';
         setTimeout(() => {
-            loader.style.display = 'none';
+            document.getElementById('loader').style.visibility = 'hidden';
         }, 500);
-    }, 4000); 
+    }, 1500);
 });
 </script>
 </body>
