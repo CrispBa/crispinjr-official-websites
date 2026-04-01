@@ -93,11 +93,9 @@ async function submitRating() {
     }
 }
 // ==================== GOOGLE SIGN-IN CONFIGURATION ====================
-// Web Application Client ID
 const GOOGLE_CLIENT_ID = "58464922508-8ch63q7f479i69cmq3i6nfcm8pj739nv.apps.googleusercontent.com";
 
 let pendingGoogleUser = null;
-let isGoogleSignUp = false;
 
 // Initialize Google Identity Services
 function initGoogleAuth() {
@@ -110,79 +108,55 @@ function initGoogleAuth() {
     google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: handleGoogleCredentialResponse,
-        // REQUIRED FOR FEDCM COMPLIANCE:
         use_fedcm_for_prompt: true 
     });
 
-    console.log("[GOOGLE] Identity Services initialized");
-}
-
-// Handle Google Sign-In button click (LOGIN ONLY)
-function handleGoogleSignIn() {
-    if (typeof google === 'undefined') {
-        showToast("Google Sign-In loading...");
-        return;
+    // Render Official Google Buttons (Works 100% on Mobile & Desktop)
+    const loginContainer = document.getElementById('googleLoginContainer');
+    if (loginContainer) {
+        google.accounts.id.renderButton(loginContainer, { theme: "outline", size: "large", type: "icon", shape: "circle" });
     }
 
-    isGoogleSignUp = false;
-
-    // Prompt the Google Sign-In popup
-    google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            // Fallback: render button and trigger click
-            const buttonContainer = document.createElement('div');
-            buttonContainer.style.display = 'none';
-            document.body.appendChild(buttonContainer);
-            google.accounts.id.renderButton(buttonContainer, {
-                theme: "outline",
-                size: "large",
-                type: "standard"
-            });
-            // Trigger the sign-in flow
-            google.accounts.id.prompt();
-        }
-    });
-}
-
-// Handle Google Sign-Up button click (REGISTRATION ONLY)
-function handleGoogleSignUp() {
-    if (typeof google === 'undefined') {
-        showToast("Google Sign-Up loading...");
-        return;
+    const regContainer = document.getElementById('googleRegContainer');
+    if (regContainer) {
+        google.accounts.id.renderButton(regContainer, { theme: "outline", size: "large", type: "icon", shape: "circle" });
     }
 
-    isGoogleSignUp = true;
-
-    // Prompt the Google Sign-In popup for registration
-    google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            google.accounts.id.prompt();
-        }
-    });
+    // Attempt to show the top-right dropdown prompt as a bonus
+    google.accounts.id.prompt();
 }
 
+// Fix the missing modal bug by pointing to the correct ID
 function showGoogleLicenseModal() {
-    document.getElementById('googleLicenseModal').classList.add('active');
+    const modal = document.getElementById('licenseModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.classList.add('active');
+    }
 }
 
-// Close Google License Agreement Modal
 function closeGoogleLicenseModal() {
-    document.getElementById('googleLicenseModal').classList.remove('active');
+    const modal = document.getElementById('licenseModal');
+    if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('active');
+    }
     pendingGoogleUser = null;
 }
 
-// Accept Google License Agreement
-function acceptGoogleLicense() {
-    document.getElementById('googleLicenseModal').classList.remove('active');
+function acceptLicense() {
+    const modal = document.getElementById('licenseModal');
+    if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('active');
+    }
 
     if (pendingGoogleUser) {
-        // Complete the login/signup process
         completeGoogleAuth(pendingGoogleUser);
         pendingGoogleUser = null;
     }
 }
 
-// Complete Google Authentication after license agreement
 function completeGoogleAuth(userData) {
     state.pts = userData.points || 0;
     state.userEmail = userData.email;
@@ -202,13 +176,11 @@ function completeGoogleAuth(userData) {
     loadRandom();
     syncStatus();
     setInterval(syncStatus, 10000);
-
- 
     initStatusTracking();
 }
-async function handleGoogleCredentialResponse(response) {
-    console.log("[GOOGLE] Credential received, isSignUp:", isGoogleSignUp);
 
+// Smart Unified Google Response Handler
+async function handleGoogleCredentialResponse(response) {
     const credential = response.credential;
     const payload = jwt_decode(credential);
 
@@ -219,11 +191,33 @@ async function handleGoogleCredentialResponse(response) {
         picture: payload.picture
     };
 
-    showToast("Authenticating...");
+    showToast("Authenticating with Google...");
 
     try {
-        if (isGoogleSignUp) {
-            // GOOGLE SIGN-UP FLOW
+        // Step 1: Check if the user already exists (Try to Login)
+        const loginResponse = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+                action: 'googleAuth',
+                email: userData.email,
+                name: userData.name,
+                googleId: userData.googleId,
+                picture: userData.picture,
+                deviceModel: getDeviceModel()
+            })
+        });
+
+        const result = await loginResponse.json();
+
+        if (result.success) {
+            // SUCCESS: User exists! Log them in immediately.
+            completeGoogleAuth({ ...userData, ...result.user });
+            
+        } else if (result.needSignup || result.message === "NOT_REGISTERED") {
+            // NOT REGISTERED: Automatically create their account!
+            showToast("Creating your account...");
+            
             const regResponse = await fetch(APPS_SCRIPT_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -240,55 +234,23 @@ async function handleGoogleCredentialResponse(response) {
             const regResult = await regResponse.json();
 
             if (regResult.success) {
-                // Registration successful - show license agreement before completing
+                // REGISTRATION SUCCESS: Show license agreement for new users
                 pendingGoogleUser = { ...userData, ...regResult.user };
                 showGoogleLicenseModal();
                 showToast("✅ Account created! Please accept the agreement.");
             } else {
-                if (regResult.message && regResult.message.includes("already")) {
-                    showToast("You already have an account. Please sign in instead.");
-                    setTimeout(() => showLogin(), 1500);
-                } else {
-                    showToast(regResult.message || "Registration failed");
-                }
+                showToast(regResult.message || "Registration failed");
             }
+        } else if (result.message && result.message.includes("password")) {
+            showToast("This email uses password login. Please use regular sign in.");
+            setTimeout(() => showLogin(), 2000);
         } else {
-            // GOOGLE SIGN-IN FLOW
-            const loginResponse = await fetch(APPS_SCRIPT_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({
-                    action: 'googleAuth',
-                    email: userData.email,
-                    name: userData.name,
-                    googleId: userData.googleId,
-                    picture: userData.picture,
-                    deviceModel: getDeviceModel()
-                })
-            });
-
-            const result = await loginResponse.json();
-
-            if (result.success) {
-                // Existing Google user - show license agreement before completing
-                pendingGoogleUser = { ...userData, ...result.user };
-                showGoogleLicenseModal();
-            } else if (result.needSignup || (result.message && result.message === "NOT_REGISTERED")) {
-                // User not registered with Google - they need to sign up first
-                showToast("⚠️ Please sign up with Google first!");
-                setTimeout(() => showRegister(), 1500);
-            } else if (result.message && result.message.includes("password")) {
-                // User exists but with regular password
-                showToast("This email uses password login. Please use regular sign in.");
-                setTimeout(() => showLogin(), 1500);
-            } else {
-                showToast(result.message || "Authentication failed");
-            }
+            showToast(result.message || "Authentication failed");
         }
 
     } catch (e) {
         console.error("[GOOGLE AUTH] Error:", e);
-        showToast("Error: " + e.message);
+        showToast("Network Error: Please try again.");
     }
 }
 
