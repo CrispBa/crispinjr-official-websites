@@ -1043,7 +1043,7 @@ async function handleAuth(mode) {
         }
     } catch (e) {
         console.error("[AUTH] Error:", e);
-        showToast("Error: " + e.message);
+        showToast("Error: Check you internet connection!!");
     }
 }
 // ==================== REDEMPTION EMAIL FUNCTION ====================
