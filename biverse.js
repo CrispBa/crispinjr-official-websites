@@ -92,11 +92,10 @@ async function submitRating() {
         closeRatingModal();
     }
 }
-
 // ==================== GOOGLE SIGN-IN CONFIGURATION ====================
+// Web Application Client ID (Matches your screenshot)
 const GOOGLE_CLIENT_ID = "58464922508-8ch63q7f479i69cmq3i6nfcm8pj739nv.apps.googleusercontent.com";
 
-// Temporary storage for pending Google auth data
 let pendingGoogleUser = null;
 let isGoogleSignUp = false;
 
@@ -112,7 +111,8 @@ function initGoogleAuth() {
         client_id: GOOGLE_CLIENT_ID,
         callback: handleGoogleCredentialResponse,
         auto_select: false,
-        cancel_on_tap_outside: true
+        cancel_on_tap_outside: false, // Prevents the popup from closing if they accidentally tap outside
+        use_fedcm_for_prompt: true    // Modern browser requirement to prevent popup blocking
     });
 
     console.log("[GOOGLE] Identity Services initialized");
@@ -121,26 +121,21 @@ function initGoogleAuth() {
 // Handle Google Sign-In button click (LOGIN ONLY)
 function handleGoogleSignIn() {
     if (typeof google === 'undefined') {
-        showToast("Google Sign-In loading...");
+        showToast("Google connection loading, please wait...");
         return;
     }
 
     isGoogleSignUp = false;
+    showToast("Connecting to Google...");
 
-    // Prompt the Google Sign-In popup
+    // Force the Google prompt to appear
     google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            // Fallback: render button and trigger click
-            const buttonContainer = document.createElement('div');
-            buttonContainer.style.display = 'none';
-            document.body.appendChild(buttonContainer);
-            google.accounts.id.renderButton(buttonContainer, {
-                theme: "outline",
-                size: "large",
-                type: "standard"
-            });
-            // Trigger the sign-in flow
-            google.accounts.id.prompt();
+        if (notification.isNotDisplayed()) {
+            console.log("Google UI not displayed. Reason:", notification.getNotDisplayedReason());
+            // Fallback if the browser blocks the popup
+            if(notification.getNotDisplayedReason() === 'opt_out_or_no_session') {
+                showToast("⚠️ Please allow third-party cookies or popups for Google Sign-In");
+            }
         }
     });
 }
@@ -148,21 +143,20 @@ function handleGoogleSignIn() {
 // Handle Google Sign-Up button click (REGISTRATION ONLY)
 function handleGoogleSignUp() {
     if (typeof google === 'undefined') {
-        showToast("Google Sign-Up loading...");
+        showToast("Google connection loading, please wait...");
         return;
     }
 
     isGoogleSignUp = true;
+    showToast("Opening Google Sign-Up...");
 
-    // Prompt the Google Sign-In popup for registration
+    // Force the Google prompt to appear
     google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            google.accounts.id.prompt();
+        if (notification.isNotDisplayed()) {
+            console.log("Google UI not displayed. Reason:", notification.getNotDisplayedReason());
         }
     });
 }
-
-// Show Google License Agreement Modal
 function showGoogleLicenseModal() {
     document.getElementById('googleLicenseModal').classList.add('active');
 }
