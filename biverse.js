@@ -120,29 +120,45 @@ function initGoogleAuth() {
 // Handle Google Sign-In button click (LOGIN ONLY)
 function handleGoogleSignIn() {
     if (typeof google === 'undefined') {
-        showToast("Google connection loading, please wait...");
+        showToast("Google Sign-In loading...");
         return;
     }
 
     isGoogleSignUp = false;
-    showToast("Connecting to Google...");
 
-    // Call prompt WITHOUT the deprecated notification callback
-    google.accounts.id.prompt();
+    // Prompt the Google Sign-In popup
+    google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            // Fallback: render button and trigger click
+            const buttonContainer = document.createElement('div');
+            buttonContainer.style.display = 'none';
+            document.body.appendChild(buttonContainer);
+            google.accounts.id.renderButton(buttonContainer, {
+                theme: "outline",
+                size: "large",
+                type: "standard"
+            });
+            // Trigger the sign-in flow
+            google.accounts.id.prompt();
+        }
+    });
 }
 
 // Handle Google Sign-Up button click (REGISTRATION ONLY)
 function handleGoogleSignUp() {
     if (typeof google === 'undefined') {
-        showToast("Google connection loading, please wait...");
+        showToast("Google Sign-Up loading...");
         return;
     }
 
     isGoogleSignUp = true;
-    showToast("Opening Google Sign-Up...");
 
-    // Call prompt WITHOUT the deprecated notification callback
-    google.accounts.id.prompt();
+    // Prompt the Google Sign-In popup for registration
+    google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            google.accounts.id.prompt();
+        }
+    });
 }
 
 function showGoogleLicenseModal() {
@@ -190,8 +206,6 @@ function completeGoogleAuth(userData) {
  
     initStatusTracking();
 }
-
-// Process Google credential response
 async function handleGoogleCredentialResponse(response) {
     console.log("[GOOGLE] Credential received, isSignUp:", isGoogleSignUp);
 
