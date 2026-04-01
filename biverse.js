@@ -93,7 +93,7 @@ async function submitRating() {
     }
 }
 // ==================== GOOGLE SIGN-IN CONFIGURATION ====================
-// Web Application Client ID (Matches your screenshot)
+// Web Application Client ID
 const GOOGLE_CLIENT_ID = "58464922508-8ch63q7f479i69cmq3i6nfcm8pj739nv.apps.googleusercontent.com";
 
 let pendingGoogleUser = null;
@@ -110,9 +110,8 @@ function initGoogleAuth() {
     google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: handleGoogleCredentialResponse,
-        auto_select: false,
-        cancel_on_tap_outside: false, // Prevents the popup from closing if they accidentally tap outside
-        use_fedcm_for_prompt: true    // Modern browser requirement to prevent popup blocking
+        // REQUIRED FOR FEDCM COMPLIANCE:
+        use_fedcm_for_prompt: true 
     });
 
     console.log("[GOOGLE] Identity Services initialized");
@@ -128,16 +127,8 @@ function handleGoogleSignIn() {
     isGoogleSignUp = false;
     showToast("Connecting to Google...");
 
-    // Force the Google prompt to appear
-    google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed()) {
-            console.log("Google UI not displayed. Reason:", notification.getNotDisplayedReason());
-            // Fallback if the browser blocks the popup
-            if(notification.getNotDisplayedReason() === 'opt_out_or_no_session') {
-                showToast("⚠️ Please allow third-party cookies or popups for Google Sign-In");
-            }
-        }
-    });
+    // Call prompt WITHOUT the deprecated notification callback
+    google.accounts.id.prompt();
 }
 
 // Handle Google Sign-Up button click (REGISTRATION ONLY)
@@ -150,13 +141,10 @@ function handleGoogleSignUp() {
     isGoogleSignUp = true;
     showToast("Opening Google Sign-Up...");
 
-    // Force the Google prompt to appear
-    google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed()) {
-            console.log("Google UI not displayed. Reason:", notification.getNotDisplayedReason());
-        }
-    });
+    // Call prompt WITHOUT the deprecated notification callback
+    google.accounts.id.prompt();
 }
+
 function showGoogleLicenseModal() {
     document.getElementById('googleLicenseModal').classList.add('active');
 }
