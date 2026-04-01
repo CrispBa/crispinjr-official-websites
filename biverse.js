@@ -1349,7 +1349,7 @@ function loadRandom() {
 }
 
 function startTimer() {
-    let tLeft = 10;
+    let tLeft = 60;
     const circle = document.getElementById('pCircle');
     const btn = document.getElementById('claimBtn');
     const txt = document.getElementById('timerTxt');
