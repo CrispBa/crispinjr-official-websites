@@ -1602,8 +1602,8 @@ position: relative;
     <div class="social-account-container">
         <span class="title">Or Sign in with</span>
         <div class="social-accounts">
-           <button class="social-button google" onclick="handleGoogleSignIn()">
-<img src="google.png" alt="Google Logo" style="height: 1.2em;width: auto;vertical-align: middle;transform: scale(1.2);">
+           <button type="button" class="social-button google" onclick="event.preventDefault(); handleGoogleSignIn();">
+    <img src="google.png" alt="Google Logo" style="height: 1.2em;width: auto;vertical-align: middle;transform: scale(1.2);">
 </button></div>
     </div>
     <p style="margin-top:15px; font-size:0.8rem; color:#666; text-align:center;">
@@ -1758,9 +1758,10 @@ position: relative;
     <div class="social-account-container">
         <span class="title">Or Sign up with</span>
         <div class="social-accounts">
-          <button class="social-button google" onclick="handleGoogleSignIn()">
-<img src="google.png" alt="Google Logo" style="height: 1.2em;width: auto;vertical-align: middle;transform: scale(1.2);">
-</button>                    </div>
+     
+  <button type="button" class="social-button google" onclick="event.preventDefault(); handleGoogleSignIn();">
+    <img src="google.png" alt="Google Logo" style="height: 1.2em;width: auto;vertical-align: middle;transform: scale(1.2);">
+</button>   </div>
     </div>
     
     <p style="margin-top:15px; font-size:0.8rem; color:#666; text-align:center;">
