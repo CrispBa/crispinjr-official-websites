@@ -6,10 +6,10 @@
     <meta name="theme-color" content="#03070e">
     <title>Bible Quest - Admin Dashboard</title>
        <link rel="shortcut icon" href="dashboard.png" type="image/x-icon">
-    
+
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
-    
+
     <style>
         :root { 
             --gold: #FFD700; 
@@ -338,7 +338,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 0.85rem;
-            min-width: 700px;
+            min-width: 950px;
         }
 
         th {
@@ -354,6 +354,10 @@
         td {
             padding: 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         tr:hover {
@@ -362,6 +366,8 @@
 
         .status-active { color: #4CAF50; font-weight: 600; }
         .status-pending { color: #ffa500; font-weight: 600; }
+        .status-success { color: #4CAF50; font-weight: 600; }
+        .status-redeem-pending { color: #ff6b6b; font-weight: 600; }
 
         /* ============================================
            MOBILE CARDS
@@ -456,6 +462,16 @@
             color: #666;
         }
 
+        .user-card-value.redeem-pending {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+
+        .user-card-value.redeem-success {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
         /* ============================================
            LOADING & EMPTY STATES
         ============================================ */
@@ -499,24 +515,24 @@
         ============================================ */
         @media (min-width: 481px) {
             html { font-size: 15px; }
-            
+
             .lock-container {
                 padding: 45px 40px;
             }
-            
+
             .lock-icon {
                 width: 75px;
                 height: 75px;
             }
-            
+
             .lock-container h2 {
                 font-size: 1.8rem;
             }
-            
+
             #dashboard {
                 padding: 20px;
             }
-            
+
             header {
                 flex-direction: row;
                 justify-content: space-between;
@@ -524,38 +540,38 @@
                 margin: -20px -20px 25px -20px;
                 padding: 20px;
             }
-            
+
             .logo {
                 font-size: 1.2rem;
                 justify-content: flex-start;
             }
-            
+
             .logo i {
                 width: 28px !important;
                 height: 28px !important;
             }
-            
+
             .header-buttons {
                 width: auto;
             }
-            
+
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 15px;
             }
-            
+
             .stat-card h3 {
                 font-size: 2.2rem;
             }
-            
+
             .data-table-container {
                 padding: 20px;
             }
-            
+
             .data-table-container h2 {
                 font-size: 1.2rem;
             }
-            
+
             .user-card-details {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -566,60 +582,60 @@
         ============================================ */
         @media (min-width: 769px) {
             html { font-size: 16px; }
-            
+
             .lock-container {
                 padding: 50px 45px;
             }
-            
+
             .lock-icon {
                 width: 80px;
                 height: 80px;
             }
-            
+
             header {
                 padding: 20px 30px;
             }
-            
+
             .logo {
                 font-size: 1.4rem;
                 gap: 12px;
             }
-            
+
             .logo i {
                 width: 32px !important;
                 height: 32px !important;
             }
-            
+
             .stats-grid {
                 grid-template-columns: repeat(4, 1fr);
                 gap: 18px;
             }
-            
+
             .stat-card {
                 padding: 25px;
             }
-            
+
             .stat-card h3 {
                 font-size: 2.5rem;
             }
-            
+
             .stat-card:hover {
                 transform: translateY(-5px);
                 box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1);
             }
-            
+
             .data-table-container {
                 padding: 25px;
             }
-            
+
             table {
                 font-size: 0.9rem;
             }
-            
+
             th, td {
                 padding: 12px 15px;
             }
-            
+
             .last-updated {
                 text-align: right;
             }
@@ -632,20 +648,20 @@
             header {
                 padding: 20px 40px;
             }
-            
+
             .logo {
                 font-size: 1.5rem;
                 letter-spacing: 3px;
             }
-            
+
             .refresh-btn, .logout-btn {
                 padding: 10px 20px;
             }
-            
+
             .stats-grid {
                 gap: 20px;
             }
-            
+
             .connection-status {
                 font-size: 0.8rem;
                 padding: 5px 12px;
@@ -659,7 +675,7 @@
             .mobile-cards {
                 display: none;
             }
-            
+
             .desktop-table {
                 display: block;
             }
@@ -672,18 +688,18 @@
             .lock-container {
                 padding: 25px;
             }
-            
+
             .lock-icon {
                 width: 50px;
                 height: 50px;
                 margin-bottom: 10px;
             }
-            
+
             .lock-container h2 {
                 font-size: 1.3rem;
                 margin-bottom: 5px;
             }
-            
+
             .lock-container p {
                 margin-bottom: 10px;
             }
@@ -709,6 +725,7 @@
             }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
     <!-- LOCK SCREEN -->
@@ -767,19 +784,19 @@
         <!-- DATA TABLE -->
         <div class="data-table-container">
             <h2><i data-lucide="database" style="width: 22px; height: 22px;"></i> User Database</h2>
-            
+
             <!-- Loading State -->
             <div id="tableLoading" class="loading">
                 <i data-lucide="loader" style="width: 36px; height: 36px;"></i>
                 <p>Loading data from Cobelo Database...</p>
             </div>
-            
+
             <!-- No Data State -->
             <div id="noData" class="no-data" style="display: none;">
                 <i data-lucide="inbox" style="width: 48px; height: 48px;"></i>
                 <p>No users found in database</p>
             </div>
-            
+
             <!-- Desktop Table -->
             <div class="desktop-table" id="desktopTableContainer">
                 <table id="usersTable">
@@ -793,15 +810,17 @@
                             <th>Points</th>
                             <th>Status</th>
                             <th>GCash Number</th>
+                            <th>Device Model</th>
+                            <th>Redeem Status</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody"></tbody>
                 </table>
             </div>
-            
+
             <!-- Mobile Cards -->
             <div class="mobile-cards" id="mobileCardsContainer"></div>
-            
+
             <div id="lastUpdated" class="last-updated"></div>
         </div>
     </div>
@@ -810,8 +829,8 @@
         // ============================================
         // CONFIGURATION
         // ============================================
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYIpQo9uip1SUcgbZysJQJxSqLDO0OEYRWKg96yQ1mNGUoZkpoUo2KmBtDz3K8WKto5g/exec";
-        
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-0TvJIAL0kbXRCvKl8OtoZpZ9VASQppSWOzUN3PW_BBLxn6xhVfwEDzgCTNniZjXp/exec";
+
         // ============================================
         // DATA FETCHING - JSONP Approach
         // ============================================
@@ -819,38 +838,38 @@
             return new Promise((resolve, reject) => {
                 const script = document.createElement('script');
                 const callbackName = 'jsonpCallback_' + Date.now();
-                
+
                 window[callbackName] = function(data) {
                     delete window[callbackName];
                     if (script.parentNode) document.head.removeChild(script);
                     resolve(data);
                 };
-                
+
                 script.onerror = function() {
                     delete window[callbackName];
                     if (script.parentNode) document.head.removeChild(script);
                     reject(new Error('Failed to connect to Database Script.'));
                 };
-                
+
                 const timeout = setTimeout(() => {
                     delete window[callbackName];
                     if (script.parentNode) document.head.removeChild(script);
                     reject(new Error('Connection timeout. Please check your internet connection.'));
                 }, 15000);
-                
+
                 const originalCallback = window[callbackName];
                 window[callbackName] = function(data) {
                     clearTimeout(timeout);
                     originalCallback(data);
                 };
-                
+
                 let url = APPS_SCRIPT_URL + '?action=' + action + '&callback=' + callbackName;
-                
+
                 // Add extra parameters
                 for (const [key, value] of Object.entries(extraParams)) {
                     url += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(value);
                 }
-                
+
                 script.src = url;
                 document.head.appendChild(script);
             });
@@ -863,45 +882,45 @@
             const input = document.getElementById('adminPassword');
             const errorDiv = document.getElementById('errorMsg');
             const btn = document.getElementById('unlockBtn');
-            
+
             if (APPS_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
                 errorDiv.innerHTML = '<strong>Setup Required!</strong><br>Please update APPS_SCRIPT_URL in the code.';
                 errorDiv.classList.add('show');
                 return;
             }
-            
+
             const password = input.value.trim();
-            
+
             if (!password) {
                 errorDiv.textContent = 'Please enter a password!';
                 errorDiv.classList.add('show');
                 return;
             }
-            
+
             btn.disabled = true;
             btn.textContent = 'Verifying...';
-            
+
             try {
                 // First verify password with server
                 const authResult = await loadDataJSONP('verifyAdmin', { password: password });
-                
+
                 if (!authResult.success) {
                     throw new Error(authResult.message || 'Invalid password');
                 }
-                
+
                 // Password verified, now fetch data
                 const dataResult = await loadDataJSONP('getAllData');
-                
+
                 if (!dataResult.success) {
                     throw new Error(dataResult.message || 'Server error');
                 }
-                
+
                 document.getElementById('lockScreen').classList.add('hidden');
                 document.getElementById('dashboard').classList.add('visible');
-                
+
                 updateConnectionStatus(true);
                 displayData(dataResult.data || []);
-                
+
             } catch (err) {
                 errorDiv.innerHTML = '<strong>Authentication Failed</strong><br>' + err.message;
                 errorDiv.classList.add('show');
@@ -918,11 +937,11 @@
             const loading = document.getElementById('tableLoading');
             const desktopTable = document.getElementById('desktopTableContainer');
             const mobileCards = document.getElementById('mobileCardsContainer');
-            
+
             loading.style.display = 'block';
             desktopTable.style.display = 'none';
             mobileCards.style.display = 'none';
-            
+
             try {
                 const result = await loadDataJSONP('getAllData');
                 if (result.success) {
@@ -943,30 +962,30 @@
             document.getElementById('totalUsers').textContent = data.length;
             document.getElementById('totalPoints').textContent = data.reduce((s, u) => s + (parseInt(u.points) || 0), 0).toLocaleString();
             document.getElementById('activeUsers').textContent = data.filter(u => u.status === 'Active').length;
-            
-            // Count users with "Pending" in their status (case-insensitive)
+
+            // Count users with "Pending" in their redeemStatus (Column M) - case-insensitive
             document.getElementById('pendingRedemptions').textContent = data.filter(u => {
-                if (!u.status) return false;
-                return String(u.status).toLowerCase().includes('pending');
+                if (!u.redeemStatus) return false;
+                return String(u.redeemStatus).toLowerCase().includes('pending');
             }).length;
-            
+
             // Hide loading
             document.getElementById('tableLoading').style.display = 'none';
-            
+
             if (data.length === 0) {
                 document.getElementById('noData').style.display = 'block';
                 document.getElementById('desktopTableContainer').style.display = 'none';
                 document.getElementById('mobileCardsContainer').style.display = 'none';
             } else {
                 document.getElementById('noData').style.display = 'none';
-                
+
                 // Render desktop table
                 renderDesktopTable(data);
-                
+
                 // Render mobile cards
                 renderMobileCards(data);
             }
-            
+
             document.getElementById('lastUpdated').textContent = 'Last updated: ' + new Date().toLocaleString();
             lucide.createIcons();
         }
@@ -977,10 +996,12 @@
         function renderDesktopTable(data) {
             const container = document.getElementById('desktopTableContainer');
             const tbody = document.getElementById('tableBody');
-            
+
             container.style.display = 'block';
-            
-            tbody.innerHTML = data.map(u => `
+
+            tbody.innerHTML = data.map(u => {
+                const redeemStatusClass = getRedeemStatusClass(u.redeemStatus);
+                return `
                 <tr>
                     <td>${formatDate(u.timeStamp) || '-'}</td>
                     <td>${u.name || '-'}</td>
@@ -990,8 +1011,10 @@
                     <td style="color: var(--gold); font-weight: 600;">${(parseInt(u.points) || 0).toLocaleString()}</td>
                     <td class="${u.status === 'Active' ? 'status-active' : 'status-pending'}">${u.status || '-'}</td>
                     <td>${u.gcashNumber || '-'}</td>
+                    <td title="${u.deviceModel || ''}">${u.deviceModel || '-'}</td>
+                    <td class="${redeemStatusClass}">${u.redeemStatus || '-'}</td>
                 </tr>
-            `).join('');
+            `}).join('');
         }
 
         // ============================================
@@ -999,10 +1022,15 @@
         // ============================================
         function renderMobileCards(data) {
             const container = document.getElementById('mobileCardsContainer');
-            
+
             container.style.display = 'flex';
-            
-            container.innerHTML = data.map(u => `
+
+            container.innerHTML = data.map(u => {
+                const redeemStatusClass = getRedeemStatusClass(u.redeemStatus);
+                const redeemValueClass = redeemStatusClass === 'status-redeem-pending' ? 'redeem-pending' : 
+                                        redeemStatusClass === 'status-success' ? 'redeem-success' : '';
+
+                return `
                 <div class="user-card">
                     <div class="user-card-header">
                         <span class="user-card-name">${u.name || 'Unknown'}</span>
@@ -1026,6 +1054,14 @@
                             <span class="user-card-value">${u.gcashNumber || '-'}</span>
                         </div>
                         <div class="user-card-detail full-width">
+                            <span class="user-card-label">Device Model</span>
+                            <span class="user-card-value">${u.deviceModel || '-'}</span>
+                        </div>
+                        <div class="user-card-detail full-width">
+                            <span class="user-card-label">Redeem Status</span>
+                            <span class="user-card-value ${redeemValueClass}">${u.redeemStatus || '-'}</span>
+                        </div>
+                        <div class="user-card-detail full-width">
                             <span class="user-card-label">Password</span>
                             <span class="user-card-value password">${maskPassword(u.password)}</span>
                         </div>
@@ -1035,7 +1071,7 @@
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         // ============================================
@@ -1054,6 +1090,14 @@
                 return dateValue.toLocaleString();
             }
             return dateValue;
+        }
+
+        function getRedeemStatusClass(status) {
+            if (!status) return '';
+            const lowerStatus = String(status).toLowerCase();
+            if (lowerStatus.includes('pending')) return 'status-redeem-pending';
+            if (lowerStatus.includes('success')) return 'status-success';
+            return '';
         }
 
         function updateConnectionStatus(connected) {
