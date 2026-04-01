@@ -1,4 +1,7 @@
-
+console.log("BIVERSE.JS LOADED SUCCESSFULLY");
+window.testFunction = function() {
+    alert("JavaScript is working!");
+};
 // Add these JavaScript functions
 function setRating(value) {
     document.getElementById('selectedRating').value = value;
@@ -268,14 +271,48 @@ const EMAILJS_OLD = {
 // NEW account - for forgot password
 const EMAILJS_NEW = {
     publicKey: "DBIAD6AqpQ2kwDqSn",
-    service: "service_2ma1ygh",  // ⚠️ VERIFY: Get this from NEW account dashboard
-    template: "template_imrtu7e" // ⚠️ VERIFY: Get this from NEW account dashboard
+    service: "service_2ma1ygh",  // ⚠️ VERIFY THIS IN EMAILJS DASHBOARD
+    template: "template_imrtu7e"    // ⚠️ VERIFY THIS IN EMAILJS DASHBOARD
 };
 
 // Initialize OLD account by default
 emailjs.init(EMAILJS_OLD.publicKey);
 
 // ==================== EMAIL SEND FUNCTION (ONLY ONE DEFINITION) ====================
+// Send using NEW account (forgot password) via REST API
+async function testEmailJSConnection() {
+    try {
+        const testResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                service_id: EMAILJS_NEW.service,
+                template_id: EMAILJS_NEW.template,
+                user_id: EMAILJS_NEW.publicKey,
+                template_params: {
+                    user_name: "Test User",
+                    to_email: "test@example.com",
+                    verification_code: "123456",
+                    expiration_time: "Mar 29, 2026 at 7:30 PM"
+                }
+            })
+        });
+        
+        console.log("Test Status:", testResponse.status);
+        const text = await testResponse.text();
+        console.log("Test Response:", text);
+        return testResponse.ok;
+        
+    } catch (e) {
+        console.error("Test Failed:", e);
+        return false;
+    }
+}
+
+// Initialize NEW account for forgot password
+function initForgotPasswordEmailJS() {
+    emailjs.init(EMAILJS_NEW.publicKey);
+}
 async function sendForgotPasswordEmail(params) {
     console.log("[EMAILJS] Sending to:", params.to_email);
     console.log("[EMAILJS] Code:", params.verification_code);
@@ -380,6 +417,19 @@ function showResetSuccess() {
     document.getElementById('resetSuccessContainer').style.display = 'block';
     lucide.createIcons();
 }
+async function testEmailJS() {
+    try {
+        await sendForgotPasswordEmail({
+            to_email: "your-test-email@gmail.com",
+            user_name: "Test User",
+            verification_code: "123456",
+            expiration_time: "Mar 29, 2026 at 7:17 PM"
+        });
+        console.log("✅ Email sent successfully");
+    } catch (e) {
+        console.error("❌ Email failed:", e);
+    }
+}
 
 function hideAllAuthContainers() {
     document.getElementById('loginContainer').style.display = 'none';
@@ -419,8 +469,7 @@ async function handleForgotPassword() {
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify({
                 action: 'forgotPassword',
-                email: email,
-                deviceModel: getDeviceModel()
+                email: email
             })
         });
         
@@ -506,10 +555,6 @@ async function verifyCode() {
     
     showToast("Verifying...");
     
-    // DEBUG: Log what we're sending
-    console.log("Verifying code for email:", resetState.email);
-    console.log("Entered code:", enteredCode);
-    
     try {
         const response = await fetch(APPS_SCRIPT_URL, {
             method: 'POST',
@@ -522,15 +567,16 @@ async function verifyCode() {
         });
         
         const result = await response.json();
-        console.log("Server response:", result); // DEBUG
         
         if (result.success) {
             showToast("✅ Code verified!");
             showResetPassword();
         } else {
             showToast(result.message || "Invalid or expired code");
-            // DEBUG: Show what was expected vs entered
-            console.log("Error:", result.message);
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById('code' + i).value = '';
+            }
+            document.getElementById('code1').focus();
         }
         
     } catch (e) {
@@ -538,6 +584,7 @@ async function verifyCode() {
         showToast("Error verifying code");
     }
 }
+
 async function resendCode() {
     if (!resetState.canResend) {
         showToast("Please wait before resending");
@@ -816,7 +863,7 @@ function initStatusTracking() {
         }
     });
 }
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwzVlUtHF6XPUNvSwoAwg6HqZDhvvEONT7iSKqSQ2ITJWz9mZ7qx8IuVhcRWxO49sP1-A/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4668aGFmhQcewS4H0YM5TRQuYUyloGskoRBf0dsV5jqgGkCNEoHQJFiop0MpmPfEfKw/exec";
 
 let state = JSON.parse(localStorage.getItem('bq_final_v18')) || { 
     pts: 0, 
