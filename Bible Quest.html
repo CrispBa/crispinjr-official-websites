@@ -376,7 +376,7 @@ spans {
         i, .lucide {width: 18px !important;height: 18px !important;display: inline-block;}
 
 header {
-    padding: 10px 15px 10px 10px;
+    padding: 15px 15px 20px 13px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -592,6 +592,7 @@ span {}
           overflow-y: auto;
           -webkit-overflow-scrolling: touch;
           touch-action: pan-y;
+          padding-bottom:20px;
         }
         .section { 
           display: none; }
@@ -854,9 +855,8 @@ width: 100%;
 
 img.logout-icon {
     object-fit: contain;
-    height: 18px;
-    width: 18px;
     transition: transform 0.2s ease;
+    transform: translate(1px, -2.2px)
 }
 .logout-tooltip {
     position: absolute;
@@ -876,9 +876,8 @@ img.logout-icon {
 /* Base Icon - Same size as Logout */
 img.resetpass-icon {
     object-fit: contain;
-    height: 18px;
-    width: 18px;
     transition: transform 0.2s ease;
+    transform:translate(1px, -2px);
 }
 
 /* Tooltip - Same look as Logout */
@@ -902,7 +901,7 @@ img.resetpass-icon {
     transform: translate(0px, 0px);
 }
 .resetpass-btn:hover .resetpass-icon {
-transform: scale(1.2)
+transform: scale(1)
 }
 
 
@@ -931,7 +930,7 @@ position: relative;
 /* Position both icons at the bottom center */
 .logout-btn, .resetpass-btn { 
     position: absolute;
-    bottom: -9px; /* Pulls icons down to sit at bottom edge */
+    bottom: -17px; /* Pulls icons down to sit at bottom edge */
     background: transparent;
     border: none;
     padding: 0;
@@ -968,9 +967,9 @@ position: relative;
 /* Icon images */
 .logout-icon, .resetpass-icon {
     object-fit: contain;
-    height: 18px;
-    width: 18px;
-    border-radius: 50%; /* Makes them circular if they aren't already */
+    height: 20px;
+    width: 20px;
+    border-radius: 100%; /* Makes them circular if they aren't already */
     border: 1px solid rgba(255, 215, 0, 0.5); /* Optional: adds subtle border */
     background: rgba(0, 0, 0, 0.8); /* Dark background behind icons */
     padding: 2px;

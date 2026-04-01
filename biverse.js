@@ -178,7 +178,7 @@ function completeGoogleAuth(userData) {
     renderShop();
     loadRandom();
     syncStatus();
-    setInterval(syncStatus, 10000);
+    setInterval(syncStatus, 600);
     initStatusTracking();
 }
 
@@ -871,9 +871,10 @@ let state = JSON.parse(localStorage.getItem('bq_final_v18')) || {
     firstClaim: true, 
     userEmail: null,
     userName: null,
-    profilePic: "https://i.imgur.com/Bu2aW8n.png"
+    profilePic: "https://i.imgur.com/Bu2aW8n.png",
+    lastPointsUpdate: 0,
+    claimLockUntil: 0
 };
-
 let allVerses = [];
 let currentVerse = null;
 let activeReward = null;
@@ -1034,7 +1035,7 @@ async function handleAuth(mode) {
                 renderShop();
                 loadRandom();
                 syncStatus();
-                setInterval(syncStatus, 10000);
+                setInterval(syncStatus, 100);
 		initStatusTracking();
             } else {
                 showToast(result.message || "Email or password incorrect");
@@ -1180,21 +1181,27 @@ async function syncStatus() {
         const result = await response.json();
         
         if (result.success && result.user) {
-            const serverStatus = result.user.status;
             const serverPoints = parseInt(result.user.points) || 0;
             const serverAmounts = parseFloat(result.user.amounts) || 0;
             
-            state.pts = serverPoints;
-            state.amounts = serverAmounts;
-            state.status = serverStatus;
-            state.gcashNumber = result.user.gcashNumber;
-
+            // Only update from server if server has MORE points (admin added)
+            // OR if local is 0 (first load)
+            if (serverPoints > state.pts || state.pts === 0) {
+                console.log(`[SYNC] Updating from server: ${state.pts} -> ${serverPoints}`);
+                state.pts = serverPoints;
+                state.amounts = serverAmounts;
+                state.status = result.user.status;
+                state.gcashNumber = result.user.gcashNumber;
+                
+                // Save and update display
+                localStorage.setItem('bq_final_v18', JSON.stringify(state));
+                document.getElementById('pts').innerText = state.pts.toLocaleString();
+            }
+            // If serverPoints <= state.pts, keep local (user just claimed or same)
+            
             if (result.redemptionHistory) {
                 updateRedemptionHistoryFromServer(result.redemptionHistory);
             }
-            
-            save();
-            updateUI();
             
             const logsSection = document.getElementById('logs');
             if (logsSection && logsSection.classList.contains('active')) {
@@ -1205,7 +1212,6 @@ async function syncStatus() {
         console.warn("[SYNC] Failed to sync:", e.message);
     }
 }
-
 function updateRedemptionHistoryFromServer(serverHistory) {
     const nonRedemptionLogs = state.logs.filter(log => !log.includes("Redeemed"));
     state.logs = [...serverHistory, ...nonRedemptionLogs];
@@ -1215,9 +1221,7 @@ function updateRedemptionHistoryFromServer(serverHistory) {
 function save() { 
     localStorage.setItem('bq_final_v18', JSON.stringify(state)); 
     updateUI();  
-    syncPointsToCloud(); 
 }
-
 async function syncPointsToCloud() {
     if (!state.userEmail || state.userEmail === 'guest') {
         console.log("[SYNC] Skipping sync: not logged in or guest user");
@@ -1225,6 +1229,8 @@ async function syncPointsToCloud() {
     }
 
     try {
+        console.log("[SYNC] Pushing points to server:", state.pts);
+        
         const response = await fetch(APPS_SCRIPT_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
@@ -1242,15 +1248,16 @@ async function syncPointsToCloud() {
 
         const result = await response.json();
         if (result.success) {
-            console.log("[SYNC] ✅ Points synced successfully:", result.newPoints);
+            console.log("[SYNC] ✅ Server confirmed:", result.newPoints);
+            // Extend lock slightly to ensure next syncStatus gets fresh data
+            state.claimLockUntil = Date.now() + 100;
         } else {
             console.warn("[SYNC] Server error:", result.message);
         }
     } catch (e) {
-        console.warn("[SYNC] Sync failed (will retry):", e.message);
+        console.warn("[SYNC] Sync failed:", e.message);
     }
 }
-
 async function loadVerse(ref) {
     const vRefElem = document.getElementById('vRef');
     const vTextElem = document.getElementById('vText');
@@ -1342,7 +1349,7 @@ function loadRandom() {
 }
 
 function startTimer() {
-    let tLeft = 60;
+    let tLeft = 10;
     const circle = document.getElementById('pCircle');
     const btn = document.getElementById('claimBtn');
     const txt = document.getElementById('timerTxt');
@@ -1369,15 +1376,24 @@ function startTimer() {
 function claimAndNext() {
     if (!currentVerse) return;
     
+    // Add points locally first
     state.pts += currentChars;
+    
+    // Update display immediately
+    document.getElementById('pts').innerText = state.pts.toLocaleString();
+    
+    // Add to logs
     state.logs.unshift(`${new Date().toLocaleTimeString()}: ${currentVerse.reference} +${currentChars} words`);
     
-    save();
-    document.getElementById('claimBtn').innerText = "Claimed!";
+    // Save to localStorage
+    localStorage.setItem('bq_final_v18', JSON.stringify(state));
     
+    // Sync to server in background
+    syncPointsToCloud();
+    
+    document.getElementById('claimBtn').innerText = "Claimed!";
     setTimeout(loadRandom, 1000);
 }
-
 function renderShop() {
     const rewards = [{v:1, c:500}, {v:50, c:25000}, {v:100, c:50000}, {v:500, c:250000}];
     document.getElementById('shopList').innerHTML = rewards.map(i => {
@@ -1497,10 +1513,9 @@ function manualSearch() {
 }
 
 function updateUI() {
-    document.getElementById('pts').innerText = state.pts.toLocaleString();
-    const avatar = document.getElementById('userAvatar');
-    if (avatar) {
-        avatar.src = state.profilePic || 'https://i.imgur.com/Bu2aW8n.png';
+    const ptsElement = document.getElementById('pts');
+    if (ptsElement) {
+        ptsElement.innerText = state.pts.toLocaleString();
     }
 }
 async function logout() {
@@ -1528,20 +1543,35 @@ async function init() {
         return;
     }
     
-    updateUI(); 
+       // First sync to get server state
+    await syncStatus();
+    
     renderShop(); 
     loadRandom(); 
-    syncStatus();
     
-    // --> ADD THIS LINE HERE <--
+    // Fast sync for live updates (every 3 seconds)
+    setInterval(syncStatus, 3000);
+    
+    // Sync when tab becomes visible
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            syncStatus();
+        }
+    });
+    
     initStatusTracking();
     
-    setInterval(syncStatus, 10000);
+    // Also sync immediately when user returns to tab
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            console.log('[SYNC] Tab visible, syncing...');
+            syncStatus();
+        }
+    });
     
     document.getElementById('logoutBtn').style.display = 'block';
     document.getElementById('resetBtn').style.display = 'block';
 }
-
 document.addEventListener('DOMContentLoaded', () => {
     console.log("[INIT] Page loaded, initializing Bible Quest...");
     
