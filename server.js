@@ -21,11 +21,8 @@ app.post('/api/build', upload.single('logo'), (req, res) => {
     setTimeout(() => {
         res.json({
             success: true,
-            // FIXED LINK: This is a real, existing test APK to prevent 404 errors
+            // UPDATED LINK: This is a real, existing test APK to prevent 404 errors
             downloadUrl: "https://github.com/GoogleChromeLabs/bubblewrap/raw/main/packages/cli/test/data/test.apk"
         });
     }, 5000);
 });
-
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`Factory live on port ${PORT}`));
