@@ -25,6 +25,6 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 
-# Match the port to Render's default or use an environment variable
+# Expose the correct port for Render
 EXPOSE 10000
 CMD ["npm", "start"]
