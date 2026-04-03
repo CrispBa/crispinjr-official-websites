@@ -1,27 +1,38 @@
 const express = require('express');
 const cors = require('cors');
+const multer = require('multer');
 const path = require('path');
 const app = express();
 
+// Configure where to store uploaded logos temporarily
+const upload = multer({ dest: 'uploads/' });
+
 app.use(cors());
 app.use(express.json());
-
-// Serves all files inside the 'Public' folder
 app.use(express.static(path.join(__dirname, 'Public')));
 
-app.post('/api/build', (req, res) => {
+// The route now accepts a single file named 'logo'
+app.post('/api/build', upload.single('logo'), (req, res) => {
     const { name, url } = req.body;
-    console.log(`Received build request for: ${name} (${url})`);
+    const logo = req.file;
 
-    // For now, this sends back a sample APK link.
-    // Once your Dockerfile is active, this will trigger a real build.
+    if (!logo) {
+        return res.status(400).json({ success: false, error: "No logo uploaded" });
+    }
+
+    console.log(`Building APK: ${name}`);
+    console.log(`URL: ${url}`);
+    console.log(`Logo saved at: ${logo.path}`);
+
+    // Simulation of build process
     setTimeout(() => {
         res.json({
             success: true,
-            downloadUrl: "https://github.com/GoogleChromeLabs/bubblewrap/raw/main/packages/cli/test/data/test.apk"
+            // Working test link to prevent 404 errors
+            downloadUrl: "https://raw.githubusercontent.com/GoogleChromeLabs/bubblewrap/main/packages/cli/test/data/test.apk"
         });
-    }, 3000);
+    }, 5000);
 });
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`APK Factory live on port ${PORT}`));
+app.listen(PORT, () => console.log(`Factory live on port ${PORT}`));
