@@ -1,0 +1,12 @@
+const response = await fetch('https://your-app-name.onrender.com/api/build', { 
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: appName, url: appUrl })
+});
+
+const data = await response.json();
+if (data.success) {
+    // This opens the real APK download link
+    window.location.href = data.downloadUrl;
+    updateProgress("Download Started!", 100);
+}
