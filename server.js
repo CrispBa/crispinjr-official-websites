@@ -22,7 +22,7 @@ app.post('/api/build', upload.single('logo'), (req, res) => {
         res.json({
             success: true,
             // UPDATED LINK: This is a real, existing test APK to prevent 404 errors
-            downloadUrl: "https://github.com/GoogleChromeLabs/bubblewrap/raw/main/packages/cli/test/data/test.apk"
+            downloadUrl: "https://raw.githubusercontent.com/appium/sample-apps/master/pre-built/selendroid-test-app.apk"
         });
     }, 5000);
 });
