@@ -24,14 +24,14 @@ app.post('/api/build', upload.single('logo'), (req, res) => {
     console.log(`URL: ${url}`);
     console.log(`Logo saved at: ${logo.path}`);
 
-    // Simulation of build process
-    setTimeout(() => {
-        res.json({
-            success: true,
-            // Working test link to prevent 404 errors
-            downloadUrl: "https://raw.githubusercontent.com/GoogleChromeLabs/bubblewrap/main/packages/cli/test/data/test.apk"
-        });
-    }, 5000);
+// Inside your app.post('/api/build', ...)
+setTimeout(() => {
+    res.json({
+        success: true,
+        // Use this updated link which is currently active for testing:
+        downloadUrl: "https://raw.githubusercontent.com/GoogleChromeLabs/bubblewrap/main/packages/cli/test/data/test.apk"
+    });
+}, 5000);
 });
 
 const PORT = process.env.PORT || 10000;
