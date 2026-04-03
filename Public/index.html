@@ -3,21 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web2APK | Bible Quest</title>
+    <title>Web2APK Builder</title>
     <style>
         :root { --neon: #00f2ff; --bg: #0d1117; --card: #161b22; }
         body { background: var(--bg); color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .container { background: var(--card); padding: 2rem; border-radius: 20px; border: 1px solid #333; width: 90%; max-width: 400px; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #444; background: #0d1117; color: white; box-sizing: border-box; }
-        .btn { width: 100%; padding: 15px; background: linear-gradient(45deg, #00d4ff, #0055ff); border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; }
-        #status { margin-top: 20px; font-size: 0.9rem; color: #8b949e; }
+        .form-group { text-align: left; margin-bottom: 1rem; }
+        label { font-size: 0.8rem; color: #8b949e; }
+        input { width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid #444; background: #0d1117; color: white; box-sizing: border-box; }
+        .btn { width: 100%; padding: 15px; background: linear-gradient(45deg, #00d4ff, #0055ff); border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        #status { margin-top: 20px; color: var(--neon); font-size: 0.9rem; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Web2<span>APK</span></h1>
-        <input type="text" id="appName" value="Bible Quest">
-        <input type="url" id="appUrl" placeholder="https://your-website.com">
+        <div class="form-group">
+            <label>App Name</label>
+            <input type="text" id="appName" placeholder="e.g. Bible Quest">
+        </div>
+        <div class="form-group">
+            <label>Website URL (HTTPS)</label>
+            <input type="url" id="appUrl" placeholder="https://your-site.com">
+        </div>
+        <div class="form-group">
+            <label>App Logo (Icon)</label>
+            <input type="file" id="appLogo" accept="image/*">
+        </div>
         <button class="btn" id="buildBtn">GENERATE APK</button>
         <p id="status"></p>
     </div>
@@ -29,23 +41,32 @@
         btn.onclick = async () => {
             const name = document.getElementById('appName').value;
             const url = document.getElementById('appUrl').value;
+            const logoFile = document.getElementById('appLogo').files[0];
 
-            if(!url.startsWith('https://')) return alert("Use HTTPS!");
+            if (!name || !url || !logoFile) return alert("Please fill in all fields and select a logo.");
+            if (!url.startsWith('https://')) return alert("URL must be HTTPS!");
 
-            status.innerText = "Connecting to Factory...";
+            // Prepare data for upload
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('url', url);
+            formData.append('logo', logoFile);
+
+            status.innerText = "Uploading assets to Render...";
             btn.disabled = true;
 
             try {
                 const res = await fetch('https://crispinjr-official-websites-40cz.onrender.com/api/build', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, url })
+                    body: formData // Browser sets headers automatically for FormData
                 });
 
                 const data = await res.json();
                 if (data.success) {
                     status.innerText = "Build Complete! Downloading...";
                     window.location.href = data.downloadUrl;
+                } else {
+                    throw new Error(data.error);
                 }
             } catch (e) {
                 status.innerText = "Error: " + e.message;
