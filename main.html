@@ -91,30 +91,7 @@
             buildBtn.disabled = false;
         }
     });
-buildBtn.addEventListener('click', async () => {
-    const appName = document.getElementById('appName').value;
-    const appUrl = document.getElementById('appUrl').value;
 
-    try {
-        const response = await fetch('https://your-render-app.onrender.com/api/build', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: appName, url: appUrl })
-        });
-
-        const data = await response.json();
-        
-        if (data.success) {
-            // This is YOUR server's link, not a third party!
-            window.location.href = `https://your-render-app.onrender.com${data.downloadUrl}`;
-            updateProgress("Build Complete! Downloading...", 100);
-        } else {
-            throw new Error(data.error);
-        }
-    } catch (err) {
-        statusText.innerText = "Build Failed: " + err.message;
-    }
-});
     function updateProgress(msg, percent) {
         statusText.innerText = msg;
         fill.style.width = percent + "%";
