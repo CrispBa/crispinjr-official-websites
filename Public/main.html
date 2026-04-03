@@ -19,6 +19,7 @@
         .progress-fill { height: 100%; width: 0%; background: var(--neon); transition: 0.3s; }
         .log { font-size: 0.8rem; color: #8b949e; }
     </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -45,6 +46,16 @@
 </div>
 
 <script>
+const buildBtn = document.getElementById('startBuild');
+const statusArea = document.getElementById('status-area');
+const statusText = document.getElementById('status-text');
+const fill = document.getElementById('fill');
+
+function updateProgress(text, percent) {
+    statusText.innerText = text;
+    fill.style.width = percent + '%';
+}
+
 buildBtn.addEventListener('click', async () => {
     const appName = document.getElementById('appName').value;
     const appUrl = document.getElementById('appUrl').value;
