@@ -1,7 +1,7 @@
 # Use a Node.js base image
 FROM node:18
 
-# Install Java and essential build tools
+# Install Java (Required for Android Builds) and essential tools
 RUN apt-get update && apt-get install -y openjdk-17-jdk wget unzip git
 
 # Install Android SDK Command Line Tools
@@ -12,19 +12,20 @@ RUN wget https://dl.google.com/android/repository/commandlinetools-linux-9477386
     && mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest \
     && rm sdk.zip
 
-# Set Path
+# Set Path for Android Tools
 ENV PATH $PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools
 
-# Accept Licenses and Install Build Tools
+# Accept Licenses and Install Required Build Components
+# This fix prevents the "Status 1" error by combining the commands correctly
 RUN yes | sdkmanager --licenses
 RUN sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
 
-# Setup your app directory
+# Setup your application
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
 
-# Expose the correct port for Render
+# Match the port to Render's default (10000) as used in your server.js
 EXPOSE 10000
 CMD ["npm", "start"]
