@@ -1983,6 +1983,53 @@ ease-in-out infinite alternate; }
 }
   </style>
 </head>
+	<div id="kofi-popup-container" style="
+    position: fixed; 
+    top: -150px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    transition: top 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    z-index: 100000;
+">
+    <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
+    <script type='text/javascript'>
+        // 1. Initialize the widget
+        kofiwidget2.init('Support CrispBa', 'Linear-gradient(45deg, #a0a2a5ab, #72a4f2', 'M4M11X8KK7');
+        kofiwidget2.draw();
+        
+        const kofiContainer = document.getElementById('kofi-popup-container');
+        let hideTimeout;
+
+        // 2. Function to show the popup
+        function showKofiPopup() {
+            // Clear any existing timer so it doesn't hide early if clicked rapidly
+            clearTimeout(hideTimeout);
+            
+            // Slide down
+            kofiContainer.style.top = '100px'; 
+
+            // Hide after 6 seconds of inactivity
+            hideTimeout = setTimeout(() => {
+                kofiContainer.style.top = '-150px'; 
+            }, 6000);
+        }
+
+        // 3. GLOBAL CLICK LISTENER
+        // This detects clicks on ANY button in your CrispBa Platform
+        document.addEventListener('click', function(event) {
+            // Check if the clicked element is a <button> or has a button-like class
+            const isButton = event.target.tagName === 'BUTTON' || 
+                             event.target.closest('button') ||
+                             event.target.classList.contains('cta-btn') ||
+                             event.target.classList.contains('ai-send-btn');
+
+            if (isButton) {
+                showKofiPopup();
+            }
+        });
+    </script>
+</div>
+
 <body>
   <div id="topBanner">
     <div class="banner-content">
