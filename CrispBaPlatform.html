@@ -317,21 +317,7 @@ menu-item:hover {
     transition: top 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     border-bottom: 3px solid var(--color-primary);
 }
-.banner-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.app-info { display: flex; align-items: center; gap: 12px; }
-.app-icon { width: 38px; height: 38px; border-radius: 8px; }
-.app-text { font-size: 14px; color: var(--color-dark); font-weight: 500; }
-.banner-actions { display: flex; gap: 10px; }
-.btn-banner { padding: 8px 16px; font-size: 13px; font-weight: 600; border-radius: 8px; cursor: pointer; text-decoration: none; border: none; }
-.btn-download { background-color: var(--color-primary); color: white !important; }
-.btn-close-banner { background-color: #f3f4f6; color: #4b5563; }
+
 @media (max-width: 600px) { .app-text { font-size: 12px; line-height: 1.2; } }
 
     /* when submenu is open, flip chevron up and color it */
@@ -2036,19 +2022,7 @@ ease-in-out infinite alternate; }
 </div>
 
 <body>
-  <div id="topBanner">
-    <div class="banner-content">
-        <div class="app-info">
-            <img src="favicon.png" class="app-icon" alt="CrispBa">
-            <div class="app-text">Install CrispBa Platform for the full mobile experience.</div>
-        </div>
-        <div class="banner-actions">
-            <button class="btn-banner btn-close-banner" onclick="closeBanner()">Later</button>
-<a href="https://crispba.github.io/crispinjr-official-websites/CrispBa.apk" download="CrispBa.apk" class="btn-banner btn-download" onclick="markAsInstalled()">Install</a>
 
-        </div>
-    </div>
-</div>
 
   <!-- Page loader: full-screen loading animation that blocks access for up to 3s -->
   <div id="pageLoader" class="page-loader" aria-hidden="false" role="status" aria-live="polite">
@@ -2599,7 +2573,7 @@ ease-in-out infinite alternate; }
     const slideImages = [
       'cobelog2.jpg', 'fb.jpg', 'fb1.jpg', 'slide4.jpeg', 'slide5.jpg', 'slide6.jpg',
       'slide7.jpg', 'slide8.jpg', 'slide9.jpg', 'slide10.jpeg', 'slide11.jpeg',
-      'slide12.jpeg', 'slide13.png', 'Screenshot_2023-11-13-17-15-21-34_22e4250240c136c826b8a3b1264b092d.jpg', 'slide15.jpg'
+      'slide12.jpeg', 'slide13.png', 'Screenshot_2023-11-13-17-15-21-34_22e4250240c136c826b8a3b1264b092d.jpg', '1775360859480.jpeg'
     ];
     const dots = document.querySelectorAll('.dot');
     const previews = document.querySelectorAll('.preview-circle');
