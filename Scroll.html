@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        *::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+        *{scrollbar-width:none!important;-ms-overflow-style:none!important}
+        body{height:200vh;background:linear-gradient(to bottom,red,blue)}
+    </style>
+</head>
+<body>
+    <h1>Scroll down - no scrollbar should appear</h1>
+    <script>
+        (function(){
+            var s=document.createElement('style');
+            s.textContent='*::-webkit-scrollbar{display:none!important}*{scrollbar-width:none!important}';
+            document.documentElement.appendChild(s);
+        })();
+    </script>
+</body>
+</html>
