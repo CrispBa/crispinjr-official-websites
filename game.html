@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Prison Break - Earn & Play</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: fixed;
+            background: #0a0a1a;
+            touch-action: none;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+ 
+
+        /* 3. Hide Scrollbar for Chrome, Safari, and Android WebView */
+        .app-container::-webkit-scrollbar {
+            display: none;
+            width: 0 !important;
+            height: 0 !important;
+        }
+
+        .game-container {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #0f0f23 0%, #1a1a3e 100%);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            height: 70px;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #00d084 0%, #00b894 100%);
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .balance-display {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .balance-box {
+            background: linear-gradient(135deg, #00d084 0%, #00b894 100%);
+            border-radius: 20px;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .balance-box.secondary {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        }
+
+        .balance-icon-svg {
+            width: 18px;
+            height: 18px;
+            color: white;
+        }
+
+        .balance-text {
+            font-weight: 700;
+            font-size: 14px;
+            color: white;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-icon {
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.1s ease, background 0.2s ease;
+        }
+
+        .header-icon:active {
+            transform: scale(0.95);
+        }
+
+        .header-icon:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .icon-svg {
+            width: 15px;
+            height: 15px;
+            color: white;
+        }
+
+        .notification-wrapper {
+            position: relative;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 10px;
+            height: 10px;
+            background: #ff4757;
+            border-radius: 50%;
+            border: 2px solid #1a1a2e;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Earn View */
+/* 1. THE MAIN WRAPPER */
+.app-container {
+    height: 100vh;
+    width: 100vw;
+    /* Hide overflow here so the inner container handles it */
+    overflow: hidden; 
+    position: relative;
+    background: linear-gradient(180deg, #ff0000 0%, #800080 50%, #0000ff 100%);
+}
+
+/* 2. THE SCROLLABLE AREA (Your Earn View) */
+.earn-view {
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    margin: 0;
+    
+    /* ENABLE SCROLLING */
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* MOMENTUM SCROLLING FOR APK/MOBILE */
+    -webkit-overflow-scrolling: touch;
+
+    /* HIDE SCROLLBAR (Firefox) */
+    scrollbar-width: none;
+
+    /* HIDE SCROLLBAR (IE/Edge) */
+    -ms-overflow-style: none;
+}
+
+/* 3. HIDE SCROLLBAR (Chrome, Safari, and Android WebView) */
+.earn-view::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        .offers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top:20px;
+        }
+
+        /* Offer Card */
+        .offer-card {
+            background: linear-gradient(135deg, #1e1e3f 0%, #2d2d5a 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.5s ease-out;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .offer-card:nth-child(1) { animation-delay: 0.1s; }
+        .offer-card:nth-child(2) { animation-delay: 0.15s; }
+        .offer-card:nth-child(3) { animation-delay: 0.2s; }
+        .offer-card:nth-child(4) { animation-delay: 0.25s; }
+        .offer-card:nth-child(5) { animation-delay: 0.3s; }
+        .offer-card:nth-child(6) { animation-delay: 0.35s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .offer-image {
+            width: 100%;
+            height: 160px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .offer-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #00d084;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .offer-details {
+            padding: 12px 15px;
+        }
+
+        .offer-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            gap: 10px;
+        }
+
+        .offer-earnings {
+            color: #00cec9;
+            font-weight: 800;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .offer-title {
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .info-icon {
+            width: 26px;
+            height: 26px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #74b9ff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: background 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .info-icon:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .info-svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .play-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #00d084 0%, #00b894 100%);
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.1s ease, box-shadow 0.2s ease;
+        }
+
+        .play-btn:active {
+            transform: scale(0.98);
+        }
+
+        .play-btn:hover {
+            box-shadow: 0 6px 15px rgba(0, 184, 148, 0.3);
+        }
+
+        /* FIXED FLOATING FEATURES - Only 3 buttons */
+        .fixed-floating-features {
+            position: fixed;
+            bottom: 100px;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+            z-index: 100;
+            display: none;
+        }
+
+        .fixed-floating-features.active {
+            display: block;
+        }
+
+        .floating-features-container {
+            position: relative;
+            max-width: 480px;
+            margin: 0 auto;
+            height: 120px;
+            pointer-events: none;
+        }
+
+        .float-btn {
+            position: absolute;
+            pointer-events: auto;
+            cursor: pointer;
+            transition: transform 0.2s ease, filter 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            animation: floatBounce 2s ease-in-out infinite;
+        }
+
+        .float-btn:active {
+            transform: scale(0.92);
+        }
+
+        .float-btn:hover {
+            filter: brightness(1.1);
+        }
+
+        @keyframes floatBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Bonus Button - Left Side */
+        .float-btn.bonus {
+            left: 20px;
+            bottom: 200%;
+            animation-delay: 0s;
+        }
+
+        .float-bonus-wrapper {
+            width: 43px;
+            height: 43px;
+            background: linear-gradient(135deg, #00d084 0%, #00b894 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 0 20px rgba(0, 208, 132, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .float-bonus-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .float-bonus-icon {
+            width: 30px;
+            height: 30px;
+            color: white;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            z-index: 1;
+        }
+
+        .float-bonus-label {
+            background: rgba(0, 0, 0, 0.8);
+            color: #00d084;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(0, 208, 132, 0.4);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        /* Theme Button - Right Side */
+        .float-btn.theme {
+
+    left: 12px;
+    bottom: 70%;
+    animation-delay: 0.3s;
+        }
+
+        .float-theme-wrapper {
+            width: 43px;
+            height: 43px;
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 0 15px rgba(155, 89, 182, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .float-theme-icon {
+            width: 26px;
+            height: 26px;
+            color: white;
+        }
+
+        .float-theme-label {
+            background: rgba(0, 0, 0, 0.8);
+            color: #9b59b6;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(155, 89, 182, 0.4);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        /* Skin Button - Right Side Below Theme */
+        .float-btn.skin {
+            left: 20px;
+            bottom: 135%;
+            animation-delay: 0.6s;
+        }
+
+        .float-skin-wrapper {
+            width: 43px;
+            height: 43px;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 0 15px rgba(243, 156, 18, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .float-skin-icon {
+            width: 26px;
+            height: 26px;
+            color: white;
+        }
+
+        .float-skin-label {
+            background: rgba(0, 0, 0, 0.8);
+            color: #f39c12;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(243, 156, 18, 0.4);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        /* Notification Badge */
+        .float-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4757;
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #1a1a2e;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            height: 80px;
+            background: linear-gradient(180deg, #2d3436 0%, #1a1a2e 100%);
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+            padding-bottom: max(8px, env(safe-area-inset-bottom));
+            position: relative;
+            z-index: 101;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 12px;
+            transition: background 0.2s ease;
+            flex: 1;
+            max-width: 80px;
+            border: none;
+            background: transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-icon-wrapper {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #636e72 0%, #2d3436 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .nav-icon-svg {
+            width: 22px;
+            height: 22px;
+            color: white;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #636e72;
+            transition: color 0.2s ease;
+        }
+
+        .nav-item.active .nav-icon-wrapper {
+            background: linear-gradient(135deg, #00d084 0%, #00b894 100%);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 184, 148, 0.4);
+        }
+
+        .nav-item.active .nav-label {
+            color: #00cec9;
+            font-weight: 700;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 300px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        .btn-close {
+            background: linear-gradient(180deg, #ff6b6b 0%, #ee5a6f 100%);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 20px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.1s ease;
+        }
+
+        .btn-close:active {
+            transform: scale(0.98);
+        }
+
+        /* Scrollbar styling */
+        .earn-view::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .earn-view::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .earn-view::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+
+        .earn-view::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Landscape mode */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .header { height: 50px; }
+            .avatar { width: 36px; height: 36px; }
+            .balance-box { padding: 6px 12px; }
+            .balance-text { font-size: 12px; }
+            .header-icon { width: 36px; height: 36px; }
+            .offer-image { height: 100px; }
+            .fixed-floating-features { bottom: 80px; }
+            .float-btn.bonus { left: 10px; }
+            .float-btn.theme { right: 10px; bottom: 50px; }
+            .float-btn.skin { right: 10px; }
+            .float-bonus-wrapper { width: 48px; height: 48px; }
+            .float-theme-wrapper, .float-skin-wrapper { width: 44px; height: 44px; }
+            .bottom-nav { height: 60px; }
+            .nav-icon-wrapper { width: 36px; height: 36px; }
+            .nav-icon-svg { width: 18px; height: 18px; }
+            .nav-label { font-size: 10px; }
+        }
+
+        /* Tablet */
+        @media (min-width: 768px) {
+            .game-container {
+                max-width: 480px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="avatar">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar">
+            </div>
+            <div class="balance-display">
+                <div class="balance-box">
+                    <svg class="balance-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 3V21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M17 5H9.5C7.01472 5 5 7.01472 5 9.5C5 11.9853 7.01472 14 9.5 14H14.5C16.9853 14 19 16.0147 19 18.5C19 20.9853 16.9853 23 14.5 23H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M7 11H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M6 18H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span class="balance-text">34.60</span>
+                </div>
+                <div class="balance-box secondary">
+                    <svg class="balance-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M9 10H12C13.6569 10 15 11.3431 15 13C15 14.6569 13.6569 16 12 16H9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span class="balance-text">13K</span>
+                </div>
+            </div>
+            <div class="header-icons">
+                <button class="header-icon" onclick="showModal('Settings', 'Settings coming soon!')">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                        <path d="M19.4 15C19.2669 15.3016 19.2272 15.6362 19.286 15.9606C19.3448 16.285 19.4995 16.5843 19.73 16.82L19.79 16.88C19.976 17.0657 20.1235 17.2863 20.2241 17.5291C20.3248 17.7719 20.3766 18.0322 20.3766 18.295C20.3766 18.5578 20.3248 18.8181 20.2241 19.0609C20.1235 19.3037 19.976 19.5243 19.79 19.71C19.6043 19.896 19.3837 20.0435 19.1409 20.1441C18.8981 20.2448 18.6378 20.2966 18.375 20.2966C18.1122 20.2966 17.8519 20.2448 17.6091 20.1441C17.3663 20.0435 17.1457 19.896 16.96 19.71L16.9 19.65C16.6643 19.4195 16.365 19.2648 16.0406 19.206C15.7162 19.1472 15.3816 19.1869 15.08 19.32C14.7848 19.4467 14.532 19.6573 14.3543 19.9255C14.1766 20.1937 14.0816 20.5082 14.08 20.83V21C14.08 21.5304 13.8693 22.0391 13.4942 22.4142C13.1191 22.7893 12.6104 23 12.08 23C11.5496 23 11.0409 22.7893 10.6658 22.4142C10.2907 22.0391 10.08 21.5304 10.08 21V20.91C10.0723 20.579 9.96512 20.258 9.77251 19.9887C9.5799 19.7194 9.31074 19.5143 9 19.4C8.69838 19.2669 8.36381 19.2272 8.03941 19.286C7.71502 19.3448 7.41568 19.4995 7.18 19.73L7.12 19.79C6.93425 19.976 6.71368 20.1235 6.47088 20.2241C6.22808 20.3248 5.96783 20.3766 5.705 20.3766C5.44217 20.3766 5.18192 20.3248 4.93912 20.2241C4.69632 20.1235 4.47575 19.976 4.29 19.79C4.10405 19.6043 3.95653 19.3837 3.85588 19.1409C3.75523 18.8981 3.70343 18.6378 3.70343 18.375C3.70343 18.1122 3.75523 17.8519 3.85588 17.6091C3.95653 17.3663 4.10405 17.1457 4.29 16.96L4.35 16.9C4.58054 16.6643 4.73519 16.365 4.794 16.0406C4.85282 15.7162 4.81312 15.3816 4.68 15.08C4.55324 14.7848 4.34265 14.532 4.07447 14.3543C3.80629 14.1766 3.49179 14.0816 3.17 14.08H3C2.46957 14.08 1.96086 13.8693 1.58579 13.4942C1.21071 13.1191 1 12.6104 1 12.08C1 11.5496 1.21071 11.0409 1.58579 10.6658C1.96086 10.2907 2.46957 10.08 3 10.08H3.09C3.42099 10.0723 3.742 9.96512 4.0113 9.77251C4.28059 9.5799 4.48572 9.31074 4.6 9C4.73312 8.69838 4.77282 8.36381 4.714 8.03941C4.65519 7.71502 4.50054 7.41568 4.27 7.18L4.21 7.12C4.02405 6.93425 3.87653 6.71368 3.77588 6.47088C3.67523 6.22808 3.62343 5.96783 3.62343 5.705C3.62343 5.44217 3.67523 5.18192 3.77588 4.93912C3.87653 4.69632 4.02405 4.47575 4.21 4.29C4.39575 4.10405 4.61632 3.95653 4.85912 3.85588C5.10192 3.75523 5.36217 3.70343 5.625 3.70343C5.88783 3.70343 6.14808 3.75523 6.39088 3.85588C6.63368 3.95653 6.85425 4.10405 7.04 4.29L7.1 4.35C7.33568 4.58054 7.63502 4.73519 7.95941 4.794C8.28381 4.85282 8.61838 4.81312 8.92 4.68H9C9.29516 4.55324 9.54804 4.34265 9.72572 4.07447C9.90339 3.80629 9.99836 3.49179 10 3.17V3C10 2.46957 10.2107 1.96086 10.5858 1.58579C10.9609 1.21071 11.4696 1 12 1C12.5304 1 13.0391 1.21071 13.4142 1.58579C13.7893 1.96086 14 2.46957 14 3V3.09C14.0016 3.41179 14.0966 3.72629 14.2743 3.99447C14.452 4.26265 14.7048 4.47324 15 4.6C15.3016 4.73312 15.6362 4.77282 15.9606 4.714C16.285 4.65519 16.5843 4.50054 16.82 4.27L16.88 4.21C17.0657 4.02405 17.2863 3.87653 17.5291 3.77588C17.7719 3.67523 18.0322 3.62343 18.295 3.62343C18.5578 3.62343 18.8181 3.67523 19.0609 3.77588C19.3037 3.87653 19.5243 4.02405 19.71 4.21C19.896 4.39575 20.0435 4.61632 20.1441 4.85912C20.2448 5.10192 20.2966 5.36217 20.2966 5.625C20.2966 5.88783 20.2448 6.14808 20.1441 6.39088C20.0435 6.63368 19.896 6.85425 19.71 7.04L19.65 7.1C19.4195 7.33568 19.2648 7.63502 19.206 7.95941C19.1472 8.28381 19.1869 8.61838 19.32 8.92V9C19.4468 9.29516 19.6574 9.54804 19.9255 9.72572C20.1937 9.90339 20.5082 9.99836 20.83 10H21C21.5304 10 22.0391 10.2107 22.4142 10.5858C22.7893 10.9609 23 11.4696 23 12C23 12.5304 22.7893 13.0391 22.4142 13.4142C22.0391 13.7893 21.5304 14 21 14H20.91C20.5882 14.0016 20.2737 14.0966 20.0055 14.2743C19.7374 14.452 19.5268 14.7048 19.4 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="header-icon notification-wrapper" onclick="showModal('Notifications', '3 new notifications!')">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="notification-dot"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="earn-view">
+                <div class="earn-header">
+                </div>
+                <div class="offers-list" id="offersList">
+                    <!-- Game cards will be inserted here by JavaScript -->
+                </div>
+            </div>
+        </main>
+
+        <!-- FIXED FLOATING FEATURES - Only 3 buttons -->
+        <div class="fixed-floating-features active" id="floatingFeatures">
+            <div class="floating-features-container">
+                <!-- Bonus Button (Left) -->
+                <div class="float-btn bonus" onclick="showBonusModal()">
+                    <div class="float-bonus-wrapper">
+                        <svg class="float-bonus-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <span class="float-bonus-label">P50+</span>
+                </div>
+
+                <!-- Theme Button (Right) -->
+                <div class="float-btn theme" onclick="showThemeModal()">
+                    <div class="float-theme-wrapper">
+                        <svg class="float-theme-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                            <path d="M3 9H21" stroke="currentColor" stroke-width="2"/>
+                            <path d="M9 21V9" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <span class="float-theme-label">Theme</span>
+                </div>
+
+                <!-- Skin Button (Right Bottom) -->
+                <div class="float-btn skin" onclick="showSkinModal()">
+                    <div class="float-skin-wrapper">
+                        <svg class="float-skin-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20.38 3.4L21.62 6.6C21.82 7.08 21.42 7.6 20.9 7.6H19.5C18.9 7.6 18.5 8.1 18.7 8.6L20.2 12.4C20.4 12.9 20 13.4 19.4 13.4H17.5C17 13.4 16.6 13.8 16.7 14.3L17.5 17.2C17.7 17.9 17 18.5 16.3 18.2L12 16.5L7.7 18.2C7 18.5 6.3 17.9 6.5 17.2L7.3 14.3C7.4 13.8 7 13.4 6.5 13.4H4.6C4 13.4 3.6 12.9 3.8 12.4L5.3 8.6C5.5 8.1 5.1 7.6 4.5 7.6H3.1C2.58 7.6 2.18 7.08 2.38 6.6L3.62 3.4C3.82 2.92 4.38 2.6 4.9 2.6H19.1C19.62 2.6 20.18 2.92 20.38 3.4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <span class="float-skin-label">Skin</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="switchTab('earn')">
+                <div class="nav-icon-wrapper">
+                    <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 7H5C3.89543 7 3 7.89543 3 9V18C3 19.1046 3.89543 20 5 20H19C20.1046 20 21 19.1046 21 18V9C21 7.89543 20.1046 7 19 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 11H16.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3 11V7C3 5.89543 3.89543 5 5 5H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Earn</span>
+            </button>
+            <button class="nav-item" onclick="switchTab('offers')">
+                <div class="nav-icon-wrapper">
+                    <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="6" y="10" width="2" height="2" fill="currentColor"/>
+                        <rect x="8" y="8" width="2" height="2" fill="currentColor"/>
+                        <rect x="10" y="10" width="2" height="2" fill="currentColor"/>
+                        <rect x="8" y="12" width="2" height="2" fill="currentColor"/>
+                        <rect x="17" y="10" width="2" height="2" fill="currentColor"/>
+                        <rect x="19" y="8" width="2" height="2" fill="currentColor"/>
+                        <rect x="21" y="10" width="2" height="2" fill="currentColor"/>
+                        <rect x="19" y="12" width="2" height="2" fill="currentColor"/>
+                        <path d="M2 8C2 6.89543 2.89543 6 4 6H20C21.1046 6 22 6.89543 22 8V16C22 17.1046 21.1046 18 20 18H4C2.89543 18 2 17.1046 2 16V8Z" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <span class="nav-label">My Offers</span>
+            </button>
+            <button class="nav-item" onclick="switchTab('cashout')">
+                <div class="nav-icon-wrapper">
+                    <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M9 10H12C13.6569 10 15 11.3431 15 13C15 14.6569 13.6569 16 12 16H9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Cashout</span>
+            </button>
+            <button class="nav-item" onclick="switchTab('rewards')">
+                <div class="nav-icon-wrapper">
+                    <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 21H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M12 17V21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M7 4H17V8C17 11.3137 14.7614 14 12 14C9.23858 14 7 11.3137 7 8V4Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M7 6H5C4.44772 6 4 6.44772 4 7V8C4 9.65685 5.34315 11 7 11" stroke="currentColor" stroke-width="2"/>
+                        <path d="M17 6H19C19.5523 6 20 6.44772 20 7V8C20 9.65685 18.6569 11 17 11" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Rewards</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal" onclick="closeModal(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-title" id="modalTitle">Title</div>
+            <div class="modal-text" id="modalText">Message</div>
+            <button class="btn-close" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Game data
+        const games = [
+            {
+                id: 1,
+                title: 'Block Puzzle',
+                earnings: '$100+',
+                image: 'block-puzzle.jpg',
+                premium: true,
+            },
+            {
+                id: 2,
+                title: 'Call of Dragons',
+                earnings: '$149+',
+                image: 'call-of-dragons.jpg',
+                premium: true,
+            },
+            {
+                id: 3,
+                title: 'Word Tiles',
+                earnings: '$85+',
+                image: 'word-tiles.jpg',
+                premium: true,
+            },
+            {
+                id: 4,
+                title: 'Ken Ken Puzzle Math Edition',
+                earnings: '$120+',
+                image: 'kenken.jpg',
+                premium: true,
+            },
+            {
+                id: 5,
+                title: 'Typer Code',
+                earnings: '$95+',
+                image: 'typer-code.jpg',
+                premium: true,
+            },
+            {
+                id: 6,
+                title: 'Tik Tak Toe',
+                earnings: '$75+',
+                image: 'tictactoe.jpg',
+                premium: true,
+            },
+        ];
+
+        // Render game cards
+        function renderGames() {
+            const container = document.getElementById('offersList');
+            container.innerHTML = games.map(game => `
+                <div class="offer-card">
+                    <div class="offer-image">
+                        <img src="${game.image}" alt="${game.title}" loading="lazy">
+                        <div class="game-label">Game</div>
+                        ${game.premium ? '<div class="premium-badge">Premium</div>' : ''}
+                    </div>
+                    <div class="offer-details">
+                        <div class="offer-header-row">
+                            <div class="offer-earnings">${game.earnings}</div>
+                            <div class="offer-title">${game.title}</div>
+                            <button class="info-icon" onclick="showModal('${game.title}', 'Play ${game.title} to earn ${game.earnings}!')">
+                                <svg class="info-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 16V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <button class="play-btn" onclick="playGame('${game.title}', '${game.earnings}')">
+                            Play and Earn ${game.earnings}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Modal functions
+        function showModal(title, message) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalText').textContent = message;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal(event) {
+            if (!event || event.target.id === 'modal') {
+                document.getElementById('modal').classList.remove('active');
+            }
+        }
+
+        // Floating button modal functions
+        function showBonusModal() {
+            showModal('💎 Bonus Rewards', 'Collect bonus points by playing games!\n\nCurrent Bonus: P50+\n\nPlay featured games to unlock exclusive bonus rewards and power-ups.');
+        }
+
+        function showThemeModal() {
+            showModal('🎨 Theme Settings', 'Customize your app experience!\n\nAvailable Themes:\n• Dark Mode (Current)\n• Light Mode\n• Neon Glow\n• Classic Retro\n• Nature Bliss\n\nUnlock premium themes with your earnings.');
+        }
+
+        function showSkinModal() {
+            showModal('👕 Skin Shop', 'Customize your avatar!\n\nAvailable Skins:\n• Default (Current)\n• Golden Frame\n• Diamond Crown\n• Cyber Punk\n• Royal Elite\n\nStand out from other players with unique skins!');
+        }
+
+        // Play game
+        function playGame(title, earnings) {
+            showModal('Starting Game', `Loading ${title}...\nPrepare to earn ${earnings}!`);
+        }
+
+        // Tab switching
+        function switchTab(tab) {
+            // Update active state
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Show/hide floating features based on tab
+            const floatingFeatures = document.getElementById('floatingFeatures');
+            if (tab === 'earn') {
+                floatingFeatures.classList.add('active');
+            } else {
+                floatingFeatures.classList.remove('active');
+            }
+
+            // Show modal for non-earn tabs
+            if (tab !== 'earn') {
+                const tabNames = {
+                    'offers': 'My Offers',
+                    'cashout': 'Cashout',
+                    'rewards': 'Rewards'
+                };
+                showModal(tabNames[tab], 'Coming soon!');
+            }
+        }
+
+        // Prevent scroll bounce on mobile
+        document.addEventListener('touchmove', (e) => {
+            if (!e.target.closest('.earn-view')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Initialize
+        renderGames();
+    </script>
+</body>
+</html>
