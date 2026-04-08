@@ -1,21 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fixed APK Layout</title>
     <style>
-        *::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
-        *{scrollbar-width:none!important;-ms-overflow-style:none!important}
-        body{height:200vh;background:linear-gradient(to bottom,red,blue)}
+        /* 1. Reset defaults to prevent unwanted margins/padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Prevents the body itself from scrolling double */
+            background-color: #000; /* Smooth background for APK */
+        }
+
+        /* 2. Create the scrollable container */
+        .app-container {
+            height: 100vh;
+            width: 100vw;
+            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-x: hidden; /* Disable horizontal scrolling */
+            
+            /* Momentum scrolling for iOS/Android WebView */
+            -webkit-overflow-scrolling: touch;
+
+            /* Hide Scrollbar for Firefox */
+            scrollbar-width: none;
+
+            /* Hide Scrollbar for IE/Edge */
+            -ms-overflow-style: none;
+
+            /* Your background gradient from the video */
+            background: linear-gradient(180deg, #ff0000 0%, #800080 50%, #0000ff 100%);
+        }
+
+        /* 3. Hide Scrollbar for Chrome, Safari, and Android WebView */
+        .app-container::-webkit-scrollbar {
+            display: none;
+            width: 0 !important;
+            height: 0 !important;
+        }
+
+        /* 4. Content styling - ensuring it's long enough to scroll */
+        .content {
+            padding: 20px;
+            color: white;
+            font-family: sans-serif;
+            font-size: 24px;
+            text-align: center;
+            /* Extra height to force a scroll state */
+            min-height: 200vh; 
+        }
+
+        h1 {
+            margin-top: 50px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-    <h1>Scroll down - no scrollbar should appear</h1>
-    <script>
-        (function(){
-            var s=document.createElement('style');
-            s.textContent='*::-webkit-scrollbar{display:none!important}*{scrollbar-width:none!important}';
-            document.documentElement.appendChild(s);
-        })();
-    </script>
+
+    <div class="app-container">
+        <div class="content">
+            <h1>Scrollbar is Hidden</h1>
+            <p style="margin-top: 500px;">Keep scrolling down...</p>
+            <p style="margin-top: 500px;">The functionality remains!</p>
+            <p style="margin-top: 500px;">You've reached the bottom.</p>
+        </div>
+    </div>
+
 </body>
 </html>
