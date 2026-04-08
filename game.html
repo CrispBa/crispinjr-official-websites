@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Block Box</title>
+    <title>Prison Break - Earn & Play</title>
     <style>
         * {
             margin: 0;
@@ -23,6 +23,31 @@
             background: #0a0a1a;
             touch-action: none;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+ .app-container {
+            height: 100vh;
+            width: 100vw;
+            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-x: hidden; /* Disable horizontal scrolling */
+            
+            /* Momentum scrolling for iOS/Android WebView */
+            -webkit-overflow-scrolling: touch;
+
+            /* Hide Scrollbar for Firefox */
+            scrollbar-width: none;
+
+            /* Hide Scrollbar for IE/Edge */
+            -ms-overflow-style: none;
+
+            /* Your background gradient from the video */
+            background: linear-gradient(180deg, #ff0000 0%, #800080 50%, #0000ff 100%);
+        }
+
+        /* 3. Hide Scrollbar for Chrome, Safari, and Android WebView */
+        .app-container::-webkit-scrollbar {
+            display: none;
+            width: 0 !important;
+            height: 0 !important;
         }
 
         .game-container {
