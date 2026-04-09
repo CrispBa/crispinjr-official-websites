@@ -425,14 +425,10 @@
         }
 
         .float-bonus-wrapper {
-            width: 43px;
-            height: 43px;
-            background: linear-gradient(135deg, #00d084 0%, #00b894 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 0 20px rgba(0, 208, 132, 0.3);
             border: 3px solid rgba(255, 255, 255, 0.4);
             position: relative;
             overflow: hidden;
@@ -459,8 +455,8 @@
             width: 30px;
             height: 30px;
             color: white;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
             z-index: 1;
+            object-fit: cover;
         }
 
         .float-bonus-label {
@@ -707,7 +703,14 @@
             line-height: 1.5;
             white-space: pre-line;
         }
-
+/* Optional styling to make the slash look more distinct */
+.muted svg {
+    opacity: 0.6;
+    color: #ff4d4d; /* Changes color to red when muted, remove if not wanted */
+}
+#mute-slash {
+    stroke-width: 2.5;
+}
         .btn-close {
             background: linear-gradient(180deg, #ff6b6b 0%, #ee5a6f 100%);
             border: none;

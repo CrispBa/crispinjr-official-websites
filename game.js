@@ -105,6 +105,24 @@ const games = [
         }
 
         // Tab switching
+function toggleMute() {
+    const slash = document.getElementById('mute-slash');
+    const btn = document.getElementById('mute-btn');
+    
+    if (slash.style.display === 'none') {
+        // Switch to MUTED state
+        slash.style.display = 'block';
+        btn.classList.add('muted');
+        console.log("Audio Muted");
+        // Add your audio.mute = true logic here
+    } else {
+        // Switch to ACTIVE state
+        slash.style.display = 'none';
+        btn.classList.remove('muted');
+        console.log("Audio Playing");
+        // Add your audio.mute = false logic here
+    }
+}
         function switchTab(tab) {
             // Update active state
             document.querySelectorAll('.nav-item').forEach(item => {
