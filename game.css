@@ -419,7 +419,7 @@
         /* Bonus Button - Left Side */
         .float-btn.bonus {
             left: 15px;
-            bottom: 350%;
+            bottom: 650%;
             animation-delay: 0s;
         }
 
@@ -448,8 +448,8 @@
         }
 
         .float-bonus-icon {
-    width: 50px;
-    height: 50px;
+    width: 56px;
+    height: 56px;
     z-index: 1;
     object-fit: cover;
     transform: translate(0px, 1.7px);
@@ -483,7 +483,7 @@
     border: none;
     /* Adjust positioning as needed. You might need to change 'bottom' */
     right: -0px; /* Position similar to the original */
-    bottom: 324%; /* Adjust this height if it overlaps other buttons */
+    bottom: 429%; /* Adjust this height if it overlaps other buttons */
 }
 
 /* Styles for the new theme image itself */
@@ -794,6 +794,6 @@
     background: transparent;
     padding: 0;
     border: none;
-    bottom: 389%;
+    bottom: 511%;.
     right:-0px;
 }
