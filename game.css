@@ -372,7 +372,7 @@
         /* FIXED FLOATING FEATURES - Only 3 buttons */
         .fixed-floating-features {
             position: fixed;
-            bottom: 100px;
+            bottom: 0;
             left: 0;
             right: 0;
             pointer-events: none;
@@ -388,9 +388,8 @@
             position: relative;
             max-width: 480px;
             margin: 0 auto;
-            height: 120px;
             pointer-events: none;
-            bottom:100px;
+            padding:0px;
         }
 
         .float-btn {
@@ -420,7 +419,7 @@
         /* Bonus Button - Left Side */
         .float-btn.bonus {
             left: 15px;
-            bottom: 210%;
+            bottom: 350%;
             animation-delay: 0s;
         }
 
@@ -454,6 +453,7 @@
             color: white;
             z-index: 1;
             object-fit: cover;
+            transform: translate(0px, 1.4px);
         }
 
 .float-bonus-label {
@@ -464,7 +464,7 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.1px;
-    border: 1.2px solid rgb(0 208 132 / 62%);
+    border: 1.5px solid rgb(71 158 77);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     display: flex; /* Ensures the container wraps the p tag nicely */
     align-items: center;
@@ -474,7 +474,7 @@
         /* Theme Button - Right Side */
         .float-btn.theme {
 	right: -10px;
-    	bottom: 102%;
+    	bottom: 195%;
     	animation-delay: 0.3s;
         }
 
@@ -791,7 +791,8 @@
 
 /* Ensure the button container allows the image to be fully visible */
 .float-btn.shop-btn {
-    background: transparent; /* Remove any background from the container */
-    padding: 0; /* Remove padding */
-    border: none; /* Remove borders */
+    background: transparent;
+    padding: 0;
+    border: none;
+    bottom: 290%;
 }
