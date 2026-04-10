@@ -390,6 +390,7 @@
             margin: 0 auto;
             height: 120px;
             pointer-events: none;
+            bottom:100px;
         }
 
         .float-btn {
@@ -400,7 +401,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2px;
             animation: floatBounce 2s ease-in-out infinite;
         }
 
@@ -419,17 +419,15 @@
 
         /* Bonus Button - Left Side */
         .float-btn.bonus {
-            left: 20px;
-            bottom: 200%;
+            left: 15px;
+            bottom: 210%;
             animation-delay: 0s;
         }
 
         .float-bonus-wrapper {
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 3px solid rgba(255, 255, 255, 0.4);
             position: relative;
             overflow: hidden;
         }
@@ -441,7 +439,6 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
             transform: rotate(45deg);
             animation: shimmer 3s infinite;
         }
@@ -452,32 +449,33 @@
         }
 
         .float-bonus-icon {
-            width: 30px;
-            height: 30px;
+            width: 43px;
+            height: 43px;
             color: white;
             z-index: 1;
             object-fit: cover;
         }
 
-        .float-bonus-label {
-            background: rgba(0, 0, 0, 0.8);
-            color: #00d084;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border: 1px solid rgba(0, 208, 132, 0.4);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
+.float-bonus-label {
+    background: rgb(255, 255, 255);
+    color: #1a1a3e;
+    padding: 0px 7px; /* Increased padding for the larger font */
+    border-radius: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1px;
+    border: 1.2px solid rgb(0 208 132 / 62%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    display: flex; /* Ensures the container wraps the p tag nicely */
+    align-items: center;
+    justify-content: center;
+}
 
         /* Theme Button - Right Side */
         .float-btn.theme {
-
-    left: 12px;
-    bottom: 70%;
-    animation-delay: 0.3s;
+	right: -10px;
+    	bottom: 102%;
+    	animation-delay: 0.3s;
         }
 
         .float-theme-wrapper {
@@ -488,7 +486,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 0 15px rgba(155, 89, 182, 0.3);
+            box-shadow: 0 0px 0px rgba(0, 0, 0, 0.4), inset 0 0px 0px rgba(255, 255, 255, 0.3), 0 0 2px rgba(155, 89, 182, 0.3);
             border: 2px solid rgba(255, 255, 255, 0.4);
         }
 
@@ -513,8 +511,8 @@
 
         /* Skin Button - Right Side Below Theme */
         .float-btn.skin {
-            left: 20px;
-            bottom: 135%;
+	    right: -4px;
+    	    bottom: 163%;
             animation-delay: 0.6s;
         }
 
@@ -783,3 +781,17 @@
                 transition-duration: 0.01ms !important;
             }
         }
+/* New styles for the Shop/Skin button image */
+.float-shop-image {
+    width: 65px; /* Adjust width as needed */
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+    pointer-events: auto; /* Ensure the image itself is clickable */
+}
+
+/* Ensure the button container allows the image to be fully visible */
+.float-btn.shop-btn {
+    background: transparent; /* Remove any background from the container */
+    padding: 0; /* Remove padding */
+    border: none; /* Remove borders */
+}

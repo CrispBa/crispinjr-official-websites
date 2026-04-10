@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,11 +79,16 @@
         <div class="fixed-floating-features active" id="floatingFeatures">
             <div class="floating-features-container">
                 <!-- Bonus Button (Left) -->
-              <div class="float-btn bonus" onclick="showBonusModal()">
+             <div class="float-btn bonus" onclick="showBonusModal()">
     <div class="float-bonus-wrapper">
         <img src="invite.png" alt="Bonus Icon" class="float-bonus-icon">
     </div>
-    <span class="float-bonus-label">P50+</span>
+    <span class="float-bonus-label">
+        <p style="font-size: 10px; display: flex; align-items: center; margin: 0;">
+            <img src="money.png" alt="cash" style="height: 1em; margin-right: 4px; vertical-align: middle;">
+            ₱50
+        </p>
+    </span>
 </div>
                 <!-- Theme Button (Right) -->
                 <div class="float-btn theme" onclick="showThemeModal()">
@@ -96,19 +102,11 @@
                     <span class="float-theme-label">Theme</span>
                 </div>
 
-                <!-- Skin Button (Right Bottom) -->
-                <div class="float-btn skin" onclick="showSkinModal()">
-                    <div class="float-skin-wrapper">
-                        <svg class="float-skin-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20.38 3.4L21.62 6.6C21.82 7.08 21.42 7.6 20.9 7.6H19.5C18.9 7.6 18.5 8.1 18.7 8.6L20.2 12.4C20.4 12.9 20 13.4 19.4 13.4H17.5C17 13.4 16.6 13.8 16.7 14.3L17.5 17.2C17.7 17.9 17 18.5 16.3 18.2L12 16.5L7.7 18.2C7 18.5 6.3 17.9 6.5 17.2L7.3 14.3C7.4 13.8 7 13.4 6.5 13.4H4.6C4 13.4 3.6 12.9 3.8 12.4L5.3 8.6C5.5 8.1 5.1 7.6 4.5 7.6H3.1C2.58 7.6 2.18 7.08 2.38 6.6L3.62 3.4C3.82 2.92 4.38 2.6 4.9 2.6H19.1C19.62 2.6 20.18 2.92 20.38 3.4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <span class="float-skin-label">Skin</span>
-                </div>
-            </div>
-        </div>
 
-        <!-- Bottom Navigation -->
+                <div class="float-btn skin shop-btn" onclick="showSkinModal()">
+    <img src="skin_shop.png" alt="Shop" class="float-shop-image">
+</div>
+
         <nav class="bottom-nav">
             <button class="nav-item active" onclick="switchTab('earn')">
                 <div class="nav-icon-wrapper">
