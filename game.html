@@ -90,17 +90,9 @@
         </p>
     </span>
 </div>
-                <!-- Theme Button (Right) -->
-                <div class="float-btn theme" onclick="showThemeModal()">
-                    <div class="float-theme-wrapper">
-                        <svg class="float-theme-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
-                            <path d="M3 9H21" stroke="currentColor" stroke-width="2"/>
-                            <path d="M9 21V9" stroke="currentColor" stroke-width="2"/>
-                        </svg>
-                    </div>
-                    <span class="float-theme-label">Theme</span>
-                </div>
+<div class="float-btn theme theme-image-btn" onclick="showThemeModal()">
+    <img src="theme.png" alt="Theme" class="float-theme-image">
+</div>
 
 
                 <div class="float-btn skin shop-btn" onclick="showSkinModal()">
@@ -164,7 +156,7 @@
         <div class="modal-box" onclick="event.stopPropagation()">
             <div class="modal-title" id="modalTitle">Title</div>
             <div class="modal-text" id="modalText">Message</div>
-            <button class="btn-close" onclick="closeModal()">Close</button>
+            <button class="btn-close" onclick="closeModal(event)">Close</button>
         </div>
     </div>
 

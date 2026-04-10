@@ -72,21 +72,17 @@ const games = [
                 </div>
             `).join('');
         }
+function closeModal() {
+    document.getElementById('modal').classList.remove('active');
+}
 
-        // Modal functions
-        function showModal(title, message) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalText').textContent = message;
-            document.getElementById('modal').classList.add('active');
-        }
-
-        function closeModal(event) {
-            if (!event || event.target.id === 'modal') {
-                document.getElementById('modal').classList.remove('active');
-            }
-        }
-
-        // Floating button modal functions
+// Handle overlay click (clicking outside the box) separately
+document.getElementById('modal').addEventListener('click', function(e) {
+    // If clicked element is the overlay itself (not the box inside)
+    if (e.target === this) {
+        closeModal();
+    }
+});
         function showBonusModal() {
             showModal('💎 Bonus Rewards', 'Collect bonus points by playing games!\n\nCurrent Bonus: P50+\n\nPlay featured games to unlock exclusive bonus rewards and power-ups.');
         }

@@ -448,13 +448,12 @@
         }
 
         .float-bonus-icon {
-            width: 43px;
-            height: 43px;
-            color: white;
-            z-index: 1;
-            object-fit: cover;
-            transform: translate(0px, 1.4px);
-        }
+    width: 50px;
+    height: 50px;
+    z-index: 1;
+    object-fit: cover;
+    transform: translate(0px, 1.7px);
+    }
 
 .float-bonus-label {
     background: rgb(255, 255, 255);
@@ -474,11 +473,31 @@
         /* Theme Button - Right Side */
         .float-btn.theme {
 	right: -10px;
-    	bottom: 195%;
+    	bottom: 195%
     	animation-delay: 0.3s;
         }
+.float-btn.theme-image-btn {
+    /* These reset some of the styles from the original theme button */
+    background: transparent;
+    padding: 0;
+    border: none;
+    /* Adjust positioning as needed. You might need to change 'bottom' */
+    right: -0px; /* Position similar to the original */
+    bottom: 324%; /* Adjust this height if it overlaps other buttons */
+}
 
+/* Styles for the new theme image itself */
+.float-theme-image {
+    width: 50px; /* Set a specific width. Adjust this for size! */
+    height: 51px; /* Maintains aspect ratio */
+    display: block; /* Important for alignment */
+    pointer-events: auto; /* Ensures the image is clickable */
+    
+    /* Optional: Add a subtle shadow to make it pop like the old one */
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+}
         .float-theme-wrapper {
+            display: none !important;
             width: 43px;
             height: 43px;
             background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
@@ -490,11 +509,6 @@
             border: 2px solid rgba(255, 255, 255, 0.4);
         }
 
-        .float-theme-icon {
-            width: 26px;
-            height: 26px;
-            color: white;
-        }
 
         .float-theme-label {
             background: rgba(0, 0, 0, 0.8);
@@ -507,13 +521,7 @@
             letter-spacing: 0.5px;
             border: 1px solid rgba(155, 89, 182, 0.4);
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        /* Skin Button - Right Side Below Theme */
-        .float-btn.skin {
-	    right: -4px;
-    	    bottom: 163%;
-            animation-delay: 0.6s;
+            display: none !important;
         }
 
         .float-skin-wrapper {
@@ -528,11 +536,6 @@
             border: 2px solid rgba(255, 255, 255, 0.4);
         }
 
-        .float-skin-icon {
-            width: 26px;
-            height: 26px;
-            color: white;
-        }
 
         .float-skin-label {
             background: rgba(0, 0, 0, 0.8);
@@ -639,26 +642,23 @@
             font-weight: 700;
         }
 
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            animation: fadeIn 0.2s ease;
-        }
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
+    display: none; /* Default hidden */
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
 
-        .modal-overlay.active {
-            display: flex;
-        }
-
+.modal-overlay.active {
+    display: flex !important; /* Force show when active */
+}
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -783,8 +783,8 @@
         }
 /* New styles for the Shop/Skin button image */
 .float-shop-image {
-    width: 65px; /* Adjust width as needed */
-    height: auto; /* Maintain aspect ratio */
+    width: 50px; /* Adjust width as needed */
+    height: 50px; /* Maintain aspect ratio */
     display: block;
     pointer-events: auto; /* Ensure the image itself is clickable */
 }
@@ -794,5 +794,6 @@
     background: transparent;
     padding: 0;
     border: none;
-    bottom: 290%;
+    bottom: 389%;
+    right:-0px;
 }
