@@ -33,6 +33,7 @@
             flex-direction: column;
             position: relative;
             overflow: hidden;
+            padding-bottom:70px;
         }
 
         /* Header */
@@ -428,7 +429,7 @@
         /* Bonus Button - Left Side */
         .float-btn.bonus {
             left: 15px;
-            bottom: 625%;
+            bottom: 630%;
             animation-delay: 0s;
         }
 
@@ -490,7 +491,7 @@
     padding: 0;
     border: none;
     right: -0px;
-    bottom: 605%;
+    bottom: 610%;
 }
 
 /* Styles for the new theme image itself */
@@ -801,6 +802,6 @@
     background: transparent;
     padding: 0;
     border: none;
-    bottom: 524%;
+    bottom: 530%;
     right: -0px;
 }
