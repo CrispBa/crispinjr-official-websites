@@ -74,7 +74,15 @@
             justify-content: center;
             gap: 8px;
         }
-
+.balance-icon-image {
+    width: 22px;   /* Adjusted size to fit the header better */
+    height: 22px;
+    object-fit: contain;
+    display: inline-block;
+    vertical-align: middle;
+    /* Optional: filter to make it stand out against the green background */
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
         .balance-box {
             background: linear-gradient(135deg, #00d084 0%, #00b894 100%);
             border-radius: 5px;
@@ -420,7 +428,7 @@
         /* Bonus Button - Left Side */
         .float-btn.bonus {
             left: 15px;
-            bottom: 500%;
+            bottom: 625%;
             animation-delay: 0s;
         }
 
@@ -482,7 +490,7 @@
     padding: 0;
     border: none;
     right: -0px;
-    bottom: 522%;
+    bottom: 605%;
 }
 
 /* Styles for the new theme image itself */
@@ -793,6 +801,6 @@
     background: transparent;
     padding: 0;
     border: none;
-    bottom: 445%;
+    bottom: 524%;
     right: -0px;
 }
