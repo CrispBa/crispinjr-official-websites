@@ -99,67 +99,58 @@ document.getElementById('modal').addEventListener('click', function(e) {
         function playGame(title, earnings) {
             showModal('Starting Game', `Loading ${title}...\nPrepare to earn ${earnings}!`);
         }
-
 // Initialize background music
 const bgMusic = new Audio('playa.mp3'); 
-bgMusic.loop = true; // Ensures the 90s track repeats
-bgMusic.volume = 0.2; // Set low so it doesn't overpower game sounds
+bgMusic.loop = true;
+bgMusic.volume = 0.2;
 
-// Function to start music on first user interaction (Browser Policy)
+// Function to start music
 function startMusic() {
-    bgMusic.play().catch(error => {
-        console.log("Autoplay prevented. Music will start on next click.");
-    });
-    // Remove listener after first interaction
-    document.removeEventListener('click', startMusic);
-}
-
-document.addEventListener('click', startMusic);
-
-// Update your existing toggleMute function
-function toggleMute() {
-    const slash = document.getElementById('mute-slash');
-    const btn = document.getElementById('mute-btn');
-    
-    if (slash.style.display === 'none') {
-        slash.style.display = 'block';
-        btn.classList.add('muted');
-        bgMusic.muted = true; // Mutes the 90s BGM
-        console.log("Audio Muted");
-    } else {
-        slash.style.display = 'none';
-        btn.classList.remove('muted');
-        bgMusic.muted = false; // Unmutes the 90s BGM
-        console.log("Audio Playing");
+    if (bgMusic.paused) {
+        bgMusic.play().then(() => {
+            console.log("Playback started successfully");
+            // Remove listeners once music is playing
+            document.removeEventListener('click', startMusic);
+            document.removeEventListener('touchstart', startMusic);
+        }).catch(error => {
+            console.log("Playback failed:", error);
+        });
     }
 }
 
-        function switchTab(tab) {
-            // Update active state
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            event.currentTarget.classList.add('active');
+// Listen for any interaction anywhere on the screen
+document.addEventListener('click', startMusic);
+document.addEventListener('touchstart', startMusic);
 
-            // Show/hide floating features based on tab
-            const floatingFeatures = document.getElementById('floatingFeatures');
-            if (tab === 'earn') {
-                floatingFeatures.classList.add('active');
-            } else {
-                floatingFeatures.classList.remove('active');
-            }
+       function switchTab(tab) {
+    // 1. Update active tab visual state
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    // Safety check for the clicked element
+    if (event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+    }
 
-            // Show modal for non-earn tabs
-            if (tab !== 'earn') {
-                const tabNames = {
-                    'offers': 'My Offers',
-                    'cashout': 'Cashout',
-                    'rewards': 'Rewards'
-                };
-                showModal(tabNames[tab], 'Coming soon!');
-            }
-        }
+    // 2. Manage floating buttons visibility
+    const floatingFeatures = document.getElementById('floatingFeatures');
+    if (tab === 'earn') {
+        floatingFeatures.classList.add('active');
+    } else {
+        floatingFeatures.classList.remove('active');
+    }
 
+    // 3. Show "Coming Soon" without breaking the layout
+    if (tab !== 'earn') {
+        const tabNames = {
+            'progress': 'Progress',
+            'missions': 'Missions',
+            'invite': 'Invite'
+        };
+        showModal(tabNames[tab], 'Coming soon!');
+    }
+}
         // Prevent scroll bounce on mobile
         document.addEventListener('touchmove', (e) => {
             if (!e.target.closest('.earn-view')) {
@@ -169,3 +160,68 @@ function toggleMute() {
 
         // Initialize
         renderGames();
+
+// Replace your click sound code with this:
+const clickSound = new Audio('sound-effects.mp3');
+clickSound.volume = 0.5;
+let clickTimeout;
+
+
+
+function addClickSoundsToButtons() {
+    // Added .balance-overlap-icon and .balance-overlap-icon-right to the list
+    const selectors = 'button, .nav-item, .header-icon, .info-icon, .float-btn, .avatar, .play-btn, .balance-box, .balance-overlap-icon, .balance-overlap-icon-right';
+    
+    document.querySelectorAll(selectors).forEach(btn => {
+        btn.addEventListener('click', playClickSound);
+    });
+}
+
+
+
+// At bottom of file, replace addClickSoundsToButtons() with:
+addClickSoundsToButtons();
+
+// 1. Keep track of the mute state globally
+let isMuted = false;
+
+function toggleMute() {
+    const slash = document.getElementById('mute-slash');
+    const btn = document.getElementById('mute-btn');
+    
+    // Toggle the state
+    isMuted = !isMuted;
+
+    if (isMuted) {
+        slash.style.display = 'block';
+        btn.classList.add('muted');
+        
+        // Mute the background music
+        bgMusic.muted = true;
+        
+        // Cancel any pending sounds
+        clearTimeout(clickTimeout); 
+        console.log("Audio Muted");
+    } else {
+        slash.style.display = 'none';
+        btn.classList.remove('muted');
+        
+        // Unmute the background music
+        bgMusic.muted = false;
+        console.log("Audio Playing");
+    }
+}
+
+function playClickSound() {
+    // If the app is muted, stop immediately and don't play anything
+    if (isMuted) return;
+
+    clearTimeout(clickTimeout);
+    clickTimeout = setTimeout(() => {
+        const soundClone = clickSound.cloneNode();
+        soundClone.volume = 0.5;
+        // Double check mute status before playing the clone
+        soundClone.muted = isMuted; 
+        soundClone.play().catch(() => {});
+    }, 0); 
+}
