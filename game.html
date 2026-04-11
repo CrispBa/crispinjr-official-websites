@@ -25,19 +25,21 @@
             <div class="avatar">
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar">
             </div>
-            <div class="balance-display">
-                <div class="balance-box">
-    <img src="money.png" alt="balance" class="balance-icon-image">
-    <span class="balance-text">34.60</span>
-</div>
+<div class="balance-container">
+    <img src="cash.png" alt="cash" class="balance-overlap-icon">
+    
+    <div class="balance-box">
+        <img src="money-icon.png" alt="money" class="balance-inner-money">
+        <span class="balance-text">34.60</span>
+    </div>
+
+
                 <div class="balance-box secondary">
-                    <svg class="balance-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-                        <path d="M12 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M9 10H12C13.6569 10 15 11.3431 15 13C15 14.6569 13.6569 16 12 16H9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                    <span class="balance-text">13K</span>
-                </div>
+<img src="coins.png" alt="money" class="balance-inner-coins">
+    <span class="balance-text">13K</span>
+    <!-- ADD THIS IMAGE for the right-side bag icon -->
+    <img src="cash.png" alt="bag" class="balance-overlap-icon-right">
+</div>
             </div>
             <div class="header-icons">
                 <button class="header-icon" id="mute-btn" onclick="toggleMute()">
