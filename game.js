@@ -122,7 +122,7 @@ function startMusic() {
 document.addEventListener('click', startMusic);
 document.addEventListener('touchstart', startMusic);
 
-       function switchTab(tab) {
+function switchTab(tab) {
     // 1. Update active tab visual state
     document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
@@ -133,15 +133,11 @@ document.addEventListener('touchstart', startMusic);
         event.currentTarget.classList.add('active');
     }
 
-    // 2. Manage floating buttons visibility
+    // 2. Keep floating buttons visible on ALL tabs (removed the hiding logic)
     const floatingFeatures = document.getElementById('floatingFeatures');
-    if (tab === 'earn') {
-        floatingFeatures.classList.add('active');
-    } else {
-        floatingFeatures.classList.remove('active');
-    }
+    floatingFeatures.classList.add('active');
 
-    // 3. Show "Coming Soon" without breaking the layout
+    // 3. Show "Coming Soon" for other tabs
     if (tab !== 'earn') {
         const tabNames = {
             'progress': 'Progress',
