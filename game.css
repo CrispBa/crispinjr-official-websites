@@ -37,12 +37,12 @@
 
         /* Header */
         .header {
-            height: 70px;
-            padding: 0 15px;
+            height: 60px;
+            padding: 0 12px;
             display: flex;
             align-items: center;
             gap: 12px;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgb(21 21 50);
             flex-shrink: 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
@@ -77,8 +77,8 @@
 
         .balance-box {
             background: linear-gradient(135deg, #00d084 0%, #00b894 100%);
-            border-radius: 20px;
-            padding: 8px 14px;
+            border-radius: 5px;
+            padding: 0px 15px;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -111,7 +111,7 @@
             width: 20px;
             height: 20px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            border-radius: 5px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -129,8 +129,8 @@
         }
 
         .icon-svg {
-            width: 15px;
-            height: 15px;
+            width: 13px;
+            height: 13px;
             color: white;
         }
 
@@ -390,6 +390,7 @@
             margin: 0 auto;
             pointer-events: none;
             padding:0px;
+            
         }
 
         .float-btn {
@@ -419,7 +420,7 @@
         /* Bonus Button - Left Side */
         .float-btn.bonus {
             left: 15px;
-            bottom: 650%;
+            bottom: 500%;
             animation-delay: 0s;
         }
 
@@ -448,22 +449,23 @@
         }
 
         .float-bonus-icon {
-    width: 56px;
-    height: 56px;
-    z-index: 1;
+    width: 54px;
+    height: 54px;
+    z-index: 0;
     object-fit: cover;
-    transform: translate(0px, 1.7px);
+    
     }
 
 .float-bonus-label {
     background: rgb(255, 255, 255);
     color: #1a1a3e;
+    transform: translate(0px, -3px);
     padding: 0px 7px; /* Increased padding for the larger font */
     border-radius: 12px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.1px;
-    border: 1.5px solid rgb(71 158 77);
+    border: 1.9px solid rgb(71 158 77);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     display: flex; /* Ensures the container wraps the p tag nicely */
     align-items: center;
@@ -472,8 +474,6 @@
 
         /* Theme Button - Right Side */
         .float-btn.theme {
-	right: -10px;
-    	bottom: 195%
     	animation-delay: 0.3s;
         }
 .float-btn.theme-image-btn {
@@ -481,9 +481,8 @@
     background: transparent;
     padding: 0;
     border: none;
-    /* Adjust positioning as needed. You might need to change 'bottom' */
-    right: -0px; /* Position similar to the original */
-    bottom: 429%; /* Adjust this height if it overlaps other buttons */
+    right: -0px;
+    bottom: 522%;
 }
 
 /* Styles for the new theme image itself */
@@ -572,15 +571,15 @@
 
         /* Bottom Navigation */
         .bottom-nav {
-            height: 80px;
-            background: linear-gradient(180deg, #2d3436 0%, #1a1a2e 100%);
-            padding: 8px 10px;
+            height: 70px;
+            background: linear-gradient(180deg, #2d3436de 0%, #1a1a2e 100%);
+            padding: 13px 10px;
             display: flex;
             justify-content: space-around;
             align-items: center;
             border-top: 2px solid rgba(255, 255, 255, 0.1);
             flex-shrink: 0;
-            padding-bottom: max(8px, env(safe-area-inset-bottom));
+            padding-bottom: max(12px, env(safe-area-inset-bottom));
             position: relative;
             z-index: 101;
         }
@@ -589,9 +588,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 0px;
             cursor: pointer;
-            padding: 5px 10px;
+            padding: 0px 0px;
             border-radius: 12px;
             transition: background 0.2s ease;
             flex: 1;
@@ -605,8 +604,8 @@
         }
 
         .nav-icon-wrapper {
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             background: linear-gradient(135deg, #636e72 0%, #2d3436 100%);
             border-radius: 12px;
             display: flex;
@@ -794,6 +793,6 @@
     background: transparent;
     padding: 0;
     border: none;
-    bottom: 511%;.
-    right:-0px;
+    bottom: 445%;
+    right: -0px;
 }
