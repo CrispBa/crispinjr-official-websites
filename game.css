@@ -530,8 +530,9 @@
     background: transparent;
     padding: 0;
     border: none;
-    right: -0px;
-    bottom: 610%;
+    right: 25px;
+    bottom: 684%;
+
 }
 
 /* Styles for the new theme image itself */
@@ -543,6 +544,7 @@
     
     /* Optional: Add a subtle shadow to make it pop like the old one */
     filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+    position: fixed;
 }
         .float-theme-wrapper {
             display: none !important;

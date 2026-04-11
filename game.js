@@ -100,25 +100,40 @@ document.getElementById('modal').addEventListener('click', function(e) {
             showModal('Starting Game', `Loading ${title}...\nPrepare to earn ${earnings}!`);
         }
 
-        // Tab switching
+// Initialize background music
+const bgMusic = new Audio('playa.mp3'); 
+bgMusic.loop = true; // Ensures the 90s track repeats
+bgMusic.volume = 0.2; // Set low so it doesn't overpower game sounds
+
+// Function to start music on first user interaction (Browser Policy)
+function startMusic() {
+    bgMusic.play().catch(error => {
+        console.log("Autoplay prevented. Music will start on next click.");
+    });
+    // Remove listener after first interaction
+    document.removeEventListener('click', startMusic);
+}
+
+document.addEventListener('click', startMusic);
+
+// Update your existing toggleMute function
 function toggleMute() {
     const slash = document.getElementById('mute-slash');
     const btn = document.getElementById('mute-btn');
     
     if (slash.style.display === 'none') {
-        // Switch to MUTED state
         slash.style.display = 'block';
         btn.classList.add('muted');
+        bgMusic.muted = true; // Mutes the 90s BGM
         console.log("Audio Muted");
-        // Add your audio.mute = true logic here
     } else {
-        // Switch to ACTIVE state
         slash.style.display = 'none';
         btn.classList.remove('muted');
+        bgMusic.muted = false; // Unmutes the 90s BGM
         console.log("Audio Playing");
-        // Add your audio.mute = false logic here
     }
 }
+
         function switchTab(tab) {
             // Update active state
             document.querySelectorAll('.nav-item').forEach(item => {
