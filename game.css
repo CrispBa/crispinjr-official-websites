@@ -597,9 +597,7 @@ animation: none;
 .float-btn.theme-image-btn:hover .float-theme-image {
     animation: pulseScale 1s ease-in-out infinite;
    }
-.float-btn.bonus:hover .float-bonus-label {
-    transform: none;
-}
+
 .float-btn.bonus:active {
     transform: scale(1.15) translateY(-12px) rotate(3deg);
     filter: brightness(1.1) contrast(1.1);
@@ -615,7 +613,7 @@ animation: none;
    ============================================ */
 
 .float-btn:hover .float-bonus-label {
-    transform: translateY(-5px) scale(1.05);
+    transform: translateY(-3px) scale(1.05);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
 }
 
