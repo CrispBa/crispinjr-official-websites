@@ -227,3 +227,34 @@ function playClickSound() {
         soundClone.play().catch(() => {});
     }, 0); 
 }
+
+// Loading Screen Progress (1% - 100%)
+(function() {
+    let progress = 0;
+    const progressFill = document.getElementById('progress-fill');
+    const percentageText = document.getElementById('percentage-text');
+    const loadingScreen = document.getElementById('loading-screen');
+    
+    if (!progressFill || !percentageText || !loadingScreen) return;
+    
+    const loadingInterval = setInterval(function() {
+        const increment = Math.floor(Math.random() * 3) + 1;
+        progress += increment;
+        
+        if (progress >= 100) {
+            progress = 99;
+            clearInterval(loadingInterval);
+            
+            setTimeout(function() {
+                loadingScreen.classList.add('hidden');
+                setTimeout(function() {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 5000);
+        }
+        
+        progressFill.style.width = progress + '%';
+        percentageText.textContent = progress + '%';
+        
+    }, 40);
+})();

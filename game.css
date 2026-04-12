@@ -33,7 +33,262 @@
             overflow: hidden;
             
         }
+/* Loading Screen - Universal Device Fit (716x1600 splash.png) */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('splash.png');
+    background-color: #1a0a2e; /* Fallback color matching splash dark purple */
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 9999;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
 
+
+/* Tall phones (iPhone X+, Android 19:9, 20:9) - Use contain to see full image */
+@media (min-aspect-ratio: 9/19) and (max-aspect-ratio: 9/21) {
+    .loading-screen {
+        
+        background-size: 100% 100%;
+        background-position: center top;
+        background-color: #0f0f23;
+    }
+}
+
+/* Very tall phones (Samsung Galaxy S20+, 20:9+) */
+@media (min-aspect-ratio: 9/20) {
+    .loading-screen {
+        background-size: cover;
+        background-position: center top;
+        background-color: #0f0f23;
+    }
+}
+
+/* Short phones (older Android 16:9, iPhone SE) - Cover is fine */
+@media (max-aspect-ratio: 9/16) {
+    .loading-screen {
+        background-size: 100% 100%;
+        background-position: center center;
+    }
+}
+
+/* Tablets (iPad, Android tablets) - 4:3, 3:2 ratio */
+@media (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) {
+    .loading-screen {
+        background-size: 100% 100%;
+        background-position: center center;
+        background-color: #0f0f23;
+    }
+}
+
+/* Landscape tablets and phones */
+@media (orientation: landscape) {
+    .loading-screen {
+        background-size: 100% 100%;
+        background-position: center center;
+        background-color: #0f0f23;
+    }
+}
+
+/* Small phones (320px-375px width) */
+@media (max-width: 375px) {
+    .loading-screen {
+        background-size: 100% 100%;
+        background-position: center center;
+        background-color: #0f0f23;
+    }
+}
+
+/* Large phones and phablets (414px+ width) */
+@media (min-width: 414px) {
+    .loading-screen {
+        background-position: center center;
+        background-color: #0f0f23;
+        background-size: 100% 100%;
+    }
+}
+
+/* Desktop - Centered with max-width constraint matching game container */
+@media (min-width: 481px) {
+    .loading-screen {
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 480px;
+        background-size: 100% 100%;
+        background-position: center center;
+    }
+}
+
+.loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Progress bar positioning - adjusted for all devices */
+.loading-content {
+    width: 100%;
+    padding: 0 50px 100px; /* Default padding */
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+}
+
+/* Small phones - reduce bottom padding */
+@media (max-height: 700px) {
+    .loading-content {
+        padding-bottom: 85px;
+        
+        
+    }
+}
+
+/* Tall phones - increase bottom padding */
+@media (min-height: 800px) {
+    .loading-content {
+        padding-bottom: 110px;
+        
+    }
+}
+
+/* Tablets - center vertically better */
+@media (min-width: 768px) {
+    .loading-content {
+        padding-bottom: 120px;
+        
+    }
+}
+
+/* Landscape - adjust for side nav or compact view */
+@media (orientation: landscape) and (max-height: 500px) {
+    .loading-content {
+        padding-bottom: 70px;
+        background-size: cover;
+    }
+}
+
+.progress-container {
+    width: 100%;
+    max-width: 280px;
+    position: relative;
+    
+}
+
+/* Small phones - slightly smaller progress bar */
+@media (max-width: 375px) {
+    .progress-container {
+        max-width: 260px;
+    }
+}
+
+.progress-bar {
+    width: 100%;
+    height: 26px;
+    background: #4a4a5a;
+    border-radius: 13px;
+    overflow: hidden;
+    
+    border: 3px solid #000000;
+    box-shadow: 
+        inset 0 2px 4px rgba(0,0,0,0.4),
+        0 2px 8px rgba(0,0,0,0.5);
+    position: relative;
+}
+
+/* Small phones - thinner progress bar */
+@media (max-width: 375px) {
+    .progress-bar {
+        height: 22px;
+        border-radius: 11px;
+    }
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(180deg, #ff9f43 0%, #e67e22 50%, #d35400 100%);
+    border-radius: 10px;
+    
+    transition: width 0.1s linear;
+    position: relative;
+    box-shadow: inset 0 -2px 4px rgba(0,0,0,0.2);
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 0.6s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+/* Percentage text CENTERED inside the bar */
+.percentage-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 17px;
+    font-weight: 800;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    /* Black outline effect */
+    text-shadow: 
+        -1px -1px 0 #000,
+        1px -2px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000,
+        0 -1px 0 #000,
+        0 1px 0 #000,
+        -1px 0 0 #000,
+        2px 0 0 #000;
+    z-index: 10;
+    pointer-events: none;
+    letter-spacing: 0.5px;
+}
+
+/* Desktop centering */
+@media (min-width: 481px) {
+    .loading-screen {
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 480px;
+    }
+}
+
+/* Mobile landscape */
+@media (orientation: landscape) and (max-height: 500px) {
+    .loading-content {
+        padding-bottom: 75px;
+    }
+    .progress-container {
+        max-width: 260px;
+    }
+    .progress-bar {
+        height: 24px;
+        border-radius: 12px;
+    }
+    .percentage-text {
+        font-size: 12px;
+    }
+}
         /* Header */
         .header {
             height: 65px;
