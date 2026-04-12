@@ -102,7 +102,7 @@ document.getElementById('modal').addEventListener('click', function(e) {
 // Initialize background music
 const bgMusic = new Audio('playa.mp3'); 
 bgMusic.loop = true;
-bgMusic.volume = 0.2;
+bgMusic.volume = 1;
 
 // Function to start music
 function startMusic() {
@@ -178,46 +178,52 @@ function addClickSoundsToButtons() {
 // At bottom of file, replace addClickSoundsToButtons() with:
 addClickSoundsToButtons();
 
-// 1. Keep track of the mute state globally
-let isMuted = false;
+let audioState = 0; // 0: All On, 1: Music Muted (/), 2: All Muted (⊘)
 
-function toggleMute() {
-    const slash = document.getElementById('mute-slash');
+function toggleAudioState() {
+    audioState = (audioState + 1) % 3;
+    const overlay = document.getElementById('audio-status-overlay');
+    const noteIcon = document.getElementById('main-note-svg');
     const btn = document.getElementById('mute-btn');
-    
-    // Toggle the state
-    isMuted = !isMuted;
 
-    if (isMuted) {
-        slash.style.display = 'block';
-        btn.classList.add('muted');
-        
-        // Mute the background music
-        bgMusic.muted = true;
-        
-        // Cancel any pending sounds
-        clearTimeout(clickTimeout); 
-        console.log("Audio Muted");
-    } else {
-        slash.style.display = 'none';
-        btn.classList.remove('muted');
-        
-        // Unmute the background music
+    if (audioState === 0) {
+        // --- ALL ON (♬) ---
         bgMusic.muted = false;
-        console.log("Audio Playing");
+        overlay.innerHTML = ''; // Remove any overlay
+        noteIcon.style.opacity = "1";
+        btn.style.boxShadow = "none";
+    } 
+    else if (audioState === 1) {
+        // --- MUSIC MUTE (♬ + /) ---
+        bgMusic.muted = true;
+        // Simple diagonal slash over the note
+        overlay.innerHTML = `
+            <svg class="overlay-svg" viewBox="0 0 24 24" fill="none">
+                <line x1="3" y1="21" x2="21" y2="3" stroke="currentColor"></line>
+            </svg>`;
+        noteIcon.style.opacity = "0.6"; // Dim the note slightly
+    } 
+    else if (audioState === 2) {
+        // --- ALL MUTE (♬ + ⊘) ---
+        bgMusic.muted = true;
+        // The circle-slash "No" symbol over the note
+        overlay.innerHTML = `
+            <svg class="overlay-svg" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="currentColor"></circle>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" stroke="currentColor"></line>
+            </svg>`;
+        noteIcon.style.opacity = "0.4"; // Dim the note more
     }
 }
 
+// Ensure SFX respects State 2
 function playClickSound() {
-    // If the app is muted, stop immediately and don't play anything
-    if (isMuted) return;
+    if (audioState === 2) return; // Silent in state 2
 
     clearTimeout(clickTimeout);
     clickTimeout = setTimeout(() => {
         const soundClone = clickSound.cloneNode();
         soundClone.volume = 0.5;
-        // Double check mute status before playing the clone
-        soundClone.muted = isMuted; 
         soundClone.play().catch(() => {});
     }, 0); 
 }

@@ -60,13 +60,79 @@
             flex-shrink: 0;
             cursor: pointer;
             overflow: hidden;
+transition: 
+        transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+        border-color 0.3s ease, 
+        box-shadow 0.3s ease;
+    position: relative;
+    z-index: 1;
         }
+.avatar:hover {
+    transform: scale(1.1) rotate(5deg); /* Slight lift and tilt */
+    border-color: #00d084; /* Matches your money theme */
+    box-shadow: 
+        0 0 15px rgba(0, 208, 132, 0.6), 
+        0 0 30px rgba(0, 208, 132, 0.2);
+    cursor: pointer;
+}
+
+/* Zoom the actual image slightly on hover for a parallax feel */
+.avatar:hover img {
+    transform: scale(1.15);
+}
+
+/* Active State (When Tapped/Clicked) */
+.avatar:active {
+    transform: scale(0.92);
+    transition: transform 0.1s ease;
+}
+
+/* Optional: A subtle "shine" overlay that sweeps across on hover */
+.avatar::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -150%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(
+        to right, 
+        rgba(255, 255, 255, 0) 0%, 
+        rgba(255, 255, 255, 0.3) 50%, 
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    transition: left 0.6s ease;
+}
+
+.avatar:hover::after {
+    left: 150%;
+}
+
+.balance-box:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 5px 15px rgba(0, 208, 132, 0.4);
+}
+
+.balance-box:hover .balance-overlap-icon-right {
+    transform: scale(1.0) rotate(-5deg);
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+}
+
+.balance-box.secondary:hover {
+    box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+}
+.balance-box.secondary:hover .balance-overlap-icon-right {
+    transform: scale(1.0) rotate(5deg); /* Opposite rotation for variety */
+}
 
         .avatar img {
             width: 100%;
             height: 100%;
             cursor: pointer;
             object-fit: cover;
+	    transition: transform 0.4s ease;
         }
 
 
@@ -97,6 +163,8 @@
     z-index: 10;
     cursor: pointer;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    transition: transform 0.2s ease, filter 0.2s ease; /* ADD TRANSITION */
+    pointer-events: none;
 }
 .balance-overlap-icon {
     width: 32px;
@@ -138,6 +206,8 @@
             cursor: pointer;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
             border: 2px solid rgba(255, 255, 255, 0.2);
+	    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+             position: relative;
         }
 
         .balance-box.secondary {
@@ -173,15 +243,41 @@
             justify-content: center;
             cursor: pointer;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.1s ease, background 0.2s ease;
+	    transition: 
+        transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+        background 0.3s ease, 
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+    position: relative;
+    overflow: visible; /* Allows the glow to spread */
         }
 
-        .header-icon:active {
-            transform: scale(0.95);
-        }
+.notification-wrapper:hover {
+    box-shadow: 0 0 15px rgba(255, 71, 87, 0.4); /* Soft red glow */
+}
+
+/* Subtle rotation for the SVGs inside when hovering */
+.header-icon:hover .icon-svg {
+    transform: rotate(8deg);
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+}
+
+/* Active/Tap State for better feedback */
+.header-icon:active {
+    transform: scale(0.9) translateY(0);
+    transition: transform 0.1s ease;
+}
+#mute-btn:hover {
+    box-shadow: 0 0 15px rgba(116, 185, 255, 0.4); /* Soft blue glow */
+    color: #74b9ff;
+}
 
         .header-icon:hover {
-            background: rgba(255, 255, 255, 0.15);
+transform: translateY(-3px) scale(1.1); /* Lifts and grows */
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
         }
 
         .icon-svg {
@@ -391,12 +487,19 @@
             color: #74b9ff;
             border: 1px solid rgba(255, 255, 255, 0.2);
             cursor: pointer;
-            transition: background 0.2s ease;
+            transition: all 0.2s ease;
             flex-shrink: 0;
         }
+.float-btn:active, .balance-box:active, .avatar:active, .info-icon:active {
+    transform: scale(0.95) !important;
+    filter: brightness(0.9);
+}
 
         .info-icon:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(116, 185, 255, 0.3);
+    transform: scale(1.15);
+    color: #ffffff;
+    border-color: #74b9ff;
         }
 
         .info-svg {
@@ -449,25 +552,125 @@
             padding:0px;            
         }
 
-        .float-btn {
-            position: absolute;
-            pointer-events: auto;
-            cursor: pointer;
-            transition: transform 0.2s ease, filter 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            animation: floatBounce 2s ease-in-out infinite;
-        }
+/* ============================================
+   UNIFIED FLOATING BUTTON HOVER EFFECTS
+   (All matching the Shop button style)
+   ============================================ */
 
-        .float-btn:active {
-            transform: scale(0.92);
-        }
+/* Base float button */
+.float-btn {
+    position: absolute;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: floatBounce 2s ease-in-out infinite;
+    z-index: 10;
+}
 
-        .float-btn:hover {
-            filter: brightness(1.1);
-        }
+/* ============================================
+   UNIFIED HOVER EFFECT (Same for ALL buttons)
+   ============================================ */
 
+/* All float buttons use the same hover as shop */
+.float-btn:hover {
+    transform: scale(1.15) translateY(-12px) rotate(3deg);
+    z-index: 100;
+    filter: brightness(1.1) contrast(1.1);
+    animation-play-state: paused;
+}
+
+/* Bonus (Invite) Button - Same pulse as shop */
+.float-btn.bonus:hover .float-bonus-icon {
+animation: none;
+    filter: none;
+}
+.float-btn.bonus:hover {
+    transform: none;
+    filter: none;
+    animation-play-state: running;
+}
+
+
+.float-btn.theme-image-btn:hover .float-theme-image {
+    animation: pulseScale 1s ease-in-out infinite;
+   }
+.float-btn.bonus:hover .float-bonus-label {
+    transform: none;
+}
+.float-btn.bonus:active {
+    transform: scale(1.15) translateY(-12px) rotate(3deg);
+    filter: brightness(1.1) contrast(1.1);
+    animation-play-state: paused;
+    transition: all 0.1s ease;
+}
+.float-btn.shop-btn:hover .float-shop-image {
+    animation: pulseScale 1s ease-in-out infinite;
+   }
+
+/* ============================================
+   LABEL HOVER EFFECTS
+   ============================================ */
+
+.float-btn:hover .float-bonus-label {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================
+   KEYFRAME ANIMATIONS
+   ============================================ */
+
+@keyframes pulseScale {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes floatBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* ============================================
+   ACTIVE/CLICK STATES
+   ============================================ */
+
+.float-btn:active {
+    transform: scale(0.92) translateY(0) !important;
+    filter: brightness(0.9);
+    transition: all 0.1s ease;
+}
+
+.float-btn.bonus:active .float-bonus-icon,
+.float-btn.theme-image-btn:active .float-theme-image,
+.float-btn.shop-btn:active .float-shop-image {
+    animation: none;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+    .float-btn:hover {
+        transform: none;
+        filter: none;
+    }
+    
+    .float-btn:hover .float-bonus-icon,
+    .float-btn:hover .float-theme-image,
+    .float-btn:hover .float-shop-image {
+        animation: none;
+        filter: none;
+    }
+    
+    .float-btn:active {
+        transform: scale(0.95) !important;
+        filter: brightness(1.2);
+    }
+}
         @keyframes floatBounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-5px); }
@@ -648,7 +851,7 @@
             gap: 0px;
             padding: 0px 0px;
             cursor: pointer !important;
-    pointer-events: auto !important;
+            pointer-events: auto !important;
             border-radius: 12px;
             transition: background 0.2s ease;
             flex: 1;
@@ -657,10 +860,7 @@
             background: transparent;
         }
 
-        .nav-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
+        
         .nav-icon-wrapper {
             width: 42px;
             height: 42px;
@@ -763,7 +963,46 @@
     opacity: 0.6;
     color: #ff4d4d; /* Changes color to red when muted, remove if not wanted */
 }
-#mute-slash {
+/* Update your existing mute-btn styles or add these */
+#audio-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#audio-icon-container svg {
+    transition: all 0.2s ease;
+}
+
+/* Optional: Make the button look slightly different when anything is muted */
+.header-icon:has(.icon-svg line) {
+    background: rgba(255, 71, 87, 0.1);
+}
+/* Container to keep icons centered */
+#audio-icon-wrapper {
+    width: 20px;
+    height: 20px;
+}
+
+/* The overlay element for / or ⊘ */
+#audio-status-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ff4d4d;
+    pointer-events: none; /* Let clicks pass through to the button */
+}
+
+/* Styles for the SVG icons within the overlay */
+.overlay-svg {
+    width: 100%;
+    height: 100%;
+    stroke: #ff4757; /* Red color for the mute indicators */
     stroke-width: 2.5;
 }
         .btn-close {
