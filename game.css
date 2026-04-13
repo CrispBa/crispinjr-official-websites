@@ -7,6 +7,11 @@
             -webkit-touch-callout: none;
         }
 
+form#login-form {
+    padding: 1px 2px;
+    margin: -5px;
+}
+
         html, body {
             width: 100%;
             height: 100%;
@@ -33,6 +38,333 @@
             overflow: hidden;
             
         }
+
+/* Login Screen Styles */
+.login-screen {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-size: 100% 100%;
+}
+
+/* Animated background stars */
+.login-screen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('splash.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    animation: twinkle 5s ease-in-out infinite;
+    padding: 0px;
+}
+
+@keyframes twinkle {
+    100% { opacity: 100; }
+    100% { opacity:100; }
+}
+
+.login-container {
+    width: 90%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    
+}
+
+
+.login-card {
+    width: 90%;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding: 25px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    animation: fadeInUp 0.8s ease 0.2s both;
+}
+
+.login-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    position: relative;
+    overflow: visible;
+}
+
+.star-icon {
+    font-size: 40px;
+    color: rgba(255, 255, 255, 0.6);
+    opacity: 0.5;
+    position: absolute;
+
+    /* 2. Positioning - Choose where it overlaps */
+    top: -10px;    /* Moves it up */
+    left: 10px;    /* Moves it to the left side */
+
+    /* 3. Layering */
+    z-index: -1;
+    
+}
+
+.login-header h3 {
+    font-size: 24px;
+    font-weight: 900;
+    text-align: center;
+    flex: 1;
+    
+    /* 1. The Gradient (Adjust colors as needed) */
+    background: linear-gradient(to top, rgb(255 255 255 / 48%) 0%, rgb(255 255 255 / 52%) 100%);
+
+    /* 2. The Clipping Magic */
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    /* 3. The Transparency */
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+
+    /* 4. Replacement for text-shadow (Optional) */
+    /* text-shadow: 0 1px 2px rgba(255,255,255,0.3); <- Standard shadow won't work well here */
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    transform: translateX(20px);
+}
+
+.coin-icon {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #ffffff9e;
+    font-size: 14px;
+    top: -35px;               /* Moves it UP (off the edge) */
+    right: -15px;             /* Moves it to the RIGHT (off the edge) */
+    
+    z-index: 10;
+    position: relative;
+}
+
+/* 4. Adding the Inner Circle Detail */
+.coin-icon::after {
+    /* content: ''; */
+    position: absolute;
+    width: 75%;
+    height: 75%;
+    border: 1.5px solid rgba(0, 0, 0, 0.1); /* The faint inner ring seen in your photo */
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* Input Groups */
+.input-group {
+    position: relative;
+    margin-bottom: 15px;
+}
+.input-groups {
+    position: relative;
+    margin-bottom: -1px;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    opacity: 0.6;
+    z-index: 2;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    border: none;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 15px;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+}
+.input-groups input {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    border: none;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 15px;
+    color: #333;
+    box-shadow: 
+        0 2px 8px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    background: #fff;
+    box-shadow: 
+        0 4px 12px rgba(0,0,0,0.15),
+        0 0 0 3px rgba(0, 208, 132, 0.2);
+    transform: translateY(-1px);
+}
+.input-groups input:focus {
+    outline: none;
+    background: #fff;
+    box-shadow: 
+        0 4px 12px rgba(0,0,0,0.15),
+        0 0 0 3px rgba(0, 208, 132, 0.2);
+    transform: translateY(-1px);
+}
+
+.input-group input::placeholder {
+    color: #999;
+}
+
+.input-groups input::placeholder {
+    color: #999;
+}
+.login-btn {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    background: linear-gradient(135deg, #00d084 0%, #00b894 100%);
+    border: none;
+    border-radius: 25px;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 208, 132, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 6px 20px rgba(0, 208, 132, 0.5),
+        0 2px 4px rgba(0,0,0,0.2);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    color: rgba(255,255,255,0.6);
+    font-size: 11px;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.3);
+    margin: 0 10px;
+}
+
+.google-btn {
+    width: 100%;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 25px;
+    color: #666;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.google-btn:hover {
+    background: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.google-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Sign Up Link */
+.signup-link {
+    margin-top: 7px;
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+    animation: fadeInUp 0.8s ease 0.4s both;
+    text-align: center;
+}
+
+.signup-link a {
+    color: #00d084;
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.signup-link a:hover {
+    color: #00b894;
+    text-decoration: underline;
+}
+
+/* Hide login screen when done */
+.login-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+/* Responsive */
+@media (max-width: 375px) {
+    .login-card {
+        padding: 1rem;
+    }
+    
+    .logo-subtitle {
+        font-size: 40px;
+    }
+    
+    .input-group input {
+        padding: 10px 10px 10px 40px;
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 481px) {
+    .login-screen {
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 480px;
+    }
+}
 /* Loading Screen - Universal Device Fit (716x1600 splash.png) */
 .loading-screen {
     position: fixed;
@@ -583,7 +915,7 @@ transform: translateY(-3px) scale(1.1); /* Lifts and grows */
 /* 2. THE SCROLLABLE AREA (Your Earn View) */
 .earn-view {
     width: 100%;
-    height: 85vh;
+    height: 90vh;
     padding: 5px 15px 100px;
     margin: 0;
     
@@ -1352,4 +1684,89 @@ animation: none;
     border: none;
     bottom: 530%;
     right: -0px;
+}
+ .social-accounts {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-accounts .social-button {
+            background: linear-gradient(45deg, #ffffff 0%, #ffffffbd 100%);
+            border: 1px solid rgb(0 0 0 / 65%);
+            padding: 5px;
+            border-radius: 50%;
+            width: 38px;
+            aspect-ratio: 1;
+            display: grid;
+            place-content: center;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+         .social-accounts .social-button .svg {
+            fill: white;
+            margin: auto;
+        }
+
+        .social-accounts .social-button:hover {
+            transform: scale(1.2);
+        }
+
+  .forgot-password {
+            display: block;
+            margin-bottom: 14px;
+            text-align: right;
+        }
+
+        .forgot-password a {
+            font-size: 11px;
+            color: rgb(255 255 255 / 62%);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+.forgot-password a:hover {
+    color: #00b894;
+    text-decoration: underline;
+}
+.input-group {
+    position: relative;
+}
+ .input-group span svg {
+  color: #9CA3AF;
+  width: 1rem;
+  height: 1rem;
+}
+
+.input-group span {
+  display: grid;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  place-content: center;
+}
+
+.input-groups {
+    position: relative;
+}
+ .input-groups span svg {
+  color: #9CA3AF;
+  width: 1rem;
+  height: 1rem;
+}
+
+.input-groups span {
+  display: grid;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  place-content: center;
 }

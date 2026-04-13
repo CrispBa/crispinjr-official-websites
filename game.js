@@ -258,3 +258,130 @@ function playClickSound() {
         
     }, 40);
 })();
+
+// Login Handler Functions
+function handleLogin(event) {
+    event.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    // Simulate login validation
+    if (email && password) {
+        // Store user data (in real app, send to your Google Apps Script)
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userName', email.split('@')[0]);
+        
+        // Show success feedback
+        const loginBtn = document.querySelector('.login-btn');
+        loginBtn.textContent = '✓ Success!';
+        loginBtn.style.background = 'linear-gradient(135deg, #00b894 0%, #00d084 100%)';
+        
+        // Transition to loading screen after short delay
+        setTimeout(() => {
+            showLoadingScreen();
+        }, 800);
+    }
+}
+
+function handleGoogleLogin() {
+    // For Google Sign-In integration with your existing setup
+    // This would typically use Google Identity Services
+    const btn = document.querySelector('.google-btn');
+    btn.innerHTML = '<span style="display: inline-block; width: 20px; height: 20px; border: 2px solid #ccc; border-top-color: #333; border-radius: 50%; animation: spin 0.8s linear infinite;"></span> Connecting...';
+    
+    // Simulate Google login (replace with actual Google Sign-In)
+    setTimeout(() => {
+        localStorage.setItem('userEmail', 'google_user@gmail.com');
+        localStorage.setItem('userName', 'Google User');
+        showLoadingScreen();
+    }, 1500);
+}
+
+function showLoadingScreen() {
+    const loginScreen = document.getElementById('login-screen');
+    const loadingScreen = document.getElementById('loading-screen');
+    
+    // Hide login screen
+    loginScreen.classList.add('hidden');
+    
+    // Show loading screen after transition
+    setTimeout(() => {
+        loginScreen.style.display = 'none';
+        loadingScreen.style.display = 'flex';
+        loadingScreen.classList.remove('hidden');
+        
+        // Start the loading progress
+        startLoadingProgress();
+    }, 500);
+}
+
+function startLoadingProgress() {
+    let progress = 0;
+    const progressFill = document.getElementById('progress-fill');
+    const percentageText = document.getElementById('percentage-text');
+    
+    const loadingInterval = setInterval(function() {
+        const increment = Math.floor(Math.random() * 3) + 1;
+        progress += increment;
+        
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(loadingInterval);
+            
+            setTimeout(function() {
+                document.getElementById('loading-screen').classList.add('hidden');
+                setTimeout(function() {
+                    document.getElementById('loading-screen').style.display = 'none';
+                    document.querySelector('.game-container').style.opacity = '1';
+                }, 500);
+            }, 500);
+        }
+        
+        progressFill.style.width = progress + '%';
+        percentageText.textContent = progress + '%';
+        
+    }, 40);
+}
+
+function showSignup() {
+    showModal('Sign Up', 'Registration form coming soon!\n\nFor now, please use Google login or email login.');
+}
+
+// Check if user is already logged in on page load
+window.addEventListener('load', function() {
+    const isLoggedIn = localStorage.getItem('userEmail');
+    const loginScreen = document.getElementById('login-screen');
+    const loadingScreen = document.getElementById('loading-screen');
+    
+    if (isLoggedIn) {
+        // Skip login if already logged in (optional - remove if you want login every time)
+        loginScreen.style.display = 'none';
+        loadingScreen.style.display = 'flex';
+        startLoadingProgress();
+    } else {
+        // Show login screen, hide loading initially
+        loadingScreen.style.display = 'none';
+        loginScreen.style.display = 'flex';
+    }
+});
+
+// Add spin animation for Google button loader
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+`;
+document.head.appendChild(style);
+
+// Update avatar with user data if available
+function updateUserAvatar() {
+    const userName = localStorage.getItem('userName') || 'Felix';
+    const avatarImg = document.querySelector('.avatar img');
+    if (avatarImg) {
+        avatarImg.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${userName}`;
+    }
+}
+
+// Call after game loads
+setTimeout(updateUserAvatar, 2000);
