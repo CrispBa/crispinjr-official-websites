@@ -146,6 +146,8 @@ form#login-form {
 .coin-icon {
     width: 30px;
     height: 30px;
+    background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -156,12 +158,30 @@ form#login-form {
     right: -15px;             /* Moves it to the RIGHT (off the edge) */
     
     z-index: 10;
-    position: relative;
+    position: relative; /* Necessary for the inner ring */
+
+    /* 1. The 3D Tilt */
+    /* rotateX tilts it back to show the top edge */
+    transform: rotateX(10deg) rotateY(-10deg);
+    
+    /* 2. The Thick 3D Side & Inner Rim */
+    /* Shadow 1: Dark orange 'depth' (the thickness) */
+    /* Shadow 2: Inner inset shadow to create the 'rim' effect inside the coin */
+    box-shadow: 
+        0 4px 0 #d35400, 
+        inset 0 0 0 2px rgba(255, 255, 255, 0.4),
+        inset 0 0 4px rgba(0, 0, 0, 0.2);
+
+    /* 3. The Highlighted Edge */
+    border: 1px solid #fcebb6;
+
+    /* Ensures the 3D depth stays sharp */
+    transform-style: preserve-3d;
 }
 
 /* 4. Adding the Inner Circle Detail */
 .coin-icon::after {
-    /* content: ''; */
+    content: '';
     position: absolute;
     width: 75%;
     height: 75%;
