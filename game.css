@@ -47,7 +47,7 @@ form#login-form {
     width: 100%;
     height: 100%;
     z-index: 10000;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     overflow: hidden;
@@ -210,6 +210,15 @@ form#login-form {
     z-index: 2;
 }
 
+.input-icons {
+    position: absolute;
+    left: 15px;
+    top: 57%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    opacity: 0.6;
+    z-index: 2;
+}
 .input-group input {
     width: 100%;
     padding: 10px 10px 10px 40px;
@@ -396,8 +405,8 @@ form#login-form {
     background-color: #1a0a2e; /* Fallback color matching splash dark purple */
     background-repeat: no-repeat;
     background-size: cover;
-    z-index: 9999;
-    display: flex;
+    z-index: 10000;
+    display: flex !important;
     align-items: flex-end;
     justify-content: center;
     transition: opacity 0.5s ease, visibility 0.5s ease;
@@ -1220,7 +1229,7 @@ animation: none;
    ============================================ */
 
 .float-btn:hover .float-bonus-label {
-    transform: translateY(-3px) scale(1.05);
+    transform: translateY(-3px) scale(1);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
 }
 
@@ -1589,7 +1598,7 @@ animation: none;
     height: 20px;
 }
 
-/* The overlay element for / or ⊘ */
+/* The overlay element for / or âŠ˜ */
 #audio-status-overlay {
     position: absolute;
     top: 0;

@@ -1,3 +1,4 @@
+
 const games = [
             {
                 id: 1,
@@ -43,35 +44,48 @@ const games = [
             },
         ];
 
-        // Render game cards
-        function renderGames() {
-            const container = document.getElementById('offersList');
-            container.innerHTML = games.map(game => `
-                <div class="offer-card">
-                    <div class="offer-image">
-                        <img src="${game.image}" alt="${game.title}" loading="lazy">
-                        <div class="game-label">Game</div>
-                        ${game.premium ? '<div class="premium-badge">Premium</div>' : ''}
-                    </div>
-                    <div class="offer-details">
-                        <div class="offer-header-row">
-                            <div class="offer-earnings">${game.earnings}</div>
-                            <div class="offer-title">${game.title}</div>
-                            <button class="info-icon" onclick="showModal('${game.title}', 'Play ${game.title} to earn ${game.earnings}!')">
-                                <svg class="info-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                                    <path d="M12 16V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                    <path d="M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                </svg>
-                            </button>
-                        </div>
-                        <button class="play-btn" onclick="playGame('${game.title}', '${game.earnings}')">
-                            Play and Earn ${game.earnings}
-                        </button>
-                    </div>
+      function renderGames() {
+    const container = document.getElementById('offersList');
+    container.innerHTML = games.map(game => `
+        <div class="offer-card">
+            <div class="offer-image">
+                <img src="${game.image}" alt="${game.title}" loading="lazy">
+                <div class="game-label">Game</div>
+                ${game.premium ? '<div class="premium-badge">Premium</div>' : ''}
+            </div>
+            <div class="offer-details">
+                <div class="offer-header-row">
+                    <div class="offer-earnings">${game.earnings}</div>
+                    <div class="offer-title">${game.title}</div>
+                    
+                    <!-- ADD playClickSound() to info button -->
+                    <button class="info-icon" onclick="playClickSound(); console.log('Info: ${game.title}')">
+                        <svg class="info-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 16V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
                 </div>
-            `).join('');
-        }
+                
+                <!-- ADD playClickSound() to play button -->
+                <button class="play-btn" onclick="playClickSound(); startGame('${game.title}', '${game.earnings}')">
+                    Play and Earn ${game.earnings}
+                </button>
+            </div>
+        </div>
+    `).join('');
+    
+    // Re-attach click sounds to newly created buttons
+    addClickSoundsToButtons();
+}
+
+// New function to actually start the game (without modal)
+function startGame(title, earnings) {
+    console.log(`Loading ${title}...`);
+    // Add your actual game loading code here
+    // window.location.href = `/game/${title}`;
+}
 function closeModal() {
     document.getElementById('modal').classList.remove('active');
 }
@@ -159,7 +173,7 @@ function switchTab(tab) {
 
 // Replace your click sound code with this:
 const clickSound = new Audio('sound-effects.mp3');
-clickSound.volume = 0.5;
+clickSound.volume = 0.7;
 let clickTimeout;
 
 
@@ -228,6 +242,151 @@ function playClickSound() {
     }, 0); 
 }
 
+// Check if we're in a screen where music should be muted
+function canPlayMusic() {
+    const loginScreen = document.getElementById('login-screen');
+    const loadingScreen = document.getElementById('loading-screen');
+    
+    // Check if login screen is visible
+    if (loginScreen) {
+        const style = window.getComputedStyle(loginScreen);
+        if (style.display !== 'none' && style.visibility !== 'hidden' && !loginScreen.classList.contains('hidden')) {
+            return false;
+        }
+    }
+    
+    // Check if loading/splash screen is visible
+    if (loadingScreen) {
+        const style = window.getComputedStyle(loadingScreen);
+        if (style.display !== 'none' && style.visibility !== 'hidden' && !loadingScreen.classList.contains('hidden')) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+// Modify startMusic to respect screen state
+function startMusic() {
+    // Don't play during splash, login, or loading screens
+    if (!canPlayMusic()) {
+        console.log("Music muted on splash/login/loading screen");
+        return;
+    }
+    
+    // Also respect the mute toggle state (state 2 = all muted)
+    if (audioState === 2) return;
+    
+    if (bgMusic.paused) {
+        bgMusic.play().then(() => {
+            console.log("Playback started successfully");
+        }).catch(error => {
+            console.log("Playback failed:", error);
+        });
+    }
+}
+
+// Update the window load handler to pause music when showing login
+window.addEventListener('load', function() {
+    const loadingScreen = document.getElementById('loading-screen');
+    const loginScreen = document.getElementById('login-screen');
+    const gameContainer = document.querySelector('.game-container');
+    const floatingFeatures = document.getElementById('floatingFeatures');
+    const progressFill = document.getElementById('progress-fill');
+    const percentageText = document.getElementById('percentage-text');
+    
+    // Ensure loading is visible and others are hidden
+    loadingScreen.style.display = 'flex';
+    loadingScreen.classList.remove('hidden');
+    loginScreen.style.display = 'none';
+    loginScreen.classList.add('hidden');
+    if (gameContainer) gameContainer.style.opacity = '0';
+    if (floatingFeatures) floatingFeatures.classList.remove('active');
+    
+    // IMPORTANT: Ensure music is paused at start
+    bgMusic.pause();
+    bgMusic.currentTime = 0;
+    
+    // Force reflow
+    void loadingScreen.offsetHeight;
+    
+    // Run splash animation (3 seconds)
+    let progress = 0;
+    const duration = 3000;
+    const startTime = Date.now();
+    
+    function updateSplash() {
+        const elapsed = Date.now() - startTime;
+        progress = Math.min((elapsed / duration) * 100, 100);
+        
+        if (progressFill) progressFill.style.width = progress + '%';
+        if (percentageText) percentageText.textContent = Math.floor(progress) + '%';
+        
+        if (progress < 100) {
+            requestAnimationFrame(updateSplash);
+        } else {
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                loadingScreen.style.opacity = '0';
+                loadingScreen.style.visibility = 'hidden';
+                
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    splashComplete = true;
+                    
+                    const isLoggedIn = localStorage.getItem('userEmail');
+                    
+                    if (isLoggedIn) {
+                        // Show game - music can play now (will start on next click or you can auto-start)
+                        if (gameContainer) {
+                            gameContainer.style.opacity = '1';
+                            floatingFeatures.classList.add('active');
+                            renderGames();
+                        }
+                        // Optional: Auto-start music if unmuted
+                        if (audioState === 0) startMusic();
+                    } else {
+                        // Show login - ensure music is paused
+                        bgMusic.pause();
+                        bgMusic.currentTime = 0;
+                        loginScreen.style.display = 'flex';
+                        setTimeout(() => {
+                            loginScreen.classList.remove('hidden');
+                        }, 50);
+                    }
+                }, 500);
+            }, 200);
+        }
+    }
+    
+    requestAnimationFrame(updateSplash);
+});
+
+// Also pause music when showing modal or any login-related overlay
+function showModal(title, text) {
+    const modal = document.getElementById('modal');
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalText').textContent = text;
+    modal.classList.add('active');
+    
+    // Optional: Pause music when modal is open
+    // bgMusic.pause();
+}
+// DISABLE ALL MODALS - Override the showModal function
+function showModal(title, text) {
+    console.log('Modal blocked:', title); // Optional: for debugging
+    return; // Does nothing - modals won't appear
+}
+
+// Also disable these specific modal functions
+function showBonusModal() { console.log('Bonus modal blocked'); }
+function showThemeModal() { console.log('Theme modal blocked'); }
+function showSkinModal() { console.log('Skin modal blocked'); }
+function closeModal() {
+    document.getElementById('modal').classList.remove('active');
+    // Optional: Resume music if game is visible and not muted
+    // if (canPlayMusic() && audioState === 0) startMusic();
+}
 // Loading Screen Progress (1% - 100%)
 (function() {
     let progress = 0;
@@ -259,30 +418,6 @@ function playClickSound() {
     }, 40);
 })();
 
-// Login Handler Functions
-function handleLogin(event) {
-    event.preventDefault();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    
-    // Simulate login validation
-    if (email && password) {
-        // Store user data (in real app, send to your Google Apps Script)
-        localStorage.setItem('userEmail', email);
-        localStorage.setItem('userName', email.split('@')[0]);
-        
-        // Show success feedback
-        const loginBtn = document.querySelector('.login-btn');
-        loginBtn.textContent = '✓ Success!';
-        loginBtn.style.background = 'linear-gradient(135deg, #00b894 0%, #00d084 100%)';
-        
-        // Transition to loading screen after short delay
-        setTimeout(() => {
-            showLoadingScreen();
-        }, 800);
-    }
-}
-
 function handleGoogleLogin() {
     // For Google Sign-In integration with your existing setup
     // This would typically use Google Identity Services
@@ -296,6 +431,7 @@ function handleGoogleLogin() {
         showLoadingScreen();
     }, 1500);
 }
+
 
 function showLoadingScreen() {
     const loginScreen = document.getElementById('login-screen');
@@ -314,34 +450,143 @@ function showLoadingScreen() {
         startLoadingProgress();
     }, 500);
 }
+// Loading Screen Progress
+let loadingProgress = 0;
+let loadingInterval;
 
 function startLoadingProgress() {
-    let progress = 0;
     const progressFill = document.getElementById('progress-fill');
     const percentageText = document.getElementById('percentage-text');
+    const loadingScreen = document.getElementById('loading-screen');
     
-    const loadingInterval = setInterval(function() {
-        const increment = Math.floor(Math.random() * 3) + 1;
-        progress += increment;
+    if (!progressFill || !percentageText) return;
+    
+    let currentProgress = 0;
+    const startTime = Date.now();
+    const minDuration = 5000; // 5 seconds minimum
+    const maxDuration = 8000; // 8 seconds maximum
+    
+    // Detect connection speed
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const effectiveType = connection ? connection.effectiveType : '4g';
+    
+    // Set target duration based on connection (slower = longer loading)
+    let targetDuration;
+    switch(effectiveType) {
+        case 'slow-2g':
+        case '2g':
+            targetDuration = 7500; // ~7.5s for very slow
+            break;
+        case '3g':
+            targetDuration = 6000; // ~6s for 3g
+            break;
+        case '4g':
+        default:
+            targetDuration = 5000 + Math.random() * 1500; // 5-6.5s for fast
+            break;
+    }
+    
+    // Clamp to max 8 seconds
+    targetDuration = Math.min(targetDuration, maxDuration);
+    targetDuration = Math.max(targetDuration, minDuration);
+    
+    function updateProgress() {
+        const elapsed = Date.now() - startTime;
+        const rawProgress = (elapsed / targetDuration) * 100;
         
-        if (progress >= 100) {
-            progress = 100;
-            clearInterval(loadingInterval);
+        // Smooth easing - starts faster, slows at end
+        // Ease-out cubic: 1 - (1 - x)^3
+        const easedProgress = 1 - Math.pow(1 - Math.min(rawProgress / 100, 1), 3);
+        currentProgress = Math.floor(easedProgress * 100);
+        
+        // Cap at 99% until actually done
+        if (currentProgress > 99) currentProgress = 99;
+        
+        progressFill.style.width = currentProgress + '%';
+        percentageText.textContent = currentProgress + '%';
+        
+        if (elapsed < targetDuration) {
+            requestAnimationFrame(updateProgress);
+        } else {
+            // Complete
+            currentProgress = 100;
+            progressFill.style.width = '100%';
+            percentageText.textContent = '100%';
             
-            setTimeout(function() {
-                document.getElementById('loading-screen').classList.add('hidden');
-                setTimeout(function() {
-                    document.getElementById('loading-screen').style.display = 'none';
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
                     document.querySelector('.game-container').style.opacity = '1';
                 }, 500);
-            }, 500);
+            }, 300);
         }
-        
-        progressFill.style.width = progress + '%';
-        percentageText.textContent = progress + '%';
-        
-    }, 40);
+    }
+    
+    requestAnimationFrame(updateProgress);
 }
+
+// Check auth status and show appropriate screen
+function initApp() {
+    const isLoggedIn = localStorage.getItem('userEmail');
+    const loginScreen = document.getElementById('login-screen');
+    const loadingScreen = document.getElementById('loading-screen');
+    
+    // Always start with splash visible (CSS handles splash.png background)
+    // After 2 seconds, decide what to show
+    setTimeout(() => {
+        if (isLoggedIn) {
+            // User logged in: show loading -> game
+            loginScreen.style.display = 'none';
+            loadingScreen.style.display = 'flex';
+            loadingScreen.classList.remove('hidden');
+            startLoadingProgress();
+        } else {
+            // User not logged in: show login screen
+            loginScreen.style.display = 'flex';
+            loadingScreen.style.display = 'none';
+        }
+    }, 2000); // 2 seconds splash
+}
+
+// Handle login success
+function showLoadingAfterLogin() {
+    const loginScreen = document.getElementById('login-screen');
+    const loadingScreen = document.getElementById('loading-screen');
+    
+    // Hide login screen
+    loginScreen.classList.add('hidden');
+    
+    setTimeout(() => {
+        loginScreen.style.display = 'none';
+        loadingScreen.style.display = 'flex';
+        loadingScreen.classList.remove('hidden');
+        startLoadingProgress();
+    }, 500);
+}
+
+// Update handleLogin to use new flow
+function handleLogin(event) {
+    event.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    if (email && password) {
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userName', email.split('@')[0]);
+        
+        const loginBtn = document.querySelector('.login-btn');
+        loginBtn.textContent = '✓ Success!';
+        loginBtn.style.background = 'linear-gradient(135deg, #00b894 0%, #00d084 100%)';
+        
+        setTimeout(() => {
+            showLoadingAfterLogin();
+        }, 800);
+    }
+}
+
+
+// Remove the old window.onload at bottom of file
 
 function showSignup() {
     showModal('Sign Up', 'Registration form coming soon!\n\nFor now, please use Google login or email login.');
