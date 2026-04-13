@@ -195,6 +195,10 @@ form#login-form {
     position: relative;
     margin-bottom: 15px;
 }
+.input-groupa {
+    position: relative;
+    margin-bottom: 15px;
+}
 .input-groups {
     position: relative;
     margin-bottom: -1px;
@@ -218,6 +222,14 @@ form#login-form {
     font-size: 18px;
     opacity: 0.6;
     z-index: 2;
+}
+.input-groupa span {
+    display: grid;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    place-content: center;
+    padding-right: 15px;
 }
 .input-group input {
     width: 100%;
@@ -409,7 +421,7 @@ form#login-form {
     display: flex !important;
     align-items: flex-end;
     justify-content: center;
-    transition: opacity 0.5s ease, visibility 0.5s ease;
+    transition: opacity 0.5s ease, visibility 0.6s ease;
 }
 
 
@@ -579,7 +591,7 @@ form#login-form {
     background: linear-gradient(180deg, #ff9f43 0%, #e67e22 50%, #d35400 100%);
     border-radius: 10px;
     
-    transition: width 0.1s linear;
+    transition: width 0.3s linear;
     position: relative;
     box-shadow: inset 0 -2px 4px rgba(0,0,0,0.2);
 }
@@ -1598,7 +1610,7 @@ animation: none;
     height: 20px;
 }
 
-/* The overlay element for / or âŠ˜ */
+/* The overlay element for / or Ã¢Å Ëœ */
 #audio-status-overlay {
     position: absolute;
     top: 0;
@@ -1767,17 +1779,17 @@ animation: none;
   color: #9CA3AF;
   width: 1rem;
   height: 1rem;
+  padding: 0px;
 }
 
 .input-group span {
   display: grid;
   position: absolute;
-  top: 0;
   bottom: 0;
   right: 0;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  \: 1rem;
   place-content: center;
+  padding-right: 15px;
 }
 
 .input-groups {
@@ -1792,10 +1804,153 @@ animation: none;
 .input-groups span {
   display: grid;
   position: absolute;
-  top: 0;
   bottom: 0;
   right: 0;
-  padding-left: 1rem;
   padding-right: 1rem;
   place-content: center;
 }
+
+
+/* Sign Up specific styles */
+#signup-card {
+    animation: fadeInUp 0.5s ease;
+}
+
+#signup-card.hidden {
+    display: none !important;
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Password strength indicator (optional) */
+.password-strength {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    display: none;
+}
+
+.password-strength.show {
+    display: block;
+}
+
+.password-strength-bar {
+    height: 100%;
+    width: 0%;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.password-strength-bar.weak { width: 33%; background: #ff4757; }
+.password-strength-bar.medium { width: 66%; background: #ffa502; }
+.password-strength-bar.strong { width: 100%; background: #00d084; }
+
+/* Error message styling */
+.error-message {
+    color: #ff4757;
+    font-size: 12px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    text-align: left;
+    padding-left: 5px;
+    display: none;
+}
+
+.error-message.show {
+    display: block;
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.password-group input {
+    padding-right: 45px !important;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    z-index: 10;
+}
+
+.toggle-password:hover {
+    opacity: 0.7;
+}
+
+.eye-icon {
+    width: 18px;
+    height: 18px;
+    color: #666;
+}
+
+.toggle-password.active .eye-icon {
+    color: #00d084;
+}
+
+.toggle-passwords {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    z-index: 10;
+}
+
+.toggle-passwords:hover {
+    opacity: 0.7;
+}
+
+.eye-icon {
+    width: 18px;
+    height: 18px;
+    color: #666;
+}
+
+.toggle-passwords.active .eye-icon {
+    color: #00d084;
+}
+
+
+.toggle-passworda {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    z-index: 10;
+}
+
+.toggle-passworda:hover {
+    opacity: 0.7;
+}
+
+.toggle-passworda.active .eye-icon {
+    color: #00d084;
+}
+

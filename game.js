@@ -86,6 +86,155 @@ function startGame(title, earnings) {
     // Add your actual game loading code here
     // window.location.href = `/game/${title}`;
 }
+// Toggle between Login and Sign Up
+function showSignup() {
+    playClickSound();
+    const loginCard = document.querySelector('#login-form').closest('.login-card');
+    const signupCard = document.getElementById('signup-card');
+    
+    loginCard.style.display = 'none';
+    signupCard.style.display = 'block';
+    signupCard.classList.remove('hidden');
+    
+    // Clear any previous errors
+    hideErrors();
+}
+
+// ✅ WORKING SIGNUP FUNCTION
+function showSignup() {
+    playClickSound();
+    const loginCard = document.querySelector('#login-form').closest('.login-card');
+    const signupCard = document.getElementById('signup-card');
+    
+    loginCard.style.display = 'none';
+    signupCard.style.display = 'block';
+    signupCard.classList.remove('hidden');
+    
+    // Clear any previous errors
+    hideErrors();
+}
+
+// ✅ ADD THIS TOO - for "Back to Login" link
+function showLogin() {
+    playClickSound();
+    const loginCard = document.querySelector('#login-form').closest('.login-card');
+    const signupCard = document.getElementById('signup-card');
+    
+    signupCard.style.display = 'none';
+    signupCard.classList.add('hidden');
+    loginCard.style.display = 'block';
+}
+function validateSignup(name, email, password, confirm) {
+    let isValid = true;
+    hideErrors();
+    
+    // Name validation
+    if (name.length < 2) {
+        showError('signup-name', 'Name must be at least 2 characters');
+        isValid = false;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showError('signup-email', 'Please enter a valid email');
+        isValid = false;
+    }
+    
+    // Password validation
+    if (password.length < 6) {
+        showError('signup-password', 'Password must be at least 6 characters');
+        isValid = false;
+    }
+    
+    // Confirm password
+    if (password !== confirm) {
+        showError('signup-confirm', 'Passwords do not match');
+        isValid = false;
+    }
+    
+    return isValid;
+}
+
+function showError(inputId, message) {
+    const input = document.getElementById(inputId);
+    input.style.border = '2px solid #ff4757';
+    input.style.background = 'rgba(255, 71, 87, 0.1)';
+    
+    // Create or update error message
+    let errorDiv = input.parentElement.querySelector('.error-message');
+    if (!errorDiv) {
+        errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        input.parentElement.appendChild(errorDiv);
+    }
+    errorDiv.textContent = message;
+    errorDiv.classList.add('show');
+    
+    // Shake animation
+    input.parentElement.style.animation = 'shake 0.5s ease';
+    setTimeout(() => {
+        input.parentElement.style.animation = '';
+    }, 500);
+}
+
+function hideErrors() {
+    document.querySelectorAll('.error-message').forEach(el => {
+        el.classList.remove('show');
+    });
+    document.querySelectorAll('#signup-form input').forEach(input => {
+        input.style.border = '';
+        input.style.background = '';
+    });
+}
+
+// Google Sign Up
+function handleGoogleSignup() {
+    playClickSound();
+    const btn = document.querySelector('#signup-card .google-btn');
+    btn.innerHTML = '<span style="display: inline-block; width: 20px; height: 20px; border: 2px solid #ccc; border-top-color: #333; border-radius: 50%; animation: spin 0.8s linear infinite;"></span> Connecting...';
+    
+    setTimeout(() => {
+        localStorage.setItem('userEmail', 'google_user_' + Date.now() + '@gmail.com');
+        localStorage.setItem('userName', 'Google User');
+        showLoadingAfterLogin();
+    }, 1500);
+}
+
+// Password strength indicator (optional enhancement)
+document.addEventListener('input', function(e) {
+    if (e.target.id === 'signup-password') {
+        const val = e.target.value;
+        const strengthBar = document.querySelector('.password-strength-bar');
+        
+        if (!strengthBar && val.length > 0) {
+            // Create strength indicator if it doesn't exist
+            const wrapper = document.createElement('div');
+            wrapper.className = 'password-strength show';
+            wrapper.innerHTML = '<div class="password-strength-bar"></div>';
+            e.target.parentElement.after(wrapper);
+        }
+        
+        if (strengthBar) {
+            const wrapper = strengthBar.parentElement;
+            if (val.length === 0) {
+                wrapper.classList.remove('show');
+            } else {
+                wrapper.classList.add('show');
+                strengthBar.className = 'password-strength-bar';
+                
+                if (val.length < 6) {
+                    strengthBar.classList.add('weak');
+                } else if (val.length < 10 || !/[A-Z]/.test(val) || !/[0-9]/.test(val)) {
+                    strengthBar.classList.add('medium');
+                } else {
+                    strengthBar.classList.add('strong');
+                }
+            }
+        }
+    }
+});
+
 function closeModal() {
     document.getElementById('modal').classList.remove('active');
 }
@@ -388,6 +537,9 @@ function closeModal() {
     // if (canPlayMusic() && audioState === 0) startMusic();
 }
 // Loading Screen Progress (1% - 100%)
+// Loading Screen Progress (1% - 100%)
+
+// Loading Screen Progress (1% - 100%)
 (function() {
     let progress = 0;
     const progressFill = document.getElementById('progress-fill');
@@ -400,20 +552,24 @@ function closeModal() {
         const increment = Math.floor(Math.random() * 3) + 1;
         progress += increment;
         
+        // Cap at 100% and show it before transitioning
         if (progress >= 100) {
-            progress = 99;
+            progress = 100;
+            progressFill.style.width = '100%';
+            percentageText.textContent = '100%';
             clearInterval(loadingInterval);
             
+            // Small delay to let user see 100%, then fade out
             setTimeout(function() {
                 loadingScreen.classList.add('hidden');
                 setTimeout(function() {
                     loadingScreen.style.display = 'none';
-                }, 500);
-            }, 5000);
+                }, 1000);
+            }, 8000); // 800ms delay so 100% is visible
+        } else {
+            progressFill.style.width = progress + '%';
+            percentageText.textContent = progress + '%';
         }
-        
-        progressFill.style.width = progress + '%';
-        percentageText.textContent = progress + '%';
         
     }, 40);
 })();
@@ -429,7 +585,7 @@ function handleGoogleLogin() {
         localStorage.setItem('userEmail', 'google_user@gmail.com');
         localStorage.setItem('userName', 'Google User');
         showLoadingScreen();
-    }, 1500);
+    }, 500);
 }
 
 
@@ -450,80 +606,73 @@ function showLoadingScreen() {
         startLoadingProgress();
     }, 500);
 }
-// Loading Screen Progress
 let loadingProgress = 0;
-let loadingInterval;
+let loadingInterval = null;
+let isLoadingComplete = false;
 
 function startLoadingProgress() {
     const progressFill = document.getElementById('progress-fill');
     const percentageText = document.getElementById('percentage-text');
     const loadingScreen = document.getElementById('loading-screen');
+    const gameContainer = document.querySelector('.game-container');
+    const floatingFeatures = document.getElementById('floatingFeatures');
     
     if (!progressFill || !percentageText) return;
     
-    let currentProgress = 0;
-    const startTime = Date.now();
-    const minDuration = 5000; // 5 seconds minimum
-    const maxDuration = 8000; // 8 seconds maximum
+    // Clear any existing interval
+    if (loadingInterval) clearInterval(loadingInterval);
     
-    // Detect connection speed
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    const effectiveType = connection ? connection.effectiveType : '4g';
+    loadingProgress = 0;
+    isLoadingComplete = false;
     
-    // Set target duration based on connection (slower = longer loading)
-    let targetDuration;
-    switch(effectiveType) {
-        case 'slow-2g':
-        case '2g':
-            targetDuration = 7500; // ~7.5s for very slow
-            break;
-        case '3g':
-            targetDuration = 6000; // ~6s for 3g
-            break;
-        case '4g':
-        default:
-            targetDuration = 5000 + Math.random() * 1500; // 5-6.5s for fast
-            break;
-    }
-    
-    // Clamp to max 8 seconds
-    targetDuration = Math.min(targetDuration, maxDuration);
-    targetDuration = Math.max(targetDuration, minDuration);
-    
-    function updateProgress() {
-        const elapsed = Date.now() - startTime;
-        const rawProgress = (elapsed / targetDuration) * 100;
+    // Use setInterval for consistent timing
+    loadingInterval = setInterval(function() {
+        // Increment by 1-3% randomly
+        const increment = Math.floor(Math.random() * 3) + 1;
+        loadingProgress += increment;
         
-        // Smooth easing - starts faster, slows at end
-        // Ease-out cubic: 1 - (1 - x)^3
-        const easedProgress = 1 - Math.pow(1 - Math.min(rawProgress / 100, 1), 3);
-        currentProgress = Math.floor(easedProgress * 100);
+        // Cap at exactly 100
+        if (loadingProgress >= 100) {
+            loadingProgress = 100;
+        }
         
-        // Cap at 99% until actually done
-        if (currentProgress > 99) currentProgress = 99;
+        // Update display - use Math.ceil to ensure we show 100 when at 100
+        const displayPercent = Math.min(loadingProgress, 100);
+        progressFill.style.width = displayPercent + '%';
+        percentageText.textContent = Math.floor(displayPercent) + '%';
         
-        progressFill.style.width = currentProgress + '%';
-        percentageText.textContent = currentProgress + '%';
-        
-        if (elapsed < targetDuration) {
-            requestAnimationFrame(updateProgress);
-        } else {
-            // Complete
-            currentProgress = 100;
+        // Check if complete
+        if (loadingProgress >= 100 && !isLoadingComplete) {
+            isLoadingComplete = true;
+            clearInterval(loadingInterval);
+            
+            // Force display to 100% one more time
             progressFill.style.width = '100%';
             percentageText.textContent = '100%';
             
-            setTimeout(() => {
+            // Wait a moment so user sees 100%, then transition
+            setTimeout(function() {
                 loadingScreen.classList.add('hidden');
-                setTimeout(() => {
+                loadingScreen.style.opacity = '0';
+                loadingScreen.style.visibility = 'hidden';
+                
+                setTimeout(function() {
                     loadingScreen.style.display = 'none';
-                    document.querySelector('.game-container').style.opacity = '1';
+                    if (gameContainer) gameContainer.style.opacity = '1';
+                    if (floatingFeatures) floatingFeatures.classList.add('active');
                 }, 500);
-            }, 300);
+            }, 800); // 800ms to see 100%
         }
-    }
-    
-    requestAnimationFrame(updateProgress);
+    }, 40); // Update every 40ms
+}
+ 
+// Eased version that guarantees 100%
+const easedProgress = 1 - Math.pow(1 - Math.min(elapsed / duration, 1), 3);
+currentProgress = Math.min(easedProgress * 100, 100);
+
+// Ensure we show exactly 100% at the end
+if (elapsed >= duration) {
+    currentProgress = 100;
 }
 
 // Check auth status and show appropriate screen
@@ -561,65 +710,159 @@ function showLoadingAfterLogin() {
         loginScreen.style.display = 'none';
         loadingScreen.style.display = 'flex';
         loadingScreen.classList.remove('hidden');
+        loadingScreen.style.opacity = '1';
+        loadingScreen.style.visibility = 'visible';
+        
+        // Start fresh loading progress
         startLoadingProgress();
     }, 500);
 }
 
-// Update handleLogin to use new flow
-function handleLogin(event) {
+const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbyBJQugJ3hAtaYH06UNkiF4jKBEyCiJT86GY_EAVv_uhd4KLAT0vXzAT_u7qKh0mWy0Fg/exec'; 
+
+
+async function handleSignup(event) {
     event.preventDefault();
-    const email = document.getElementById('email').value;
+    playClickSound();
+    
+    const name = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const password = document.getElementById('signup-password').value;
+    const confirm = document.getElementById('signup-confirm').value;
+    
+    // Validation
+    if (!validateSignup(name, email, password, confirm)) {
+        return;
+    }
+    
+    // Show loading state
+    const btn = event.target.querySelector('.login-btn');
+    const originalText = btn.textContent;
+    btn.textContent = 'Creating Account...';
+    btn.disabled = true;
+    
+    try {
+        // Send to Google Sheets
+        const response = await fetch(SHEET_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'signup',
+                name: name,
+                email: email,
+                password: password
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Save to localStorage
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userName', name);
+            
+            btn.textContent = '✓ Account Created!';
+            btn.style.background = 'linear-gradient(135deg, #00b894 0%, #00d084 100%)';
+            
+            setTimeout(() => {
+                showLoadingAfterLogin();
+            }, 1000);
+        } else {
+            btn.textContent = originalText;
+            btn.disabled = false;
+            showError('signup-email', result.message || 'Signup failed');
+        }
+        
+    } catch (error) {
+        console.error('Signup error:', error);
+        btn.textContent = originalText;
+        btn.disabled = false;
+        
+        // Fallback: save locally only
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userName', name);
+        localStorage.setItem('userPassword', password);
+        showLoadingAfterLogin();
+    }
+}
+
+// ============================================
+// LOGIN FUNCTION
+// ============================================
+async function handleLogin(event) {
+    event.preventDefault();
+    playClickSound();
+    
+    const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     
-    if (email && password) {
-        localStorage.setItem('userEmail', email);
-        localStorage.setItem('userName', email.split('@')[0]);
-        
-        const loginBtn = document.querySelector('.login-btn');
-        loginBtn.textContent = '✓ Success!';
-        loginBtn.style.background = 'linear-gradient(135deg, #00b894 0%, #00d084 100%)';
-        
-        setTimeout(() => {
-            showLoadingAfterLogin();
-        }, 800);
+    if (!email || !password) {
+        alert('Please enter email and password');
+        return;
     }
-}
-
-
-// Remove the old window.onload at bottom of file
-
-function showSignup() {
-    showModal('Sign Up', 'Registration form coming soon!\n\nFor now, please use Google login or email login.');
-}
-
-// Check if user is already logged in on page load
-window.addEventListener('load', function() {
-    const isLoggedIn = localStorage.getItem('userEmail');
-    const loginScreen = document.getElementById('login-screen');
-    const loadingScreen = document.getElementById('loading-screen');
     
-    if (isLoggedIn) {
-        // Skip login if already logged in (optional - remove if you want login every time)
-        loginScreen.style.display = 'none';
-        loadingScreen.style.display = 'flex';
-        startLoadingProgress();
-    } else {
-        // Show login screen, hide loading initially
-        loadingScreen.style.display = 'none';
-        loginScreen.style.display = 'flex';
+    // Show loading state
+    const btn = document.querySelector('.login-btn');
+    const originalText = btn.textContent;
+    btn.textContent = 'Logging in...';
+    btn.disabled = true;
+    
+    try {
+        // Check Google Sheets
+        const response = await fetch(SHEET_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'login',
+                email: email,
+                password: password
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Login successful
+            localStorage.setItem('userEmail', result.email);
+            localStorage.setItem('userName', result.name);
+            
+            btn.textContent = '✓ Success!';
+            btn.style.background = 'linear-gradient(135deg, #00b894 0%, #00d084 100%)';
+            
+            setTimeout(() => {
+                showLoadingAfterLogin();
+            }, 800);
+        } else {
+            btn.textContent = originalText;
+            btn.disabled = false;
+            alert(result.message || 'Invalid email or password');
+        }
+        
+    } catch (error) {
+        console.error('Login error:', error);
+        btn.textContent = originalText;
+        btn.disabled = false;
+        
+        // Fallback: check localStorage
+        const storedEmail = localStorage.getItem('userEmail');
+        const storedPassword = localStorage.getItem('userPassword');
+        
+        if (storedEmail === email && storedPassword === password) {
+            showLoadingAfterLogin();
+        } else {
+            alert('Connection error. Please try again.');
+        }
     }
-});
-
-// Add spin animation for Google button loader
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-`;
-document.head.appendChild(style);
-
-// Update avatar with user data if available
+}
+function togglePassword(inputId, toggleBtn) {
+    const input = document.getElementById(inputId);
+    input.type = input.type === 'password' ? 'text' : 'password';
+    toggleBtn.classList.toggle('active');
+}
 function updateUserAvatar() {
     const userName = localStorage.getItem('userName') || 'Felix';
     const avatarImg = document.querySelector('.avatar img');
