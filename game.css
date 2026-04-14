@@ -1024,6 +1024,7 @@ transform: translateY(-3px) scale(1.1); /* Lifts and grows */
             flex-direction: column;
             gap: 15px;
             margin-top:20px;
+			margin-bottom: 50px;
         }
 
         /* Offer Card */
