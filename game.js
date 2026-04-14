@@ -1,4 +1,7 @@
 
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNRTMquEqFNZ1aclgIcnrnA4kB3Uz5MYoy4yd6ipplVQ5r5F3wr2Etj-obLScRMNaO/exec";
+
+
 const games = [
             {
                 id: 1,
@@ -746,9 +749,6 @@ function showLoadingAfterLogin() {
     }, 500);
 }
 
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbyBJQugJ3hAtaYH06UNkiF4jKBEyCiJT86GY_EAVv_uhd4KLAT0vXzAT_u7qKh0mWy0Fg/exec'; 
-
-
 async function handleSignup(event) {
     event.preventDefault();
     playClickSound();
@@ -758,25 +758,22 @@ async function handleSignup(event) {
     const password = document.getElementById('signup-password').value;
     const confirm = document.getElementById('signup-confirm').value;
     
-    // Validation
     if (!validateSignup(name, email, password, confirm)) {
         return;
+
     }
     
-    // Show loading state
     const btn = event.target.querySelector('.login-btn');
     const originalText = btn.textContent;
     btn.textContent = 'Creating Account...';
     btn.disabled = true;
+
     
     try {
-        // Send to Google Sheets
-        const response = await fetch(SHEET_API_URL, {
+        const response = await fetch(APPS_SCRIPT_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
                 action: 'signup',
                 name: name,
                 email: email,
@@ -787,16 +784,23 @@ async function handleSignup(event) {
         const result = await response.json();
         
         if (result.success) {
-            // Save to localStorage
-            localStorage.setItem('userEmail', email);
-            localStorage.setItem('userName', name);
-            
+            // SUCCESS: Account is saved to Google Sheets
             btn.textContent = '✓ Account Created!';
-            btn.style.background = 'linear-gradient(135deg, #00b894 0%, #00d084 100%)';
-            
+            btn.style.background = '#00b894';
             setTimeout(() => {
-                showLoadingAfterLogin();
-            }, 1000);
+
+                showLogin(); // This switches the UI back to the Login card
+                
+                // Optional: Pre-fill the email for them
+                document.getElementById('email').value = email;
+                
+                // Reset signup button for next time
+                btn.textContent = originalText;
+                btn.style.background = '';
+                btn.disabled = false;
+                event.target.reset(); // Clear signup form
+            }, 1500);
+
         } else {
             btn.textContent = originalText;
             btn.disabled = false;
@@ -807,18 +811,9 @@ async function handleSignup(event) {
         console.error('Signup error:', error);
         btn.textContent = originalText;
         btn.disabled = false;
-        
-        // Fallback: save locally only
-        localStorage.setItem('userEmail', email);
-        localStorage.setItem('userName', name);
-        localStorage.setItem('userPassword', password);
-        showLoadingAfterLogin();
+        alert('Connection error. Please check your Apps Script deployment.');
     }
 }
-
-// ============================================
-// LOGIN FUNCTION
-// ============================================
 async function handleLogin(event) {
     event.preventDefault();
     playClickSound();
@@ -826,8 +821,8 @@ async function handleLogin(event) {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     
-    if (!email || !password) {
-        alert('Please enter email and password');
+if (!email || !password) {
+        showToast("Please fill all fields");
         return;
     }
     
@@ -838,20 +833,21 @@ async function handleLogin(event) {
     btn.disabled = true;
     
     try {
-        // Check Google Sheets
-        const response = await fetch(SHEET_API_URL, {
+        // Send as JSON with text/plain content-type (exactly like your friend's code!)
+        const response = await fetch(APPS_SCRIPT_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
                 action: 'login',
                 email: email,
                 password: password
             })
         });
         
+        console.log('Response status:', response.status);
+        
         const result = await response.json();
+        console.log('Response data:', result);
         
         if (result.success) {
             // Login successful
@@ -864,27 +860,105 @@ async function handleLogin(event) {
             setTimeout(() => {
                 showLoadingAfterLogin();
             }, 800);
-        } else {
+        }else {
+            showToast(result.message || 'Invalid email or password');
             btn.textContent = originalText;
             btn.disabled = false;
-            alert(result.message || 'Invalid email or password');
         }
-        
     } catch (error) {
         console.error('Login error:', error);
+        showToast('Connection error'); // Aesthetic replacement for alert
         btn.textContent = originalText;
         btn.disabled = false;
+    }
+}
+// --- FOCUS TRAP LOGIC ---
+window.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab' || e.keyCode === 9) {
+        const loginScreen = document.getElementById('login-screen');
         
-        // Fallback: check localStorage
-        const storedEmail = localStorage.getItem('userEmail');
-        const storedPassword = localStorage.getItem('userPassword');
-        
-        if (storedEmail === email && storedPassword === password) {
-            showLoadingAfterLogin();
-        } else {
-            alert('Connection error. Please try again.');
+        // Only trap focus if the login/signup screen is actually visible
+        if (window.getComputedStyle(loginScreen).display !== 'none') {
+            
+            // 1. Find which card is currently active (Login or Signup)
+            const signupCard = document.getElementById('signup-card');
+            const isSignupVisible = signupCard.style.display !== 'none';
+            const activeCard = isSignupVisible ? signupCard : document.querySelector('.login-card:not(.hidden)');
+
+            // 2. Get all focusable elements inside the active card
+            const focusableSelectors = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+            const focusableElements = activeCard.querySelectorAll(focusableSelectors);
+            
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+
+            // 3. Logic for cycling
+            if (e.shiftKey) { 
+                // If Shift + Tab and on the FIRST element, wrap to the LAST
+                if (document.activeElement === firstElement) {
+                    lastElement.focus();
+                    e.preventDefault();
+                }
+            } else { 
+                // If Tab and on the LAST element, wrap to the FIRST
+                if (document.activeElement === lastElement) {
+                    firstElement.focus();
+                    e.preventDefault();
+                }
+            }
+            
+            // If the focus is somehow outside the card (e.g., clicked background), force it back in
+            const isFocusInside = activeCard.contains(document.activeElement);
+            if (!isFocusInside) {
+                firstElement.focus();
+                e.preventDefault();
+            }
         }
     }
+});
+
+// Auto-focus the first input when switching screens
+function focusFirstInput() {
+    const signupCard = document.getElementById('signup-card');
+    if (signupCard.style.display !== 'none') {
+        document.getElementById('signup-name').focus();
+    } else {
+        document.getElementById('email').focus();
+    }
+}
+
+// Update your existing showSignup and showLogin to call focusFirstInput
+const originalShowSignup = showSignup;
+showSignup = function() {
+    originalShowSignup();
+    setTimeout(focusFirstInput, 100);
+};
+
+const originalShowLogin = showLogin;
+showLogin = function() {
+    originalShowLogin();
+    setTimeout(focusFirstInput, 100);
+};
+
+// Also focus first input on app load
+window.addEventListener('load', () => {
+    if (document.getElementById('login-screen').style.display !== 'none') {
+        setTimeout(focusFirstInput, 3500); // Wait for splash to finish
+    }
+});
+
+
+// Also run it every 2 seconds just in case new elements appear
+setInterval(disableAllTabStops, 2000);
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
 }
 function togglePassword(inputId, toggleBtn) {
     const input = document.getElementById(inputId);
@@ -901,3 +975,5 @@ function updateUserAvatar() {
 
 // Call after game loads
 setTimeout(updateUserAvatar, 2000);
+
+

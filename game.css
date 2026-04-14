@@ -29,7 +29,32 @@ form#login-form {
             width: 0 !important;
             height: 0 !important;
         }
+.toast {
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    /* Matching your login button gradient and card transparency */
+    background: linear-gradient(135deg, rgba(0, 208, 132, 0.95) 0%, rgba(0, 184, 148, 0.95) 100%);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 100000;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    white-space: nowrap;
+    /* Adding subtle glow and border like your login elements */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 25px rgba(0, 208, 132, 0.3);
+    text-transform: none;
+    letter-spacing: 0.5px;
+}
 
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+}
         .game-container {    
             background: linear-gradient(180deg, #0f0f23 0%, #1a1a3e 100%);
             display: flex;
@@ -65,7 +90,6 @@ form#login-form {
     background: url('splash.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    animation: twinkle 5s ease-in-out infinite;
     padding: 0px;
 }
 
@@ -1958,4 +1982,10 @@ animation: none;
 .toggle-passworda.active .eye-icon {
     color: #00d084;
 }
-
+.login-screen {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    background: #0a0a1a; /* Matches your background color */
+}

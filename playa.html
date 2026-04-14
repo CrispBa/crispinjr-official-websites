@@ -1,0 +1,342 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Playa</title>
+    <link rel="icon" type="image/x-icon" href="playa.ico?v=2">
+	<link rel="icon" type="image/png" sizes="32x32" href="playa.ico">
+	<link rel="apple-touch-icon" href="playa.ico">
+    <meta property="og:title" content="Playa | Play + Earn " />
+    <meta property="og:description" content="Explore the official hub of CrispBa. Featuring web development projects, creative content, and a suite of integrated digital services." />
+    <meta property="og:image" content="https://crispba.github.io/crispinjr-official-websites/linkimages(P).png" />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#a0a1a">
+    <link rel="stylesheet" href="game.css">
+<base target="_blank">
+</head>
+<body>
+<div id="toast" class="toast"></div>
+<!-- Login Screen -->
+<div id="login-screen" class="login-screen" style="display: flex;">
+    <div class="login-container">
+
+        <!-- Login Card -->
+        <div class="login-card">
+            <div class="login-header">
+                <span class="star-icon">✦</span>
+                <h3>Log in</h3>
+                <div class="coin-icon">₱</div>
+            </div>
+
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="input-group">
+<div class="input-icons">
+<svg height="22px" width="20px" viewBox="0 0 100.354 100.354" fill="#000000" stroke="#000000" stroke-width="1" stroke-linejoin="round"><path d="M93.09,76.224c0.047-0.145,0.079-0.298,0.079-0.459V22.638c0-0.162-0.032-0.316-0.08-0.462  c-0.007-0.02-0.011-0.04-0.019-0.06c-0.064-0.171-0.158-0.325-0.276-0.46c-0.008-0.009-0.009-0.02-0.017-0.029  c-0.005-0.005-0.011-0.007-0.016-0.012c-0.126-0.134-0.275-0.242-0.442-0.323c-0.013-0.006-0.023-0.014-0.036-0.02  c-0.158-0.071-0.33-0.111-0.511-0.123c-0.018-0.001-0.035-0.005-0.053-0.005c-0.017-0.001-0.032-0.005-0.049-0.005H8.465  c-0.017,0-0.033,0.004-0.05,0.005c-0.016,0.001-0.032,0.004-0.048,0.005c-0.183,0.012-0.358,0.053-0.518,0.125  c-0.01,0.004-0.018,0.011-0.028,0.015c-0.17,0.081-0.321,0.191-0.448,0.327c-0.005,0.005-0.011,0.006-0.016,0.011  c-0.008,0.008-0.009,0.019-0.017,0.028c-0.118,0.135-0.213,0.29-0.277,0.461c-0.008,0.02-0.012,0.04-0.019,0.061  c-0.048,0.146-0.08,0.3-0.08,0.462v53.128c0,0.164,0.033,0.32,0.082,0.468c0.007,0.02,0.011,0.039,0.018,0.059  c0.065,0.172,0.161,0.327,0.28,0.462c0.007,0.008,0.009,0.018,0.016,0.026c0.006,0.007,0.014,0.011,0.021,0.018  c0.049,0.051,0.103,0.096,0.159,0.14c0.025,0.019,0.047,0.042,0.073,0.06c0.066,0.046,0.137,0.083,0.21,0.117  c0.018,0.008,0.034,0.021,0.052,0.028c0.181,0.077,0.38,0.121,0.589,0.121h83.204c0.209,0,0.408-0.043,0.589-0.121  c0.028-0.012,0.054-0.03,0.081-0.044c0.062-0.031,0.124-0.063,0.181-0.102c0.03-0.021,0.057-0.048,0.086-0.071  c0.051-0.041,0.101-0.082,0.145-0.129c0.008-0.008,0.017-0.014,0.025-0.022c0.008-0.009,0.01-0.021,0.018-0.03  c0.117-0.134,0.211-0.288,0.275-0.458C93.078,76.267,93.083,76.246,93.09,76.224z M9.965,26.04l25.247,23.061L9.965,72.346V26.04z   M61.711,47.971c-0.104,0.068-0.214,0.125-0.301,0.221c-0.033,0.036-0.044,0.083-0.073,0.121l-11.27,10.294L12.331,24.138h75.472  L61.711,47.971z M37.436,51.132l11.619,10.613c0.287,0.262,0.649,0.393,1.012,0.393s0.725-0.131,1.011-0.393l11.475-10.481  l25.243,23.002H12.309L37.436,51.132z M64.778,49.232L90.169,26.04v46.33L64.778,49.232z"></path></svg></div>                    <input type="email" id="email" placeholder="Email Address" required="">
+<span>
+<svg stroke="currentColor" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:-3px;margin-bottom: 10px;">
+              <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
+            </svg>
+          </span>
+                </div>
+                <div class="input-groups">
+                    <div class="input-icon"> <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="-64 0 512 512" height="20"><path d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0"></path><path d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0"></path></svg> </div>
+                    <input type="password" id="password" placeholder="Password" required="">
+<span class="toggle-passwords" onclick="togglePassword('password', this)">
+        <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+    </span>
+</div>
+                <span class="forgot-password"><a href="#" onclick="showForgotPassword(); return false;">Forgot Password?</a></span>
+
+                <button type="submit" class="login-btn">Log In</button>
+
+                <div class="divider">
+                    <span>Or Sign in with</span>
+                </div>
+
+                <div class="social-accounts" id="googleLoginContainer">
+
+           <button type="button" class="social-button google" onclick="handleGoogleSignIn()">
+    <img src="google.png" alt="Google Logo" style="height: 1.2em;width: auto;vertical-align: middle;transform: scale(1.2);">
+</button></div>
+<div class="signup-link">
+    Don't have an account? 
+    <a href="javascript:void(0)" onclick="showSignup(); return false;">Sign Up</a>
+</div>
+</form>
+</div>
+
+<div id="signup-card" class="login-card hidden" style="display: none;">
+    <div class="login-header">
+        <div class="star-icon">✦</div>
+        <h3>Sign Up</h3>
+        <div class="coin-icon">$</div>
+    </div>
+    
+    <form id="signup-form" onsubmit="handleSignup(event)">
+        <!-- Full Name -->
+        <div class="input-group">
+            <div class="input-icon">
+                <!-- User/Person SVG -->
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #666;">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <input type="text" id="signup-name" placeholder="Full Name" required>
+<span><svg version="1.1" id="USER" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="color: #9ca3af;margin-right:-3px; margin-bottom:10px;" width="20px" height="20px" viewBox="0 0 1800 1800" enable-background="new 0 0 1800 1800" xml:space="preserve">
+<g>
+	<path fill="#9ca3af" stroke="#9ca3af" stroke-width="6" d="M899.996,13.388c-488.883,0-886.611,397.732-886.611,886.615c0,297.415,147.216,561.092,372.596,722.011
+		c14.883,10.622,30.131,20.758,45.673,30.469c101.1,63.151,215.747,106.507,338.525,124.601
+		c42.384,6.248,85.723,9.529,129.816,9.529c44.084,0,87.423-3.281,129.808-9.529c122.778-18.094,237.434-61.449,338.525-124.592
+		c15.542-9.711,30.799-19.855,45.682-30.478c225.389-160.919,372.604-424.596,372.604-722.011
+		C1786.615,411.12,1388.879,13.388,899.996,13.388z M899.996,1724.407c-163.127,0-315.337-47.626-443.461-129.704
+		c58.621-107.8,176.409-191.24,323.694-221.345v22.277l119.594,66.448l119.932-66.431v-22.295
+		c147.285,30.104,265.074,113.545,323.694,221.345C1215.324,1676.781,1063.118,1724.407,899.996,1724.407z M554.979,912.854
+		c-15.75-5.685-27.058-20.743-27.058-38.429c0-17.69,11.308-32.751,27.058-38.44v9.194V912.854z M1238.035,845.179v-8.769
+		c15.144,6.001,25.896,20.758,25.896,38.001c0,17.261-10.752,32.021-25.896,38.017V845.179z M1212.461,711.77
+		c-2.014,9.963-4.564,19.813-7.654,29.489c-61.936-32.053-146.322-67.303-235.16-79.466
+		c-155.131-21.218-168.833-29.74-183.829-73.174l-12.957-37.516l-29.723,26.291c-0.894,0.789-80.681,71.251-161.344,136.272
+		c-11.984-42.575-13.798-86.934-5.103-130.046c27.397-135.974,156.441-234.666,306.824-234.666c23.249,0,46.749,2.365,69.859,7.017
+		c85.297,17.195,159.218,63.936,208.153,131.617C1210.005,554.617,1228.081,634.235,1212.461,711.77z M608.063,845.179V817.6
+		v-56.933c55.635-44.597,111.831-92.696,143.719-120.336c30.452,47.001,85.592,56.964,210.67,74.073
+		c86.504,11.833,170.369,49.166,222.49,76.398V817.6v27.579v94.646c0,159.053-129.399,288.436-288.436,288.436
+		c-159.044,0-288.444-129.383-288.444-288.436V845.179z M833.33,1310.867V1275.4c20.489,3.853,41.586,5.962,63.177,5.962
+		c24.048,0,47.505-2.534,70.154-7.281v36.786v30.843v22.649l-66.796,36.995l-66.535-36.969v-22.676V1310.867z M1387.403,1564.451
+		c-68.34-121.537-201.975-214.22-367.649-245.175v-61.016c119.42-46.385,206.444-158.038,217.075-290.979
+		c45.291-6.708,80.194-45.742,80.194-92.871c0-43.972-30.399-80.88-71.265-91.081c8.175-19.678,14.536-40.158,18.745-61.06
+		c18.588-92.227-2.699-186.615-59.94-265.794c-56.781-78.533-142.27-132.711-240.705-152.558
+		c-26.547-5.354-53.57-8.062-80.343-8.062c-84.273,0-166.412,27.106-231.29,76.333c-66.301,50.303-111.619,121.676-127.595,200.942
+		c-13.13,65.121-6.196,132.494,20.021,194.854l5.997,14.245c-43.156,8.487-75.838,46.576-75.838,92.192
+		c0,47.533,35.52,86.844,81.383,93.041c10.909,135.439,101.083,248.828,224.035,293.486v58.325
+		c-165.679,30.955-299.3,123.638-367.641,245.175C208.383,1414.259,75.59,1172.364,75.59,900.003
+		c0-454.583,369.827-824.41,824.406-824.41s824.415,369.828,824.415,824.41C1724.41,1172.364,1591.608,1414.259,1387.403,1564.451z"></path>
+</g>
+</svg>
+          </span>
+        </div>
+        
+        <!-- Email -->
+        <div class="input-group">
+            <div class="input-icon">
+                <!-- Envelope/Email SVG -->
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #666;">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+            </div>
+<input type="email" id="signup-email" placeholder="Email Address" required="">
+<span>
+<svg stroke="currentColor" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:-3px;margin-bottom: 10px;">
+              <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
+            </svg>
+          </span>
+        </div>
+        
+        <!-- Password -->
+        <div class="input-group">
+            <div class="input-icon">
+                <!-- Lock SVG -->
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #666;">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            </div>
+            <input type="password" id="signup-password" placeholder="Password" required minlength="8">
+ <span class="toggle-passworda" onclick="togglePassword('signup-password', this)">
+        <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+    </span>
+        </div>
+        
+        <!-- Confirm Password -->
+        <div class="input-group">
+            <div class="input-icon">
+                <!-- Shield/Lock Check SVG -->
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #666;">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <polyline points="9,12 12,15 16,10"></polyline>
+                </svg>
+            </div>
+            <input type="password" id="signup-confirm" placeholder="Confirm Password" required>
+<span class="toggle-passworda" onclick="togglePassword('signup-confirm', this)">
+        <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+    </span>
+        </div>
+        
+        <button type="submit" class="login-btn" style="margin-top: 10px;">CREATE ACCOUNT</button>
+    </form>
+    
+    <div class="divider">Or Sign Up with</div>
+    
+    <div class="social-accounts" id="googleLoginContainer">
+
+           <button type="button" class="social-button google" onclick="handleGoogleSignIn()">
+    <img src="google.png" alt="Google Logo" style="height: 1.2em;width: auto;vertical-align: middle;transform: scale(1.2);">
+</button></div>    
+    <div class="signup-link">
+        Already have an account? <a href="javascript:void(0)" onclick="showLogin(); return false;">Log In</a>
+    </div>
+</div>
+        </div>
+    </div>
+</div>
+
+<div id="loading-screen" class="loading-screen" style="display: none;">
+    <div class="loading-content">
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="percentage-text" id="percentage-text">0%</div>
+        </div>
+    </div>
+</div>
+    <div class="game-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="avatar">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar">
+            </div>
+<div class="balance-container">
+    <!-- Remove this from outside -->
+    <!-- <img src="cash.png" alt="cash" class="balance-overlap-icon"> -->
+    
+    <div class="balance-box">
+        <img src="money-icon.png" alt="money" class="balance-inner-money">
+        <span class="balance-text">34.60</span>
+        <!-- MOVE CASH.PNG INSIDE HERE -->
+        <img src="cash.png" alt="cash" class="balance-overlap-icon-right">
+    </div>
+                <div class="balance-box secondary">
+<img src="coins.png" alt="money" class="balance-inner-coins">
+    <span class="balance-text">13K</span>
+    <!-- ADD THIS IMAGE for the right-side bag icon -->
+    <img src="cash.png" alt="bag" class="balance-overlap-icon-right">
+</div>
+            </div>
+            <div class="header-icons">
+<button class="header-icon" id="mute-btn" onclick="toggleAudioState()">
+    <div id="audio-icon-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center;">
+        <svg id="main-note-svg" class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+        </svg>
+        <div id="audio-status-overlay"></div>
+    </div>
+</button>
+
+                <button class="header-icon notification-wrapper" onclick="showModal('Notifications', '3 new notifications!')">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="notification-dot"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="earn-view">
+                <div class="earn-header">
+                </div>
+                <div class="offers-list" id="offersList">
+                    <!-- Game cards will be inserted here by JavaScript -->
+                </div>
+            </div>
+        </main>
+
+        <!-- FIXED FLOATING FEATURES - Only 3 buttons -->
+        <div class="fixed-floating-features active" id="floatingFeatures">
+            <div class="floating-features-container">
+                <!-- Bonus Button (Left) -->
+             <div class="float-btn bonus" onclick="showBonusModal()">
+    <div class="float-bonus-wrapper">
+        <img src="invite.png" alt="Bonus Icon" class="float-bonus-icon">
+    </div>
+    <span class="float-bonus-label">
+        <p style="font-size: 10px; display: flex; align-items: center; margin: 0;">
+            <img src="money.png" alt="cash" style="height: 1em; margin-right: 4px; vertical-align: middle;">
+            ₱50
+        </p>
+    </span>
+</div>
+<div class="float-btn theme theme-image-btn" onclick="showThemeModal()">
+    <img src="theme.png" alt="Theme" class="float-theme-image">
+</div>
+
+
+                <div class="float-btn skin shop-btn" onclick="showSkinModal()">
+    <img src="skin_shop.png" alt="Shop" class="float-shop-image">
+</div>
+
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="switchTab('earn')">
+                <div class="nav-icon-wrapper">
+                    <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 7H5C3.89543 7 3 7.89543 3 9V18C3 19.1046 3.89543 20 5 20H19C20.1046 20 21 19.1046 21 18V9C21 7.89543 20.1046 7 19 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 11H16.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3 11V7C3 5.89543 3.89543 5 5 5H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Earn</span>
+            </button>
+ <button class="nav-item" onclick="switchTab('progress')">
+                <div class="nav-icon-wrapper">
+                    <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Progress</span>
+            </button>
+ <button class="nav-item" onclick="switchTab('missions')">
+                <div class="nav-icon-wrapper">
+                    <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 11L12 14L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 12V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Missions</span>
+            </button>
+<button class="nav-item" onclick="switchTab('invite')">
+                <div class="nav-icon-wrapper">
+                    <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H6C4.93913 15 3.92172 15.4214 3.17157 16.1716C2.42143 16.9217 2 17.9391 2 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M20 8V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M23 11H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="nav-label">Invite</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal" onclick="closeModal(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-title" id="modalTitle">Title</div>
+            <div class="modal-text" id="modalText">Message</div>
+            <button class="btn-close" onclick="closeModal(event)">Close</button>
+        </div>
+    </div>
+
+	<script src="https://apis.google.com/js/api.js"></script>
+	<script src="game.js"></script>
+</body>
+</html>
