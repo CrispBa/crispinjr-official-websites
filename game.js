@@ -285,6 +285,34 @@ function startMusic() {
 document.addEventListener('click', startMusic);
 document.addEventListener('touchstart', startMusic);
 
+// Listen for scroll in earn-view and game container to trigger music
+const earnView = document.querySelector('.earn-view');
+const gameContainer = document.querySelector('.game-container');
+
+function handleScrollMusic() {
+    if (canPlayMusic() && bgMusic.paused && audioState !== 2) {
+        bgMusic.play().then(() => {
+            console.log("Playback started via scroll");
+        }).catch(error => {
+            console.log("Scroll playback failed:", error);
+        });
+    }
+}
+
+// Add scroll listeners
+if (earnView) {
+    earnView.addEventListener('scroll', handleScrollMusic, { passive: true });
+}
+
+if (gameContainer) {
+    gameContainer.addEventListener('scroll', handleScrollMusic, { passive: true });
+}
+
+// Also listen for wheel events on the main content area
+document.querySelector('.main-content')?.addEventListener('wheel', handleScrollMusic, { passive: true });
+
+// Touch move for mobile scrolling
+document.querySelector('.main-content')?.addEventListener('touchmove', handleScrollMusic, { passive: true });
 function switchTab(tab) {
     // 1. Update active tab visual state
     document.querySelectorAll('.nav-item').forEach(item => {
