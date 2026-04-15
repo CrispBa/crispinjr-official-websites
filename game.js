@@ -1,58 +1,61 @@
 
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNRTMquEqFNZ1aclgIcnrnA4kB3Uz5MYoy4yd6ipplVQ5r5F3wr2Etj-obLScRMNaO/exec";
 
-
+// Update games array with IDs for game selection
 const games = [
-            {
-                id: 1,
-                title: 'Block Puzzle',
-                earnings: '$100+',
-                image: 'block-puzzle.jpg',
-                premium: true,
-            },
-            {
-                id: 2,
-                title: 'Call of Dragons',
-                earnings: '$149+',
-                image: 'call-of-dragons.jpg',
-                premium: true,
-            },
-            {
-                id: 3,
-                title: 'Word Tiles',
-                earnings: '$85+',
-                image: 'word-tiles.jpg',
-                premium: true,
-            },
-            {
-                id: 4,
-                title: 'Ken Ken Puzzle Math Edition',
-                earnings: '$120+',
-                image: 'kenken.jpg',
-                premium: true,
-            },
-            {
-                id: 5,
-                title: 'Typer Code',
-                earnings: '$95+',
-                image: 'typer-code.jpg',
-                premium: true,
-            },
-            {
-                id: 6,
-                title: 'Tik Tak Toe',
-                earnings: '$75+',
-                image: 'tictactoe.jpg',
-                premium: true,
-            },
-        ];
+    {
+        id: 1,
+        title: 'Block Puzzle',
+        earnings: '$100+',
+        image: 'BlockPuzzle.jpg',
+        premium: true,
+    },
+    {
+        id: 2,
+        title: 'Lucky Hunt',
+        earnings: '$149+',
+        image: 'Luckyhunt.jpg',
+        premium: true,
+    },
+    {
+        id: 3,
+        title: 'Word Bloom',
+        earnings: '$85+',
+        image: 'WordBloom.jpg',
+        premium: true,
+    },
+    {
+        id: 4,
+        title: 'Ken Ken Puzzle',
+        earnings: '$120+',
+        image: 'kenken.jpg',
+        premium: true,
+    },
+    {
+        id: 5,
+        title: 'Type Fury',
+        earnings: '$95+',
+        image: 'TypeFury.jpg',
+        premium: true,
+    },
+    {
+        id: 6,
+        title: 'Mind Vault',
+        earnings: '$75+',
+        image: 'MindVault.jpg',
+        premium: true,
+    },
+];
 
-      function renderGames() {
+let currentGame = null;
+
+// Update renderGames to include game ID in onclick
+function renderGames() {
     const container = document.getElementById('offersList');
     container.innerHTML = games.map(game => `
-        <div class="offer-card">
+        <div class="offer-card" data-game-id="${game.id}">
             <div class="offer-image">
-                <img src="${game.image}" alt="${game.title}" loading="lazy">
+                <img src="${game.image}" alt="${game.title}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23667eea%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2224%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.3em%22%3E${game.title}%3C/text%3E%3C/svg%3E'">
                 <div class="game-label">Game</div>
                 ${game.premium ? '<div class="premium-badge">Premium</div>' : ''}
             </div>
@@ -60,8 +63,6 @@ const games = [
                 <div class="offer-header-row">
                     <div class="offer-earnings">${game.earnings}</div>
                     <div class="offer-title">${game.title}</div>
-                    
-                    <!-- ADD playClickSound() to info button -->
                     <button class="info-icon" onclick="playClickSound(); console.log('Info: ${game.title}')">
                         <svg class="info-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
@@ -70,26 +71,75 @@ const games = [
                         </svg>
                     </button>
                 </div>
-                
-                <!-- ADD playClickSound() to play button -->
-                <button class="play-btn" onclick="playClickSound(); startGame('${game.title}', '${game.earnings}')">
+                <button class="play-btn" onclick="playClickSound(); startGame('${game.title}', '${game.earnings}', ${game.id})">
                     Play and Earn ${game.earnings}
                 </button>
             </div>
         </div>
     `).join('');
     
-    // Re-attach click sounds to newly created buttons
     addClickSoundsToButtons();
 }
 
-// New function to actually start the game (without modal)
-function startGame(title, earnings) {
+function startGame(title, earnings, gameId) {
     console.log(`Loading ${title}...`);
-    // Add your actual game loading code here
-    // window.location.href = `/game/${title}`;
+    
+    const overlay = document.getElementById('game-overlay');
+    const gameTitle = document.getElementById('game-title');
+    const gameScore = document.getElementById('game-score');
+    const canvasContainer = document.getElementById('game-canvas-container');
+    
+    // Hide main container
+    document.querySelector('.game-container').style.display = 'none';
+    
+    // Show game overlay
+    overlay.classList.remove('hidden');
+    overlay.style.display = 'flex';
+    gameTitle.textContent = title;
+    gameScore.textContent = 'Score: 0';
+    
+    // Clear previous game
+    canvasContainer.innerHTML = '';
+    
+    // Small delay to ensure DOM is ready for size calculations
+    setTimeout(() => {
+        if (gameId === 1) {
+            currentGame = new BlockPuzzleGame(canvasContainer);
+        } else if (gameId === 4) {
+            currentGame = new KenKenGame(canvasContainer);
+        } else {
+            canvasContainer.innerHTML = `
+                <div style="text-align: center; padding: 50px 20px; color: white; max-width: 100%;">
+                    <h2 style="margin-bottom: 20px;">🎮 ${title}</h2>
+                    <p style="margin: 20px 0; opacity: 0.8; line-height: 1.5;">This game is coming soon!</p>
+                    <p style="font-size: 24px; margin: 20px 0; color: #00cec9;">Earn ${earnings}</p>
+                    <button class="game-btn" onclick="backToMenu()" style="margin-top: 30px;">Back to Games</button>
+                </div>
+            `;
+        }
+    }, 100);
 }
-// Toggle between Login and Sign Up
+function backToMenu() {
+    playClickSound();
+    
+    const overlay = document.getElementById('game-overlay');
+    overlay.classList.add('hidden');
+    overlay.style.display = 'none';
+    
+    document.querySelector('.game-container').style.display = 'flex';
+    
+    // Clean up current game
+    if (currentGame && currentGame.stopTimer) {
+        currentGame.stopTimer();
+    }
+    currentGame = null;
+}
+
+// Attach back button listener when DOM loads
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('back-to-menu')?.addEventListener('click', backToMenu);
+});
+
 function showSignup() {
     playClickSound();
     const loginCard = document.querySelector('#login-form').closest('.login-card');

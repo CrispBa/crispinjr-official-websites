@@ -20,6 +20,21 @@
 <base target="_blank">
 </head>
 <body>
+<!-- Game Overlay for both games -->
+<div id="game-overlay" class="game-overlay hidden">
+    <div class="game-header">
+        <button id="back-to-menu" class="back-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back
+        </button>
+        <h2 id="game-title">Game</h2>
+        <div id="game-score" class="game-score">Score: 0</div>
+    </div>
+    <div id="game-canvas-container" class="game-canvas-container">
+    </div>
+</div>
 <div id="toast" class="toast"></div>
 <!-- Login Screen -->
 <div id="login-screen" class="login-screen" style="display: flex;">
@@ -338,5 +353,6 @@
 
 	<script src="https://apis.google.com/js/api.js"></script>
 	<script src="game.js"></script>
+	<script src="game-function.js"></script>
 </body>
 </html>
