@@ -1,16 +1,16 @@
-// ==================== BLOCK PUZZLE GAME ====================
+// ==================== BLOCK PUZZLE GAME - RESPONSIVE ====================
 class BlockPuzzleGame {
     constructor(container) {
         this.container = container;
         this.gridSize = 10;
-        this.cellSize = 35;
         this.grid = Array(this.gridSize).fill(null).map(() => Array(this.gridSize).fill(0));
         this.score = 0;
         this.highScore = parseInt(localStorage.getItem('blockPuzzleHighScore') || '0');
         this.currentShapes = [];
         this.selectedShape = null;
         this.gameOver = false;
-        
+        this.cellSize = 30; // Will be calculated dynamically
+
         this.shapeDefinitions = [
             [[1]], [[1, 1]], [[1], [1]], [[1, 1, 1]], [[1], [1], [1]],
             [[1, 1], [1, 1]], [[1, 1, 1], [1, 0, 0]], [[1, 0, 0], [1, 1, 1]],
@@ -18,16 +18,53 @@ class BlockPuzzleGame {
             [[0, 1, 0], [1, 1, 1]], [[1, 1, 0], [0, 1, 1]], [[0, 1, 1], [1, 1, 0]],
             [[1, 1, 1], [1, 1, 1]], [[1, 1], [1, 1], [1, 1]],
         ];
-        
+
         this.init();
+        this.handleResize = this.handleResize.bind(this);
+        window.addEventListener('resize', this.handleResize);
     }
-    
+
     init() {
         this.render();
+        this.calculateCellSize();
         this.generateShapes();
         this.updateScore();
     }
-    
+
+    // Calculate optimal cell size based on available space
+    calculateCellSize() {
+        const container = this.container.querySelector('.block-puzzle-game');
+        if (!container) return;
+
+        const gameInfo = container.querySelector('.game-info');
+        const shapesContainer = container.querySelector('.shapes-container');
+        const controls = container.querySelector('.game-controls');
+
+        const headerHeight = gameInfo ? gameInfo.offsetHeight + 20 : 80;
+        const shapesHeight = shapesContainer ? shapesContainer.offsetHeight + 20 : 120;
+        const controlsHeight = controls ? controls.offsetHeight + 20 : 70;
+
+        const availableHeight = container.offsetHeight - headerHeight - shapesHeight - controlsHeight - 40;
+        const availableWidth = container.offsetWidth - 40;
+
+        // Calculate max cell size that fits both dimensions
+        const maxCellHeight = Math.floor(availableHeight / this.gridSize);
+        const maxCellWidth = Math.floor(availableWidth / this.gridSize);
+
+        this.cellSize = Math.min(maxCellHeight, maxCellWidth, 35);
+        this.cellSize = Math.max(this.cellSize, 22); // Minimum cell size
+
+        this.renderGrid();
+    }
+
+    handleResize() {
+        // Debounce resize
+        clearTimeout(this.resizeTimeout);
+        this.resizeTimeout = setTimeout(() => {
+            this.calculateCellSize();
+        }, 100);
+    }
+
     render() {
         this.container.innerHTML = `
             <div class="block-puzzle-game">
@@ -52,9 +89,11 @@ class BlockPuzzleGame {
         this.renderGrid();
         this.attachEventListeners();
     }
-    
+
     renderGrid() {
         const gridContainer = document.getElementById('bp-grid');
+        if (!gridContainer) return;
+
         gridContainer.innerHTML = '';
         gridContainer.style.cssText = `
             display: grid;
@@ -62,12 +101,12 @@ class BlockPuzzleGame {
             grid-template-rows: repeat(${this.gridSize}, ${this.cellSize}px);
             gap: 2px;
             background: rgba(0, 0, 0, 0.3);
-            padding: 5px;
+            padding: 4px;
             border-radius: 8px;
-            margin: 20px auto;
+            margin: 0 auto;
             width: fit-content;
         `;
-        
+
         for (let row = 0; row < this.gridSize; row++) {
             for (let col = 0; col < this.gridSize; col++) {
                 const cell = document.createElement('div');
@@ -75,18 +114,27 @@ class BlockPuzzleGame {
                 cell.dataset.row = row;
                 cell.dataset.col = col;
                 cell.style.cssText = `
-                    background: ${this.grid[row][col] ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'rgba(255, 255, 255, 0.05)'};
+                    width: ${this.cellSize}px;
+                    height: ${this.cellSize}px;
+                    background: ${this.grid[row][col] ? this.grid[row][col] : 'rgba(255, 255, 255, 0.05)'};
                     border: 1px solid rgba(255, 255, 255, 0.1);
-                    border-radius: 4px;
+                    border-radius: 3px;
                     transition: all 0.2s ease;
                 `;
+
+                // Touch and mouse events
                 cell.addEventListener('mouseenter', (e) => this.handleCellHover(e));
                 cell.addEventListener('click', (e) => this.handleCellClick(e));
+                cell.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.handleCellClick(e);
+                }, {passive: false});
+
                 gridContainer.appendChild(cell);
             }
         }
     }
-    
+
     generateShapes() {
         this.currentShapes = [];
         for (let i = 0; i < 3; i++) {
@@ -96,7 +144,7 @@ class BlockPuzzleGame {
         }
         this.renderShapes();
     }
-    
+
     getRandomColor() {
         const colors = [
             'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -108,50 +156,58 @@ class BlockPuzzleGame {
         ];
         return colors[Math.floor(Math.random() * colors.length)];
     }
-    
+
     renderShapes() {
         const shapesContainer = document.getElementById('bp-shapes');
+        if (!shapesContainer) return;
+
         shapesContainer.innerHTML = '';
-        shapesContainer.style.cssText = `
-            display: flex;
-            justify-content: space-around;
-            gap: 10px;
-            padding: 20px;
-            margin-top: 20px;
-        `;
-        
+
         this.currentShapes.forEach((shapeData, index) => {
             if (shapeData.used) return;
+
             const shapeWrapper = document.createElement('div');
             shapeWrapper.className = 'shape-wrapper';
             shapeWrapper.dataset.shapeIndex = index;
+
+            const canPlace = this.canPlaceAnyShape(shapeData.shape);
             shapeWrapper.style.cssText = `
-                cursor: ${this.canPlaceAnyShape(shapeData.shape) ? 'grab' : 'not-allowed'};
-                opacity: ${this.canPlaceAnyShape(shapeData.shape) ? '1' : '0.5'};
-                padding: 10px;
+                cursor: ${canPlace ? 'grab' : 'not-allowed'};
+                opacity: ${canPlace ? '1' : '0.4'};
+                padding: 8px;
                 background: rgba(255, 255, 255, 0.05);
                 border-radius: 8px;
                 transition: transform 0.2s ease;
+                transform: scale(${canPlace ? 1 : 0.9});
             `;
+
             const shape = this.createShapeElement(shapeData.shape, shapeData.color);
             shapeWrapper.appendChild(shape);
-            if (this.canPlaceAnyShape(shapeData.shape)) {
+
+            if (canPlace) {
                 shapeWrapper.addEventListener('mousedown', (e) => this.handleShapeSelect(e, index));
-                shapeWrapper.addEventListener('touchstart', (e) => this.handleShapeSelect(e, index));
+                shapeWrapper.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.handleShapeSelect(e, index);
+                }, {passive: false});
             }
+
             shapesContainer.appendChild(shapeWrapper);
         });
     }
-    
+
     createShapeElement(shape, color) {
         const shapeElement = document.createElement('div');
-        const cellSize = 25;
+        const cellSize = Math.min(22, Math.floor(this.cellSize * 0.7));
+
         shapeElement.style.cssText = `
             display: grid;
             grid-template-columns: repeat(${shape[0].length}, ${cellSize}px);
             grid-template-rows: repeat(${shape.length}, ${cellSize}px);
-            gap: 2px;
+            gap: 1px;
+            pointer-events: none;
         `;
+
         shape.forEach(row => {
             row.forEach(cell => {
                 const cellDiv = document.createElement('div');
@@ -159,38 +215,54 @@ class BlockPuzzleGame {
                     width: ${cellSize}px;
                     height: ${cellSize}px;
                     background: ${cell ? color : 'transparent'};
-                    border-radius: 3px;
-                    border: ${cell ? '1px solid rgba(255, 255, 255, 0.3)' : 'none'};
+                    border-radius: 2px;
+                    border: ${cell ? '1px solid rgba(255,255,255,0.3)' : 'none'};
                 `;
                 shapeElement.appendChild(cellDiv);
             });
         });
         return shapeElement;
     }
-    
+
     handleShapeSelect(e, shapeIndex) {
         e.preventDefault();
         this.selectedShape = shapeIndex;
-        const wrapper = e.currentTarget;
-        wrapper.style.transform = 'scale(1.1)';
-        wrapper.style.cursor = 'grabbing';
+
+        // Visual feedback
+        document.querySelectorAll('.shape-wrapper').forEach((wrapper, idx) => {
+            if (idx === shapeIndex) {
+                wrapper.style.transform = 'scale(1.1)';
+                wrapper.style.background = 'rgba(255,255,255,0.15)';
+            } else {
+                wrapper.style.transform = 'scale(1)';
+                wrapper.style.background = 'rgba(255,255,255,0.05)';
+            }
+        });
     }
-    
+
     handleCellHover(e) {
         if (this.selectedShape === null) return;
+
         const row = parseInt(e.target.dataset.row);
         const col = parseInt(e.target.dataset.col);
         const shapeData = this.currentShapes[this.selectedShape];
+
+        // Clear previous preview
         document.querySelectorAll('.grid-cell').forEach(cell => {
-            if (!this.grid[cell.dataset.row][cell.dataset.col]) {
+            const r = parseInt(cell.dataset.row);
+            const c = parseInt(cell.dataset.col);
+            if (!this.grid[r][c]) {
                 cell.style.background = 'rgba(255, 255, 255, 0.05)';
+                cell.style.opacity = '1';
             }
         });
+
+        // Show preview
         if (this.canPlaceShape(shapeData.shape, row, col)) {
             this.previewShape(shapeData.shape, row, col, shapeData.color);
         }
     }
-    
+
     previewShape(shape, startRow, startCol, color) {
         shape.forEach((row, rIdx) => {
             row.forEach((cell, cIdx) => {
@@ -201,35 +273,46 @@ class BlockPuzzleGame {
                         const cellElement = document.querySelector(`[data-row="${gridRow}"][data-col="${gridCol}"]`);
                         if (cellElement && !this.grid[gridRow][gridCol]) {
                             cellElement.style.background = color;
-                            cellElement.style.opacity = '0.6';
+                            cellElement.style.opacity = '0.5';
                         }
                     }
                 }
             });
         });
     }
-    
+
     handleCellClick(e) {
         if (this.selectedShape === null || this.gameOver) return;
+
         const row = parseInt(e.target.dataset.row);
         const col = parseInt(e.target.dataset.col);
         const shapeData = this.currentShapes[this.selectedShape];
+
         if (this.canPlaceShape(shapeData.shape, row, col)) {
             this.placeShape(shapeData.shape, row, col, shapeData.color);
             shapeData.used = true;
             this.selectedShape = null;
+
+            // Reset shape visuals
+            document.querySelectorAll('.shape-wrapper').forEach(wrapper => {
+                wrapper.style.transform = 'scale(1)';
+                wrapper.style.background = 'rgba(255,255,255,0.05)';
+            });
+
             this.clearCompleteLines();
             this.renderGrid();
             this.renderShapes();
+
             if (this.currentShapes.every(s => s.used)) {
                 this.generateShapes();
             }
+
             if (this.isGameOver()) {
                 this.endGame();
             }
         }
     }
-    
+
     canPlaceShape(shape, startRow, startCol) {
         for (let rIdx = 0; rIdx < shape.length; rIdx++) {
             for (let cIdx = 0; cIdx < shape[rIdx].length; cIdx++) {
@@ -237,13 +320,14 @@ class BlockPuzzleGame {
                     const gridRow = startRow + rIdx;
                     const gridCol = startCol + cIdx;
                     if (gridRow >= this.gridSize || gridCol >= this.gridSize) return false;
+                    if (gridRow < 0 || gridCol < 0) return false;
                     if (this.grid[gridRow][gridCol]) return false;
                 }
             }
         }
         return true;
     }
-    
+
     canPlaceAnyShape(shape) {
         for (let row = 0; row < this.gridSize; row++) {
             for (let col = 0; col < this.gridSize; col++) {
@@ -252,7 +336,7 @@ class BlockPuzzleGame {
         }
         return false;
     }
-    
+
     placeShape(shape, startRow, startCol, color) {
         let blocksPlaced = 0;
         shape.forEach((row, rIdx) => {
@@ -268,15 +352,20 @@ class BlockPuzzleGame {
         this.score += blocksPlaced * 10;
         this.updateScore();
     }
-    
+
     clearCompleteLines() {
         let linesCleared = 0;
+
+        // Check rows
         for (let row = 0; row < this.gridSize; row++) {
             if (this.grid[row].every(cell => cell !== 0)) {
                 this.grid[row] = Array(this.gridSize).fill(0);
                 linesCleared++;
+                this.animateClear('row', row);
             }
         }
+
+        // Check columns
         for (let col = 0; col < this.gridSize; col++) {
             let columnFull = true;
             for (let row = 0; row < this.gridSize; row++) {
@@ -290,49 +379,123 @@ class BlockPuzzleGame {
                     this.grid[row][col] = 0;
                 }
                 linesCleared++;
+                this.animateClear('col', col);
             }
         }
+
         if (linesCleared > 0) {
             this.score += linesCleared * 100;
             if (linesCleared > 1) this.score += (linesCleared - 1) * 50;
             this.updateScore();
         }
     }
-    
-    isGameOver() {
-        return this.currentShapes.filter(s => !s.used).every(s => !this.canPlaceAnyShape(s.shape));
+
+    animateClear(type, index) {
+        // Simple flash animation
+        const cells = type === 'row' 
+            ? document.querySelectorAll(`[data-row="${index}"]`)
+            : document.querySelectorAll(`[data-col="${index}"]`);
+
+        cells.forEach(cell => {
+            cell.style.background = '#fff';
+            cell.style.transform = 'scale(1.1)';
+        });
+
+        setTimeout(() => {
+            cells.forEach(cell => {
+                cell.style.transform = 'scale(1)';
+            });
+        }, 150);
     }
-    
+
+    isGameOver() {
+        const remainingShapes = this.currentShapes.filter(s => !s.used);
+        if (remainingShapes.length === 0) return false;
+        return remainingShapes.every(s => !this.canPlaceAnyShape(s.shape));
+    }
+
     updateScore() {
-        document.getElementById('bp-score').textContent = this.score;
+        const scoreEl = document.getElementById('bp-score');
+        const highScoreEl = document.getElementById('bp-high-score');
+
+        if (scoreEl) scoreEl.textContent = this.score;
+
         if (this.score > this.highScore) {
             this.highScore = this.score;
             localStorage.setItem('blockPuzzleHighScore', this.highScore);
-            document.getElementById('bp-high-score').textContent = this.highScore;
+            if (highScoreEl) highScoreEl.textContent = this.highScore;
         }
-        if (document.getElementById('game-score')) {
-            document.getElementById('game-score').textContent = `Score: ${this.score}`;
+
+        const gameScoreEl = document.getElementById('game-score');
+        if (gameScoreEl) {
+            gameScoreEl.textContent = `Score: ${this.score}`;
         }
     }
-    
+
     endGame() {
         this.gameOver = true;
-        setTimeout(() => {
-            alert(`Game Over! Your score: ${this.score}\nHigh Score: ${this.highScore}`);
-        }, 500);
+
+        // Show game over overlay instead of alert
+        const gameOverDiv = document.createElement('div');
+        gameOverDiv.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+            z-index: 1000;
+            border: 3px solid rgba(255,255,255,0.3);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+        `;
+        gameOverDiv.innerHTML = `
+            <h2 style="margin-bottom: 15px; font-size: 24px;">🎮 Game Over!</h2>
+            <p style="font-size: 18px; margin-bottom: 10px;">Score: ${this.score}</p>
+            <p style="font-size: 14px; opacity: 0.8; margin-bottom: 20px;">Best: ${this.highScore}</p>
+            <button onclick="this.parentElement.remove(); currentGame.restart();" 
+                    style="background: #00d084; border: none; padding: 12px 30px; border-radius: 25px; 
+                           color: white; font-weight: 700; cursor: pointer; font-size: 14px;">
+                Play Again
+            </button>
+        `;
+
+        this.container.querySelector('.block-puzzle-game').appendChild(gameOverDiv);
     }
-    
+
     restart() {
         this.grid = Array(this.gridSize).fill(null).map(() => Array(this.gridSize).fill(0));
         this.score = 0;
         this.gameOver = false;
         this.selectedShape = null;
+
+        // Remove any game over overlay
+        const overlay = this.container.querySelector('.block-puzzle-game > div[style*="z-index: 1000"]');
+        if (overlay) overlay.remove();
+
         this.init();
     }
-    
+
     attachEventListeners() {
         document.getElementById('bp-new-game')?.addEventListener('click', () => this.restart());
         document.getElementById('bp-restart')?.addEventListener('click', () => this.restart());
+
+        // Deselect shape when clicking elsewhere
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.shape-wrapper') && !e.target.closest('.grid-cell')) {
+                this.selectedShape = null;
+                document.querySelectorAll('.shape-wrapper').forEach(wrapper => {
+                    wrapper.style.transform = 'scale(1)';
+                    wrapper.style.background = 'rgba(255,255,255,0.05)';
+                });
+            }
+        });
+    }
+
+    destroy() {
+        window.removeEventListener('resize', this.handleResize);
     }
 }
 
