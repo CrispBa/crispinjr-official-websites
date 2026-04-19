@@ -21,34 +21,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 <body>
 <style>
-body, html {
-        height: 100%;
-        width: 100%;
-        margin: 0;
-        overflow: hidden; /* Prevents double scrollbars and "bounce" */
-    }
+/* Hide scrollbar completely but keep scroll functionality */
+::-webkit-scrollbar {
+    display: none;
+    width: 0px;
+    height: 0px;
+    background: transparent;
+}
 
-    /* 2. Create the Scrollable Container */
-    .app-container {
-        height: 100vh;
-        width: 100vw;
-        overflow-y: auto;
-        overflow-x: hidden;
-        -webkit-overflow-scrolling: touch; /* Keeps smooth mobile scrolling */
-        
-        /* Apply your background here */
-        background: linear-gradient(180deg, #ff0000 0%, #800080 50%, #0000ff 100%);
-    }
+* {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
 
-    /* 3. Hide Scrollbar (Modern Browsers, Firefox, IE) */
-    .app-container::-webkit-scrollbar {
-        display: none;
-        width: 0 !important;
-    }
-    .app-container {
-        scrollbar-width: none; 
-        -ms-overflow-style: none;
-    }
+/* Ensure html and body also hide scrollbars */
+html, body {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+html::-webkit-scrollbar, 
+body::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+}
+
+/* Container specific scrollbar hiding */
+.container::-webkit-scrollbar,
+#authOverlay::-webkit-scrollbar,
+.modal::-webkit-scrollbar,
+.modal-box::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
 /* Verification Code Input Styles */
 .code-inputs {
     display: flex;
@@ -111,49 +120,7 @@ body, html {
 button, a, input, select, textarea, .nav-btn {
     touch-action: manipulation;
 }
-* {
-    -webkit-text-size-adjust: 100%;
-}
-body {
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-}
 
-/* Hide scrollbar background/track color */
-::-webkit-scrollbar {
-    width: 0px;
-    background: transparent; /* Make scrollbar background invisible */
-}
-
-/* Optional: If you want to keep a thin scrollbar without background */
-::-webkit-scrollbar-track {
-    background: transparent; /* Hide track background */
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgba(255, 215, 0, 0.3); /* Gold color with transparency */
-    border-radius: 10px;
-        width:0px;
-    height: 0px;
-}
-
-/* Firefox */
-* {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 215, 0, 0.3) transparent; 
-    /* thumb color, track color */
-}
-/* Hide scrollbar completely but keep scroll functionality */
-::-webkit-scrollbar {
-    display: none;
-    width:0px;
-    height: 0px;
-}
-
-* {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
 #loader {
         
   width: 200px;
@@ -619,6 +586,8 @@ span {}
           -webkit-overflow-scrolling: touch;
           touch-action: pan-y;
           padding-bottom:20px;
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
         .section { 
           display: none; }
@@ -1365,9 +1334,6 @@ position: relative;
 <base target="_blank">
 </head>
 <body>
-<div class="app-container">
-        <div id="bible-content"></div>
-    </div>
 <div class="modal" id="ratingModal" style="backdrop-filter: blur(20px); background: rgb(0 0 0 / 0%);">
     <div class="container" style="max-width: 350px; animation: fadeInUp 0.6s ease;">
         <div class="heading" style="font-size: 24px; margin-bottom: 10px;">Rate Your Experience</div>
