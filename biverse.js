@@ -166,6 +166,9 @@ function completeGoogleAuth(userData) {
     state.userName = userData.name;
     state.profilePic = userData.profile || userData.picture || "https://i.imgur.com/Bu2aW8n.png";
     state.isGoogleUser = true;
+    state.isLoggedIn = true;  
+    state.sessionToken = Date.now();  
+
 
     document.getElementById('authOverlay').style.display = 'none';
     document.getElementById('logoutBtn').style.display = 'block';
@@ -873,7 +876,9 @@ let state = JSON.parse(localStorage.getItem('bq_final_v18')) || {
     userName: null,
     profilePic: "https://i.imgur.com/Bu2aW8n.png",
     lastPointsUpdate: 0,
-    claimLockUntil: 0
+    claimLockUntil: 0,
+    isLoggedIn: false,  
+    sessionToken: null
 };
 let allVerses = [];
 let currentVerse = null;
@@ -1217,8 +1222,16 @@ function updateRedemptionHistoryFromServer(serverHistory) {
     state.logs = [...serverHistory, ...nonRedemptionLogs];
     console.log(`[SYNC] Updated ${serverHistory.length} redemptions from server`);
 }
+function clearSession() {
+    state.isLoggedIn = false;
+    state.sessionToken = null;
+    state.userEmail = null;
+    state.userName = null;
+    localStorage.setItem('bq_final_v18', JSON.stringify(state));
+}
 
 function save() { 
+    state.isLoggedIn = !!state.userEmail;
     localStorage.setItem('bq_final_v18', JSON.stringify(state)); 
     updateUI();  
 }
@@ -1519,58 +1532,80 @@ function updateUI() {
     }
 }
 async function logout() {
-    // Tell the server the user is offline before logging out
     if (state.userEmail) {
         await sendOnlineStatus(false);
     }
     
     if (statusInterval) clearInterval(statusInterval);
     
-    state.userEmail = null;
-    state.userName = null;
-    save();
+    // Clear session data
+    clearSession();  // This sets isLoggedIn = false
     
     document.getElementById('logoutBtn').style.display = 'none';
     document.getElementById('resetBtn').style.display = 'none';
     document.getElementById('authOverlay').style.display = 'flex';
-    location.reload(); 
+    
+    showToast("Logged out successfully");
 }
 async function init() { 
+    // CRITICAL FIX: Read localStorage DIRECTLY and IMMEDIATELY
+    // Don't rely on the global 'state' variable which might not be initialized yet
+    const savedData = localStorage.getItem('bq_final_v18');
+    let hasSession = false;
+    
+    if (savedData) {
+        try {
+            const parsed = JSON.parse(savedData);
+            // Must have BOTH email AND explicit isLoggedIn === true
+            if (parsed.userEmail && parsed.isLoggedIn === true) {
+                hasSession = true;
+                // Restore to global state
+                state = parsed;
+                console.log("[INIT] Session restored for:", parsed.userEmail);
+            }
+        } catch (e) {
+            console.error("[INIT] Failed to parse state:", e);
+        }
+    }
+    
+    // CRITICAL: Apply UI immediately BEFORE any async operations
+    const authOverlay = document.getElementById('authOverlay');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    
+    if (hasSession) {
+        // User is logged in - hide login overlay immediately
+        authOverlay.style.display = 'none';
+        logoutBtn.style.display = 'block';
+        resetBtn.style.display = 'block';
+        updateUI();
+    } else {
+        // No session - ensure login is shown
+        authOverlay.style.display = 'flex';
+        logoutBtn.style.display = 'none';
+        resetBtn.style.display = 'none';
+    }
+    
+    // Now load verses (this might take time, but UI is already correct)
     await loadVersesFromSheet();
     
-    if (!state.userEmail) {
-        document.getElementById('authOverlay').style.display = 'flex';
+    // If no session, stop here
+    if (!hasSession) {
+        console.log("[INIT] No session, staying on login");
         return;
     }
     
-       // First sync to get server state
-    await syncStatus();
-    
+    // Initialize app for logged-in user
     renderShop(); 
     loadRandom(); 
-    
-    // Fast sync for live updates (every 3 seconds)
+    syncStatus();
     setInterval(syncStatus, 3000);
     
-    // Sync when tab becomes visible
     document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') {
-            syncStatus();
-        }
+        if (document.visibilityState === 'visible') syncStatus();
     });
     
     initStatusTracking();
-    
-    // Also sync immediately when user returns to tab
-    document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') {
-            console.log('[SYNC] Tab visible, syncing...');
-            syncStatus();
-        }
-    });
-    
-    document.getElementById('logoutBtn').style.display = 'block';
-    document.getElementById('resetBtn').style.display = 'block';
 }
 document.addEventListener('DOMContentLoaded', () => {
     console.log("[INIT] Page loaded, initializing Bible Quest...");
