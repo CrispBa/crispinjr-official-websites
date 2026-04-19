@@ -21,103 +21,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 <body>
 <style>
-/* ============================================================
-   HIDE ALL SCROLLBARS -- KEEP SCROLL FUNCTIONALITY (APK WEBVIEW)
-   ============================================================ */
+body, html {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        overflow: hidden; /* Prevents double scrollbars and "bounce" */
+    }
 
-/* --- ROOT: html and body are the app container in APK --- */
-html, body {
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-    overflow: -moz-scrollbars-none !important;
-}
+    /* 2. Create the Scrollable Container */
+    .app-container {
+        height: 100vh;
+        width: 100vw;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch; /* Keeps smooth mobile scrolling */
+        
+        /* Apply your background here */
+        background: linear-gradient(180deg, #ff0000 0%, #800080 50%, #0000ff 100%);
+    }
 
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-    background: transparent !important;
-}
-
-/* --- UNIVERSAL: every element --- */
-*,
-*::before,
-*::after {
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-    overflow: -moz-scrollbars-none !important;
-}
-
-/* --- WEBKIT: all scrollbar parts --- */
-*::-webkit-scrollbar,
-*::-webkit-scrollbar-track,
-*::-webkit-scrollbar-track-piece,
-*::-webkit-scrollbar-thumb,
-*::-webkit-scrollbar-thumb:hover,
-*::-webkit-scrollbar-thumb:active,
-*::-webkit-scrollbar-corner,
-*::-webkit-scrollbar-button,
-*::-webkit-resizer {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-}
-
-/* --- APP CONTAINER & ALL SCROLLABLE ELEMENTS --- */
-body,
-html,
-.container,
-#authOverlay,
-#LicenseModal,
-.app-container,
-#appContainer,
-#app,
-[id*="Container"],
-[id*="container"],
-.modal,
-.modal-box,
-.modal > div,
-.verse-card,
-#shopList,
-#logContent,
-#loginBox,
-#registerBox {
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-    overflow: -moz-scrollbars-none !important;
-}
-
-body::-webkit-scrollbar,
-html::-webkit-scrollbar,
-.container::-webkit-scrollbar,
-#authOverlay::-webkit-scrollbar,
-#LicenseModal::-webkit-scrollbar,
-.app-container::-webkit-scrollbar,
-#appContainer::-webkit-scrollbar,
-#app::-webkit-scrollbar,
-.modal::-webkit-scrollbar,
-.modal-box::-webkit-scrollbar,
-.modal > div::-webkit-scrollbar,
-.verse-card::-webkit-scrollbar,
-#shopList::-webkit-scrollbar,
-#logContent::-webkit-scrollbar,
-#loginBox::-webkit-scrollbar,
-#registerBox::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-}
-
-/* --- iOS / Android WebView smooth scroll --- */
-html, body, .container, #authOverlay, .app-container, #appContainer {
-    -webkit-overflow-scrolling: touch !important;
-}
+    /* 3. Hide Scrollbar (Modern Browsers, Firefox, IE) */
+    .app-container::-webkit-scrollbar {
+        display: none;
+        width: 0 !important;
+    }
+    .app-container {
+        scrollbar-width: none; 
+        -ms-overflow-style: none;
+    }
 /* Verification Code Input Styles */
 .code-inputs {
     display: flex;
@@ -1434,6 +1365,9 @@ position: relative;
 <base target="_blank">
 </head>
 <body>
+<div class="app-container">
+        <div id="bible-content"></div>
+    </div>
 <div class="modal" id="ratingModal" style="backdrop-filter: blur(20px); background: rgb(0 0 0 / 0%);">
     <div class="container" style="max-width: 350px; animation: fadeInUp 0.6s ease;">
         <div class="heading" style="font-size: 24px; margin-bottom: 10px;">Rate Your Experience</div>
