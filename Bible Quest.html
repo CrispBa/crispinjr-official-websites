@@ -21,43 +21,51 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 <body>
 <style>
-/* Hide scrollbar completely but keep scroll functionality */
-::-webkit-scrollbar {
-    display: none;
-    width: 0px;
-    height: 0px;
-    background: transparent;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-* {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
+        body, html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        .app-container {
+            height: 100vh;
+            width: 100vw;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
 
-/* Ensure html and body also hide scrollbars */
-html, body {
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-}
+        /* HIDE SCROLLBARS - FUNCTIONALITY KEPT */
+        .app-container::-webkit-scrollbar {
+            display: none;
+            width: 0 !important;
+        }
+        .app-container {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
 
-html::-webkit-scrollbar, 
-body::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-    background: transparent !important;
-}
+        /* --- 2. OFFLINE OVERLAY STYLING --- */
 
-/* Container specific scrollbar hiding */
-.container::-webkit-scrollbar,
-#authOverlay::-webkit-scrollbar,
-.modal::-webkit-scrollbar,
-.modal-box::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-}
 
+        .hidden {
+            display: none !important;
+            pointer-events: none;
+        }
+
+
+        .main-content {
+            padding: 20px;
+            min-height: 200vh; /* Force scroll for testing */
+            color: white;
+            text-align: center;
+        }
 /* Verification Code Input Styles */
 .code-inputs {
     display: flex;
@@ -1334,6 +1342,10 @@ position: relative;
 <base target="_blank">
 </head>
 <body>
+      <div class="app-container" id="main-app">
+
+
+
 <div class="modal" id="ratingModal" style="backdrop-filter: blur(20px); background: rgb(0 0 0 / 0%);">
     <div class="container" style="max-width: 350px; animation: fadeInUp 0.6s ease;">
         <div class="heading" style="font-size: 24px; margin-bottom: 10px;">Rate Your Experience</div>
@@ -1754,6 +1766,7 @@ position: relative;
     <p style="margin-top:15px; font-size:0.8rem; color:#666; text-align:center;">
         Already a seeker? <span onclick="showLogin()" style="color:rgb(16, 137, 211); cursor:pointer; font-weight:800;">Login here</span>
     </p>
+</div>
 </div>
 <script src="biverse.js"></script>
 <script type="text/javascript"> var infolinks_pid = 3444667; var infolinks_wsid = 0; </script> <script type="text/javascript" src="//resources.infolinks.com/js/infolinks_main.js"></script>
