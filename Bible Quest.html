@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +21,68 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 <body>
 <style>
+/* ============================================================
+   HIDE ALL SCROLLBARS -- KEEP SCROLL FUNCTIONALITY
+   ============================================================ */
+
+/* Universal: hide scrollbars on ALL elements */
+*,
+*::before,
+*::after {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+/* WebKit browsers (Chrome, Safari, Opera, Edge Chromium) */
+*::-webkit-scrollbar,
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track-piece,
+*::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-corner,
+*::-webkit-resizer {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Specific scrollable containers -- ensure scrollbars are hidden */
+body,
+html,
+.container,
+#authOverlay,
+#licenseModal,
+.app-container,
+[id*="Container"],
+.modal,
+.modal-box {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+body::-webkit-scrollbar,
+html::-webkit-scrollbar,
+.container::-webkit-scrollbar,
+#authOverlay::-webkit-scrollbar,
+#licenseModal::-webkit-scrollbar,
+.app-container::-webkit-scrollbar,
+[id*="Container"]::-webkit-scrollbar,
+.modal::-webkit-scrollbar,
+.modal-box::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* iOS Safari momentum scrolling fix -- keep smooth scroll */
+body,
+.container,
+#authOverlay,
+.app-container {
+    -webkit-overflow-scrolling: touch !important;
+}
 /* Verification Code Input Styles */
 .code-inputs {
     display: flex;
@@ -27,6 +90,7 @@
     justify-content: center;
     margin: 20px 0;
 }
+
 
 .code-input {
     width: 30px;
@@ -474,15 +538,7 @@ div.search-box {
     /* padding-left: 15px; */
 }
 
-#vSearch {
-    /* background-color: red; */
-    /* display: flex; */
-    /* flex-wrap: nowrap; */
-    /* flex-direction: row; */
-    /* align-content: stretch; */
-    /* justify-content: space-evenly; */
-    /* align-items: center; */
-}
+
 .search-go 
     background: var(--gold-gradient);
     border: none;
@@ -877,14 +933,12 @@ img.logout-icon {
 }
 
 
-/* Base Icon - Same size as Logout */
+
 img.resetpass-icon {
     object-fit: contain;
     transition: transform 0.2s ease;
     transform:translate(1px, -2px);
 }
-
-/* Tooltip - Same look as Logout */
 .resetpass-tooltip {
     position: absolute;
     top: 30px; 
@@ -899,7 +953,7 @@ img.resetpass-icon {
     pointer-events: none; 
 }
 
-/* --- HOVER EFFECTS (Matching Logout) --- */
+
 .logout-btn:hover .logout-tooltip {
     opacity: 1; 
     transform: translate(0px, 0px);
@@ -930,8 +984,6 @@ position: relative;
     min-width: 80px;
     justify-content: center;
 }
-
-/* Position both icons at the bottom center */
 .logout-btn, .resetpass-btn { 
     position: absolute;
     bottom: -17px; /* Pulls icons down to sit at bottom edge */
@@ -947,19 +999,19 @@ position: relative;
     z-index: 10;
 }
 
-/* Position logout icon on the left */
+
 .logout-btn {
     left: 50%;
     transform: translateX(-20px); /* Shift left from center */
 }
 
-/* Position reset icon on the right */
+
 .resetpass-btn {
     left: 50%;
     transform: translateX(2px); /* Shift right from center */
 }
 
-/* Hover effects */
+
 .logout-btn:hover {
     transform: translateX(-20px) scale(1.2);
 }
@@ -968,7 +1020,7 @@ position: relative;
     transform: translateX(2px) scale(1.2);
 }
 
-/* Icon images */
+
 .logout-icon, .resetpass-icon {
     object-fit: contain;
     height: 20px;
@@ -979,7 +1031,7 @@ position: relative;
     padding: 2px;
 }
 
-/* Tooltips - position above icons */
+
 .logout-tooltip, .resetpass-tooltip {
     position: absolute;
     top: -20px; /* Above the icon */
@@ -997,14 +1049,14 @@ position: relative;
     border-radius: 4px;
 }
 
-/* Show tooltips on hover */
+
 .logout-btn:hover .logout-tooltip,
 .resetpass-btn:hover .resetpass-tooltip {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* Remove the old positioning styles */
+
 .user-controls {
     padding: 0;
     margin: 0;
@@ -1024,9 +1076,7 @@ position: relative;
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ============================================
-           AUTH OVERLAY ANIMATIONS & STYLING
-           ============================================ */
+
         @keyframes fadeInBackdrop {
             from { backdrop-filter: blur(0px); background: rgba(0,0,0,0); }
             to { backdrop-filter: blur(10px); background: rgba(0,0,0,0.95); }
@@ -1155,7 +1205,7 @@ position: relative;
             height: 100%;
             -webkit-backdrop-filter: blur(20px);
             backdrop-filter: blur(20px);
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -1407,9 +1457,7 @@ position: relative;
 <div class="points-display">
     <i data-lucide="zap"></i> 
     <span id="pts">0</span>
-    
-    <!-- Icons moved inside points-display -->
-    <button onclick="logout()" class="resetpass-btn" id="logoutBtn" style="display: none;">
+        <button onclick="logout()" class="resetpass-btn" id="logoutBtn" style="display: none;">
         <img src="logout_4836207.png" alt="Logout" class="resetpass-icon">
         <span class="resetpass-tooltip">LOGOUT</span>
     </button>
@@ -1526,7 +1574,7 @@ position: relative;
             <i data-lucide="eye" onclick="togglePassword('authPass', this)" class="eye-icon"></i>
         </div>
         
-        <!-- MOVED: License Agreement checkbox to login -->
+
         <label class="agreement" style="display: flex; align-items: center; gap: 4px; margin-top: 15px; cursor: pointer; justify-content: flex-start; padding-left: 5px;">
     <input type="checkbox" id="licenseAgreeLogin" style="width: 16px; height: 16px; cursor: pointer; accent-color: rgb(16, 137, 211);">
     <span style="font-size: 11px; color: #666;">
@@ -1535,7 +1583,7 @@ position: relative;
 </label><span class="forgot-password"><a href="#" onclick="showForgotPassword(); return false;">Forgot Password?</a></span>
         <button type="submit" class="login-button">Sign In</button>
     </form>
-    <!-- License Agreement Modal - Styled to match login page -->
+
 <div class="modal" id="licenseModal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; z-index: 99999; align-items: center; justify-content: center; padding: 15px; backdrop-filter: blur(20px);
     background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url(https://images.unsplash.com/photo-1438109491414-7198515b166b?q=80&w=2070&auto=format&fit=crop);background-size: cover;
     background-position: center;
@@ -1614,7 +1662,7 @@ position: relative;
         New seeker? <span onclick="showRegister()" style="color:rgb(16, 137, 211); cursor:pointer; font-weight:800;">Create Account</span>
     </p>
 </div>
-<!-- STEP 1: Forgot Password - Enter Email -->
+
 <div class="container" id="forgotPasswordContainer" style="display:none;">
     <div class="step-indicator">
         <div class="step-dot active"></div>
@@ -1644,7 +1692,7 @@ position: relative;
     </p>
 </div>
 
-<!-- STEP 2: Enter Verification Code -->
+
 <div class="container" id="verifyCodeContainer" style="display:none;">
     <div class="step-indicator">
         <div class="step-dot"></div>
@@ -1712,7 +1760,7 @@ position: relative;
     </form>
 </div>
 
-<!-- Success Message -->
+
 <div class="container" id="resetSuccessContainer" style="display:none;">
     <div style="text-align:center;">
         <div style="width:80px; height:80px; background:linear-gradient(45deg, #4CAF50, #8BC34A); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
@@ -1758,7 +1806,7 @@ position: relative;
         <button type="submit" class="login-button">CREATE ACCOUNT</button>
     </form>
     
-    <!-- ADDED: Social Sign Up Section -->
+
     <div class="social-account-container">
         <span class="title">Or Sign up with</span>
         <div class="social-accounts" id="googleRegContainer">
