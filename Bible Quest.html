@@ -22,23 +22,42 @@
 <body>
 <style>
 /* ============================================================
-   HIDE ALL SCROLLBARS -- KEEP SCROLL FUNCTIONALITY
+   HIDE ALL SCROLLBARS -- KEEP SCROLL FUNCTIONALITY (APK WEBVIEW)
    ============================================================ */
 
-/* Universal: hide scrollbars on ALL elements */
+/* --- ROOT: html and body are the app container in APK --- */
+html, body {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    overflow: -moz-scrollbars-none !important;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+}
+
+/* --- UNIVERSAL: every element --- */
 *,
 *::before,
 *::after {
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
+    overflow: -moz-scrollbars-none !important;
 }
 
-/* WebKit browsers (Chrome, Safari, Opera, Edge Chromium) */
+/* --- WEBKIT: all scrollbar parts --- */
 *::-webkit-scrollbar,
 *::-webkit-scrollbar-track,
 *::-webkit-scrollbar-track-piece,
 *::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:active,
 *::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-button,
 *::-webkit-resizer {
     display: none !important;
     width: 0 !important;
@@ -46,20 +65,32 @@
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
 }
 
-/* Specific scrollable containers -- ensure scrollbars are hidden */
+/* --- APP CONTAINER & ALL SCROLLABLE ELEMENTS --- */
 body,
 html,
 .container,
 #authOverlay,
 #licenseModal,
 .app-container,
+#appContainer,
+#app,
 [id*="Container"],
+[id*="container"],
 .modal,
-.modal-box {
+.modal-box,
+.modal > div,
+.verse-card,
+#shopList,
+#logContent,
+#loginBox,
+#registerBox {
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
+    overflow: -moz-scrollbars-none !important;
 }
 
 body::-webkit-scrollbar,
@@ -68,19 +99,23 @@ html::-webkit-scrollbar,
 #authOverlay::-webkit-scrollbar,
 #licenseModal::-webkit-scrollbar,
 .app-container::-webkit-scrollbar,
-[id*="Container"]::-webkit-scrollbar,
+#appContainer::-webkit-scrollbar,
+#app::-webkit-scrollbar,
 .modal::-webkit-scrollbar,
-.modal-box::-webkit-scrollbar {
+.modal-box::-webkit-scrollbar,
+.modal > div::-webkit-scrollbar,
+.verse-card::-webkit-scrollbar,
+#shopList::-webkit-scrollbar,
+#logContent::-webkit-scrollbar,
+#loginBox::-webkit-scrollbar,
+#registerBox::-webkit-scrollbar {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
 }
 
-/* iOS Safari momentum scrolling fix -- keep smooth scroll */
-body,
-.container,
-#authOverlay,
-.app-container {
+/* --- iOS / Android WebView smooth scroll --- */
+html, body, .container, #authOverlay, .app-container, #appContainer {
     -webkit-overflow-scrolling: touch !important;
 }
 /* Verification Code Input Styles */

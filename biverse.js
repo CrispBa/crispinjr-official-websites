@@ -716,21 +716,35 @@ function acceptLicense() {
     }
 }
 
-// Hide scrollbars
-// Hide scrollbars dynamically injected style (backup/enforcement)
+// Hide scrollbars - APK WebView enforcement
 (function() {
     const style = document.createElement('style');
-    style.id = 'hide-scrollbar-style';
+    style.id = 'hide-scrollbar-style-apk';
     style.innerHTML = `
+        html, body {
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+            overflow: -moz-scrollbars-none !important;
+        }
+        html::-webkit-scrollbar, body::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            background: transparent !important;
+        }
         *, *::before, *::after {
             scrollbar-width: none !important;
             -ms-overflow-style: none !important;
+            overflow: -moz-scrollbars-none !important;
         }
         *::-webkit-scrollbar,
         *::-webkit-scrollbar-track,
         *::-webkit-scrollbar-track-piece,
         *::-webkit-scrollbar-thumb,
+        *::-webkit-scrollbar-thumb:hover,
+        *::-webkit-scrollbar-thumb:active,
         *::-webkit-scrollbar-corner,
+        *::-webkit-scrollbar-button,
         *::-webkit-resizer {
             display: none !important;
             width: 0 !important;
@@ -738,22 +752,30 @@ function acceptLicense() {
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
-        }
-        body, html, .container, #authOverlay, .app-container {
-            scrollbar-width: none !important;
-            -ms-overflow-style: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
         }
         body::-webkit-scrollbar,
         html::-webkit-scrollbar,
         .container::-webkit-scrollbar,
         #authOverlay::-webkit-scrollbar,
-        .app-container::-webkit-scrollbar {
+        .app-container::-webkit-scrollbar,
+        #appContainer::-webkit-scrollbar,
+        #app::-webkit-scrollbar,
+        .modal::-webkit-scrollbar,
+        .modal-box::-webkit-scrollbar {
             display: none !important;
             width: 0 !important;
             height: 0 !important;
         }
     `;
     document.head.appendChild(style);
+
+    // Extra: force body/html scrollbar removal for Android WebView
+    document.documentElement.style.scrollbarWidth = 'none';
+    document.body.style.scrollbarWidth = 'none';
+    document.documentElement.style.setProperty('overflow', 'auto', 'important');
+    document.body.style.setProperty('overflow', 'auto', 'important');
 })();
 
 document.addEventListener('touchmove', function(e) {
