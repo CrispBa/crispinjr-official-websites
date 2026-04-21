@@ -2,6 +2,38 @@ console.log("BIVERSE.JS LOADED SUCCESSFULLY");
 window.testFunction = function() {
     alert("JavaScript is working!");
 };
+
+const offlineScreen = document.getElementById('offline-screen');
+        const mainApp = document.getElementById('main-app');
+
+        function updateStatus() {
+            if (navigator.onLine) {
+                offlineScreen.classList.add('hidden');
+                mainApp.style.filter = "none";
+            } else {
+                offlineScreen.classList.remove('hidden');
+                // Optional: blur the background for a premium feel
+                mainApp.style.filter = "blur(5px)";
+            }
+        }
+
+        function checkConnection() {
+            // Force a reload or just re-check the status
+            if (navigator.onLine) {
+                updateStatus();
+            } else {
+                // Shake effect to show it's still offline
+                offlineScreen.style.animation = "shake 0.2s ease";
+                setTimeout(() => offlineScreen.style.animation = "", 200);
+            }
+        }
+
+        // Listen for browser/WebView events
+        window.addEventListener('online', updateStatus);
+        window.addEventListener('offline', updateStatus);
+
+        // Initial check
+        updateStatus();
 // Add these JavaScript functions
 function setRating(value) {
     document.getElementById('selectedRating').value = value;
@@ -1104,7 +1136,7 @@ async function processRedeem() {
         if (result.success) {
             state.pts = result.newPoints;
             state.amounts = result.newAmounts;
-            if(activeReward.val === 1) state.firstClaim = false;
+            
             
             save(); 
             renderShop(); 
@@ -1392,22 +1424,18 @@ function claimAndNext() {
 function renderShop() {
     const rewards = [{v:1, c:500}, {v:50, c:25000}, {v:100, c:50000}, {v:500, c:250000}];
     document.getElementById('shopList').innerHTML = rewards.map(i => {
-        const isFree = (i.v === 1 && state.firstClaim);
-        const cost = isFree ? 0 : i.c;
         return `
         <div class="shop-card">
-            ${isFree ? '<span class="free-badge">NEWBIE GIFT</span>' : ''}
             <b>
                 <img src="bg-gcash-icn.png" width="32" height="32" style="transform: translate(1px, 4px); margin-right: 10px;">
                 <span style="display: inline-block; transform: translate(0px, -6px);font-size: 0.8rem;">₱${i.v} GCash</span>
             </b>
-            <button onclick="openModal(${i.v}, ${cost})" style="background:var(--gold-gradient); border:none; padding:10px 15px; border-radius:10px; font-weight:900; cursor:pointer; color:#3a2a00;">
-                ${isFree ? 'FREE' : cost.toLocaleString() + ' PTS'}
+            <button onclick="openModal(${i.v}, ${i.c})" style="background:var(--gold-gradient); border:none; padding:10px 15px; border-radius:10px; font-weight:900; cursor:pointer; color:#3a2a00;">
+                ${i.c.toLocaleString()} PTS
             </button>
         </div>`;
     }).join('');
 }
-
 function openModal(val, cost) {
     if(state.pts < cost) return showToast("Not enough points!");
     activeReward = { val, cost };
