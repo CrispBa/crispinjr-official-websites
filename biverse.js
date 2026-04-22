@@ -2,39 +2,98 @@ console.log("BIVERSE.JS LOADED SUCCESSFULLY");
 window.testFunction = function() {
     alert("JavaScript is working!");
 };
-
 const offlineScreen = document.getElementById('offline-screen');
-        const mainApp = document.getElementById('main-app');
+const mainApp = document.getElementById('main-app');
+const offlineMsg = document.getElementById('offlineMsg');
 
-        function updateStatus() {
-            if (navigator.onLine) {
-                offlineScreen.classList.add('hidden');
-                mainApp.style.filter = "none";
+let isChecking = false;
+
+// Ping a lightweight endpoint to verify REAL internet access
+async function hasRealInternet() {
+    try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
+        
+        // Use a reliable CDN with cache-busting to avoid false positives
+        const response = await fetch('https://www.google.com/favicon.ico?nocache=' + Date.now(), {
+            method: 'HEAD',
+            mode: 'no-cors',
+            cache: 'no-store',
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeout);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+async function updateConnectionStatus() {
+    if (isChecking) return;
+    isChecking = true;
+    
+    const hasInternet = await hasRealInternet();
+    
+    if (hasInternet) {
+        // Online with real internet
+        offlineScreen.classList.add('hidden');
+        mainApp.style.filter = "none";
+        mainApp.style.pointerEvents = "auto";
+    } else {
+        // No real internet — determine why
+        offlineScreen.classList.remove('hidden');
+        mainApp.style.filter = "blur(5px)";
+        mainApp.style.pointerEvents = "none";
+        
+        // Smart message based on network state
+        if (!navigator.onLine) {
+            offlineMsg.innerText = "Slow or No Internet Connection. Please check your connection settings and try again after reconnecting.";
+        } else {
+            // Connected to network but no internet
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            const isWifi = connection && connection.type === 'wifi';
+            
+            if (isWifi) {
+                offlineMsg.innerText = "Slow or No Internet Connection. Please check your connection settings and try again after reconnecting.";
             } else {
-                offlineScreen.classList.remove('hidden');
-                // Optional: blur the background for a premium feel
-                mainApp.style.filter = "blur(5px)";
+                offlineMsg.innerText = "Slow or No Internet Connection. Please check your connection settings and try again after reconnecting.";
             }
         }
+    }
+    
+    isChecking = false;
+}
 
-        function checkConnection() {
-            // Force a reload or just re-check the status
-            if (navigator.onLine) {
-                updateStatus();
-            } else {
-                // Shake effect to show it's still offline
-                offlineScreen.style.animation = "shake 0.2s ease";
-                setTimeout(() => offlineScreen.style.animation = "", 200);
-            }
-        }
+function checkConnection() {
+    // Visual feedback on button press
+    const btn = document.querySelector('.btn-try-again');
+    btn.innerText = "Checking...";
+    btn.disabled = true;
+    
+    updateConnectionStatus().then(() => {
+        btn.innerText = "Try Again";
+        btn.disabled = false;
+    });
+}
 
-        // Listen for browser/WebView events
-        window.addEventListener('online', updateStatus);
-        window.addEventListener('offline', updateStatus);
+// Event listeners
+window.addEventListener('online', () => {
+    // Don't trust navigator.onLine alone — verify with ping
+    setTimeout(updateConnectionStatus, 300);
+});
 
-        // Initial check
-        updateStatus();
-// Add these JavaScript functions
+window.addEventListener('offline', () => {
+    updateConnectionStatus();
+});
+
+// Periodic heartbeat check every 8 seconds
+setInterval(updateConnectionStatus, 8000);
+
+// Initial check on load
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(updateConnectionStatus, 500);
+});
 function setRating(value) {
     document.getElementById('selectedRating').value = value;
     const stars = document.querySelectorAll('.star-rating .star');
@@ -1542,18 +1601,29 @@ function updateUI() {
     }
 }
 async function logout() {
-    if (state.userEmail) {
-        await sendOnlineStatus(false);
-    }
+    const loader = document.getElementById('logoutLoader');
+    if (!loader) return;
     
+    loader.style.display = 'flex';
+    loader.style.visibility = 'visible';
+    loader.style.opacity = '1';
+    
+    await new Promise(r => setTimeout(r, 1500));
+    
+    if (state.userEmail) await sendOnlineStatus(false);
     if (statusInterval) clearInterval(statusInterval);
     
-    // Clear session data
-    clearSession();  // This sets isLoggedIn = false
+    clearSession();
     
     document.getElementById('logoutBtn').style.display = 'none';
     document.getElementById('resetBtn').style.display = 'none';
     document.getElementById('authOverlay').style.display = 'flex';
+    
+    loader.style.opacity = '0';
+    setTimeout(() => {
+        loader.style.display = 'none';
+        loader.style.visibility = 'hidden';
+    }, 500);
     
     showToast("Logged out successfully");
 }

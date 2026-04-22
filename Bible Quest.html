@@ -444,14 +444,22 @@ spans {
         i, .lucide {width: 18px !important;height: 18px !important;display: inline-block;}
 
 header {
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
     padding: 15px 15px 20px 13px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    backdrop-filter: blur(1px);
+    backdrop-filter: blur(3px);
     border-bottom: 2px solid rgb(255 255 255 / 8%);
     box-shadow: 0 8px 32px rgba(255, 215, 0, 0.1);
+    background: #0000004a;
 }
+
 
         .logo { 
             font-family: 'Cinzel', serif; 
@@ -469,7 +477,7 @@ header {
 
         .points-display:hover { transform: scale(1.05); }
 
-        .search-area {padding: 15px 20px 10px;}
+        .search-area {padding: 15px 20px 10px;margin-top: 65px;}
 
         .search-box:focus-within { 
             border-color: var(--gold);
@@ -658,7 +666,7 @@ span {}
         }
         .section { 
           display: none; }
-        .section.active { display: block; animation: fadeInUp 0.6s ease; }
+        .section.active { display: block; animation: fadeInUp 0.6s ease;margin-bottom: 30%; }
 
 .stop-scrolling {
     height: 100%;
@@ -675,6 +683,7 @@ span {}
             text-align: center;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
+	    margin-bottom: 65px;
         }
         .verse-card:hover {
             border-color: var(--gold);
@@ -1401,18 +1410,26 @@ position: relative;
 <base target="_blank">
 </head>
 <body>
-<div id="offline-screen" class="">
-        <div class="offline-image">
-           <img src="error_response_imgs.png" alt="No Connection" style="width: 100%;height: auto;margin-bottom:20px;transform: scale(1.29);padding-top: 30px;">
+<div id="logoutLoader" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #fffffffc; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(15px); background: linear-gradient(346deg, #ffffff, rgb(255 255 255 / 26%)); z-index: 999999; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s cubic-bezier(0, -0.34, 0, 1.38), visibility 0.5s;">
+    <div class="loader-inner" style="transform: scale(0.6); display: flex; flex-direction: column; align-items: center;">
+        <div class="loader-3d" style="height: 200px; perspective: 1000px; position: relative;">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
         </div>
-        <h1 class="oops-title">Oops!</h1>
-        <p class="oops-text">Slow or No Internet Connection. Please check your connection settings.</p>
-        <button class="btn-try-again" onclick="checkConnection()">Try Again</button>
+        <div class="loader-text" style="font-family: 'Cinzel', serif; color: #BF953F; letter-spacing: 5px; font-size: 1.5rem; font-weight: bold; -webkit-text-stroke: 0.4px rgb(0 0 0 / 12%); text-shadow: -1px -1px 0 #00000029, 1px -1px 0 #00000040, -1px 1px 0 #00000033, 1px 1px 0 #0000001c; margin-top: 20px;">Logging Out...</div>
     </div>
+</div>
+
+<div id="offline-screen" class="hidden">
+    <div class="offline-image">
+        <img src="error_response_imgs.png" alt="No Connection" style="width: 100%; height: auto; margin-bottom: 20px; transform: scale(1.29); padding-top: 30px;">
+    </div>
+    <h1 class="oops-title">Oops!</h1>
+    <p class="oops-text" id="offlineMsg">Slow or No Internet Connection. Please check your connection settings and try again after reconnecting.</p>
+    <button class="btn-try-again" onclick="checkConnection()">Try Again</button>
+</div>
       <div class="app-container" id="main-app">
-
-
-
 <div class="modal" id="ratingModal" style="backdrop-filter: blur(20px); background: rgb(0 0 0 / 0%);">
     <div class="container" style="max-width: 350px; animation: fadeInUp 0.6s ease;">
         <div class="heading" style="font-size: 24px; margin-bottom: 10px;">Rate Your Experience</div>
